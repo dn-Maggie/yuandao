@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.system.dao.DictTypeMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.system.model.DictType">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="IS_ACTIVE" property="isActive" jdbcType="INTEGER" />
+		<result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="MEMO" property="memo" jdbcType="VARCHAR" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR" />
+		<result column="STATES" property="states" jdbcType="VARCHAR" />
+		<result column="TYPE_CODE" property="typeCode" jdbcType="VARCHAR" />
+		<result column="UPDATER_ID" property="updaterId" jdbcType="VARCHAR" />
+		<result column="IS_SYSTEM" property="isSystem" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		IS_ACTIVE
+		,TYPE_NAME
+		,ID
+		,CREATE_TIME
+		,MEMO
+		,UPDATE_TIME
+		,CREATOR_ID
+		,STATES
+		,TYPE_CODE
+		,UPDATER_ID
+		,IS_SYSTEM
+	</sql>
+
+	<select id="getByTypeCode" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.system.model.DictType">
+		select
+		<include refid="Base_Column_List" />
+		from SYS_DICT_TYPE
+		where TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+		and IS_ACTIVE='0'
+	</select>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from SYS_DICT_TYPE
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.system.model.DictType">
+		select
+		<include refid="Base_Column_List" />
+		from SYS_DICT_TYPE
+		where 1=1
+		<if test="isActive != null and '' != isActive">
+			and IS_ACTIVE = #{isActive,jdbcType=INTEGER}
+		</if>
+		<if test="typeName != null and '' != typeName">
+			and TYPE_NAME LIKE CONCAT('%',#{typeName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="id != null and '' != id">
+			and ID = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null and '' != createTime">
+			and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="memo != null and '' != memo">
+			and MEMO LIKE CONCAT('%',#{memo,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="updateTime != null and '' != updateTime">
+			and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="creatorId != null and '' != creatorId">
+			and CREATOR_ID = #{creatorId,jdbcType=VARCHAR}
+		</if>
+		<if test="states != null and '' != states">
+			and STATES = #{states,jdbcType=VARCHAR}
+		</if>
+		<if test="typeCode != null and '' != typeCode">
+			and TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+		</if>
+		<if test="updaterId != null and '' != updaterId">
+			and UPDATER_ID = #{updaterId,jdbcType=VARCHAR}
+		</if>
+		<if test="isSystem != null and '' != isSystem">
+			and IS_SYSTEM = #{isSystem,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+
+
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from
+		SYS_DICT_TYPE
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="add" parameterType="com.dongnao.workbench.system.model.DictType">
+		insert into SYS_DICT_TYPE (
+		<include refid="Base_Column_List" />
+		)
+		values (
+		#{isActive,jdbcType=INTEGER}
+		,#{typeName,jdbcType=VARCHAR}
+		,#{id,jdbcType=VARCHAR}
+		,#{createTime,jdbcType=TIMESTAMP}
+		,#{memo,jdbcType=VARCHAR}
+		,#{updateTime,jdbcType=TIMESTAMP}
+		,#{creatorId,jdbcType=VARCHAR}
+		,#{states,jdbcType=VARCHAR}
+		,#{typeCode,jdbcType=VARCHAR}
+		,#{updaterId,jdbcType=VARCHAR}
+		,#{isSystem,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.dongnao.workbench.system.model.DictType">
+		update SYS_DICT_TYPE set
+		<if test="id != null and '' != id">
+			ID = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="isActive != null">
+			,IS_ACTIVE = #{isActive,jdbcType=INTEGER}
+		</if>
+		<if test="typeName != null">
+			,TYPE_NAME = #{typeName,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null">
+			,CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="memo != null">
+			,MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="updateTime != null">
+			,UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="creatorId != null">
+			,CREATOR_ID = #{creatorId,jdbcType=VARCHAR}
+		</if>
+		<if test="states != null">
+			,STATES = #{states,jdbcType=VARCHAR}
+		</if>
+		<if test="typeCode != null">
+			,TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+		</if>
+		<if test="updaterId != null">
+			,UPDATER_ID = #{updaterId,jdbcType=VARCHAR}
+		</if>
+		<if test="isSystem != null">
+			,IS_SYSTEM = #{isSystem,jdbcType=VARCHAR}
+		</if>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateByTypeCode" parameterType="com.dongnao.workbench.system.model.DictType">
+		update SYS_DICT_TYPE set
+		<if test="typeCode != null">
+			TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+		</if>
+		<if test="id != null and '' != id">
+			,ID = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="isActive != null">
+			,IS_ACTIVE = #{isActive,jdbcType=INTEGER}
+		</if>
+		<if test="typeName != null">
+			,TYPE_NAME = #{typeName,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null">
+			,CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="memo != null">
+			,MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="updateTime != null">
+			,UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="creatorId != null">
+			,CREATOR_ID = #{creatorId,jdbcType=VARCHAR}
+		</if>
+		<if test="states != null">
+			,STATES = #{states,jdbcType=VARCHAR}
+		</if>
+		<if test="updaterId != null">
+			,UPDATER_ID = #{updaterId,jdbcType=VARCHAR}
+		</if>
+		<if test="isSystem != null">
+			,IS_SYSTEM = #{isSystem,jdbcType=VARCHAR}
+		</if>
+		where TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+	</update>
+</mapper>

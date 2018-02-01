@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.system.dao.SettingInfoMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.system.model.SettingInfo">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="VARIABLE_VALUE" property="variableValue" jdbcType="VARCHAR" />
+		<result column="VARIABLE_NAME" property="variableName" jdbcType="VARCHAR" />
+		<result column="VAR_NAME_CN" property="varNameCn" jdbcType="VARCHAR" />
+		<result column="BUREAU_ID" property="bureauId" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		ID,VARIABLE_VALUE,VARIABLE_NAME,VAR_NAME_CN
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from SYS_SETTINGS
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.system.model.SettingInfo">
+		select
+		<include refid="Base_Column_List" />
+		from SYS_SETTINGS
+		where 1=1
+		<if test="id != null and '' != id">
+			and ID = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="variableValue != null and '' != variableValue">
+			and VARIABLE_VALUE LIKE CONCAT('%',#{variableValue,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="variableName != null and '' != variableName">
+			and VARIABLE_NAME LIKE CONCAT('%',#{variableName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="varNameCn != null and '' != varNameCn">
+			and VAR_NAME_CN LIKE CONCAT('%',#{varNameCn,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="bureauId != null and '' != bureauId">
+			and BUREAU_ID LIKE CONCAT('%',#{bureauId,jdbcType=VARCHAR},'%')
+		</if>
+		order by ${orderBy} ${orderType}
+	</select>
+
+	<select id="getCheckByName" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from SYS_SETTINGS
+		where 1=1 and VARIABLE_NAME = #{variableName,jdbcType=VARCHAR}
+	</select>
+
+	<select id="getSessionValueByUserId" parameterType="java.lang.String" resultType="java.lang.String">
+		select lost_time
+		 from sys_session 
+		 where user_id = #{userId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getSettingValue" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from SYS_SETTINGS
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from
+		SYS_SETTINGS
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.system.model.SettingInfo">
+		insert into SYS_SETTINGS (
+		<include refid="Base_Column_List" />
+		)
+		values (
+		#{id,jdbcType=VARCHAR}
+		,#{variableValue,jdbcType=VARCHAR}
+		,#{variableName,jdbcType=VARCHAR}
+		,#{varNameCn,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="addSessionInfo" parameterType="java.util.Map">
+		insert into SYS_SESSION(ID,USER_ID,LOST_TIME) values (
+			#{id,jdbcType=VARCHAR}
+			,#{userId,jdbcType=VARCHAR}
+			,#{lostTime,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.dongnao.workbench.system.model.SettingInfo">
+		update SYS_SETTINGS set
+			VARIABLE_VALUE = #{variableValue,jdbcType=VARCHAR},
+			VAR_NAME_CN = #{varNameCn,jdbcType=VARCHAR}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateSessionValueByName" parameterType="java.util.Map">
+		update SYS_SESSION set
+			LOST_TIME = #{lostTime,jdbcType=VARCHAR}
+		where USER_ID = #{userId,jdbcType=VARCHAR}
+	</update>
+	
+</mapper>

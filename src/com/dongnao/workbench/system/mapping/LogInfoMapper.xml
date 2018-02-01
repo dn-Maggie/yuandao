@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.system.dao.LogInfoMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.system.model.LogInfo">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="ACT_MODULE" property="actModule" jdbcType="VARCHAR" />
+		<result column="ACT_OBJ" property="actObj" jdbcType="VARCHAR" />
+		<result column="ACT_RESULT" property="actResult" jdbcType="VARCHAR" />
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+		<result column="ACT_TIME" property="actTime" jdbcType="TIMESTAMP" />
+		<result column="ACT_MESSAGE" property="actMessage" jdbcType="VARCHAR" />
+		<result column="ACT_ACTION" property="actAction" jdbcType="VARCHAR" />
+		<result column="ACTOR_NAME" property="actorName" jdbcType="VARCHAR" />
+		<result column="ACT_TYPE" property="actType" jdbcType="VARCHAR" />
+		<result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+		<result column="ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		ID,ACT_MODULE,ACT_OBJ,ACT_RESULT,USER_ID,ACT_TIME,ACT_MESSAGE,ACT_ACTION,ACTOR_NAME,ACT_TYPE,ORG_ID,ORG_NAME
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from SYS_ACT_LOG
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.system.model.LogInfo">
+		select
+		<include refid="Base_Column_List" />
+		from SYS_ACT_LOG
+		where 1=1
+		<if test="id != null and '' != id">
+			and ID = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="actModule != null and '' != actModule">
+			and ACT_MODULE = #{actModule,jdbcType=VARCHAR}
+		</if>
+		<if test="actObj != null and '' != actObj">
+			and ACT_OBJ = #{actObj,jdbcType=VARCHAR}
+		</if>
+		<if test="actResult != null and '' != actResult">
+			and ACT_RESULT LIKE #{actResult,jdbcType=VARCHAR}
+		</if>
+		<if test="userId != null and '' != userId">
+			and USER_ID = #{userId,jdbcType=VARCHAR}
+		</if>
+		<if test="actTime != null and '' != actTime">
+			and ACT_TIME >= #{actTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="endTime != null and '' != endTime">
+			<![CDATA[
+			and ACT_TIME <= #{endTime,jdbcType=TIMESTAMP}
+			 ]]>
+		</if>
+		<if test="actMessage != null and '' != actMessage">
+			and ACT_MESSAGE = #{actMessage,jdbcType=VARCHAR}
+		</if>
+		<if test="actAction != null and '' != actAction">
+			and ACT_ACTION = #{actAction,jdbcType=VARCHAR}
+		</if>
+		<if test="actorName != null and '' != actorName">
+			and ACTOR_NAME LIKE #{actorName,jdbcType=VARCHAR}
+		</if>
+		<if test="actType != null and '' != actType">
+			and ACT_TYPE = #{actType,jdbcType=VARCHAR}
+		</if>
+			order by ACT_TIME
+		<if test="orderFields != null and '' != orderFields">  
+           	,${orderFields} ${order}
+		</if>
+	
+	</select>
+
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from SYS_ACT_LOG
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.system.model.LogInfo">
+		insert into SYS_ACT_LOG (
+		<include refid="Base_Column_List" />
+		)
+		values (
+		#{id,jdbcType=VARCHAR}
+		,#{actModule,jdbcType=VARCHAR}
+		,#{actObj,jdbcType=VARCHAR}
+		,#{actResult,jdbcType=VARCHAR}
+		,#{userId,jdbcType=VARCHAR}
+		,#{actTime,jdbcType=TIMESTAMP}
+		,#{actMessage,jdbcType=VARCHAR}
+		,#{actAction,jdbcType=VARCHAR}
+		,#{actorName,jdbcType=VARCHAR}
+		,#{actType,jdbcType=VARCHAR}
+		,#{orgId,jdbcType=VARCHAR}
+		,#{orgName,jdbcType=VARCHAR}
+		)
+	</insert>
+</mapper>

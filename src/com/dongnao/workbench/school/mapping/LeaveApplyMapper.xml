@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.school.dao.LeaveApplyMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.school.model.LeaveApply">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="emp_id" property="empId" jdbcType="VARCHAR" />
+		<result column="check_id" property="checkId" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="leave_date" property="leaveDate" jdbcType="DECIMAL" />
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="check_date" property="checkDate" jdbcType="TIMESTAMP" />
+		<result column="check_flag" property="checkFlag" jdbcType="INTEGER" />
+		<result column="cost_salary" property="costSalary" jdbcType="DECIMAL" />
+		<result column="is_cost" property="isCost" jdbcType="INTEGER" />
+		<result column="leave_type" property="leaveType" jdbcType="INTEGER" />
+		<result column="straight_leader" property="straightLeader" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+	 	id
+		,emp_id
+		,check_id
+		,content
+		,start_date
+		,end_date
+		,leave_date
+		,create_date
+		,check_date
+		,check_flag
+		,cost_salary
+		,is_cost
+		,leave_type
+		,straight_leader
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			la.id
+			,la.emp_id
+			,la.check_id
+			,la.content
+			,la.start_date
+			,la.end_date
+			,la.leave_date
+			,la.create_date
+			,la.check_date
+			,la.check_flag
+			,la.cost_salary
+			,la.is_cost
+			,la.leave_type
+			,e3.nick_name AS straightLeaderName
+			,la.straight_leader
+			,bo.corp_man AS deptLeader
+			,e1.nick_name AS empNAME
+			,bo.org_name AS empDept
+			,e2.nick_name AS checkName
+		from 
+			emp_leave_apply la
+		LEFT JOIN employee e1 ON e1.id = la.emp_id
+		LEFT join basic_org bo on e1.dept_no = bo.org_no
+		LEFT JOIN employee e2 ON e2.id = la.check_id
+		LEFT JOIN employee e3 ON e3.id = la.straight_leader
+		where la.id = #{id,jdbcType=VARCHAR}
+	</select>
+
+<select id="sumAllLeave" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.LeaveApply">
+				select
+					la.id
+					,la.emp_id
+					,la.check_id
+					,la.content
+					,la.start_date
+					,la.end_date
+					,sum(la.leave_date) as leave_date
+					,la.create_date
+					,la.check_date
+					,la.check_flag
+					,la.cost_salary
+					,la.is_cost
+					,la.leave_type
+					,e3.nick_name AS straightLeaderName
+					,bo.corp_man AS deptLeader
+					,e1.nick_name AS empNAME
+					,bo.org_name AS empDept
+					,e2.nick_name AS checkName
+				from 
+					emp_leave_apply la
+				LEFT JOIN employee e1 ON e1.id = la.emp_id
+				LEFT join basic_org bo on e1.dept_no = bo.org_no
+				LEFT JOIN employee e2 ON e2.id = la.check_id
+				LEFT JOIN employee e3 ON e3.id = la.straight_leader
+				where 1=1
+				<if test="id != null and '' != id">  
+					and la.id = #{id,jdbcType=VARCHAR}
+				</if>
+				<if test="empId != null and '' != empId">  
+					and la.emp_id = #{empId,jdbcType=VARCHAR}
+				</if>
+				<if test="checkId != null and '' != checkId">  
+					and la.check_id = #{checkId,jdbcType=VARCHAR}
+				</if>
+				<if test="content != null and '' != content">  
+					and la.content = #{content,jdbcType=VARCHAR}
+				</if>
+				<if test="startDate != null and '' != startDate">  
+					and DATE_FORMAT(la.start_date,'%Y-%m-%d') >= DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				</if>
+				<if test="endDate != null and '' != endDate">  
+					and DATE_FORMAT(la.end_date,'%Y-%m-%d') >= DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				</if>
+				
+				<if test="createDate != null and '' != createDate">  
+					and la.create_date = #{createDate,jdbcType=TIMESTAMP}
+				</if>
+				<if test="checkDate != null and '' != checkDate">  
+					and la.check_date = #{checkDate,jdbcType=TIMESTAMP}
+				</if>
+				<if test="checkFlag != null and '' != checkFlag">  
+					and la.check_flag = #{checkFlag,jdbcType=INTEGER}
+				</if>
+				<if test="isCost != null and '' != isCost">  
+					and la.is_cost = #{isCost,jdbcType=INTEGER}
+				</if>
+				<if test="null != propsMap.startDate and propsMap.startDate != ''">
+					<![CDATA[
+					and DATE_FORMAT(la.create_date,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+					]]>
+				</if>
+				<if test="null != propsMap.endDate and propsMap.endDate != ''">
+					<![CDATA[
+						and DATE_FORMAT(la.create_date,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+					]]>
+				</if>
+		 	GROUP BY la.emp_id
+		 <if test="orderFields != null and '' != orderFields">  
+		           	order by ${orderFields} ${order}
+		 </if>
+	</select>	
+	
+	<select id="subgridlist" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.LeaveApply">
+		select
+		<include refid="Base_Column_List" />
+		from emp_leave_apply
+		where 1=1
+		<if test="empId != null and '' != empId">  
+			and emp_id = #{empId,jdbcType=VARCHAR}
+		</if>
+<!-- 		<if test="empName != null and '' != empName">   -->
+<!-- 			and enter_name = #{enterName,jdbcType=VARCHAR} -->
+<!-- 		</if> -->
+		<if test="null != startDate and startDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(create_date,'%Y-%m-%d') >= DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != endDate and endDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(create_date,'%Y-%m-%d') <= DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+		]]>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+					<![CDATA[
+					and DATE_FORMAT(create_date,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+					]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+					<![CDATA[
+						and DATE_FORMAT(create_date,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+					]]>
+		</if>
+		</if>		
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.LeaveApply">
+		select
+			 la.id
+			,la.emp_id
+			,la.check_id
+			,la.content
+			,la.start_date
+			,la.end_date
+			,la.leave_date
+			,la.create_date
+			,la.check_date
+			,la.check_flag
+			,la.cost_salary
+			,la.is_cost
+			,la.leave_type
+			,e3.nick_name AS straightLeaderName
+			,bo.corp_man AS deptLeader
+			,e1.nick_name AS empNAME
+			,bo.org_name AS empDept
+			,e2.nick_name AS checkName
+		from 
+			emp_leave_apply la
+		LEFT JOIN employee e1 ON e1.id = la.emp_id
+		LEFT join basic_org bo on e1.dept_no = bo.org_no
+		LEFT JOIN employee e2 ON e2.id = la.check_id
+		LEFT JOIN employee e3 ON e3.id = la.straight_leader
+		where 1=1
+		<if test="id != null and '' != id">  
+			and la.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="empId != null and '' != empId">  
+			and la.emp_id = #{empId,jdbcType=VARCHAR}
+		</if>
+		<if test="empName != null and '' != empName">  
+			and e1.nick_name = #{empName,jdbcType=VARCHAR}
+		</if>
+		<if test="empDept != null and '' != empDept">  
+			and e1.dept_no = #{empDept,jdbcType=VARCHAR}
+		</if>
+		<if test="checkId != null and '' != checkId">  
+			and la.check_id = #{checkId,jdbcType=VARCHAR}
+		</if>
+		<if test="content != null and '' != content">  
+			and la.content = #{content,jdbcType=VARCHAR}
+		</if>
+		<if test="startDate != null and '' != startDate">  
+			and la.start_date = #{startDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="endDate != null and '' != endDate">  
+			and la.end_date = #{endDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="createDate != null and '' != createDate">  
+			and la.create_date = #{createDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="checkDate != null and '' != checkDate">  
+			and la.check_date = #{checkDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="checkFlag != null and '' != checkFlag">  
+			and la.check_flag = #{checkFlag,jdbcType=INTEGER}
+		</if>
+		<if test="leaveDate != null and '' != leaveDate">  
+			and la.leave_date > #{leaveDate,jdbcType=DECIMAL}
+		</if>
+		<if test="deptLeader != null and '' != deptLeader">  
+			and bo.corp_man = #{deptLeader,jdbcType=VARCHAR}
+		</if>
+		<if test="straightLeader != null and '' != straightLeader">  
+			and la.straight_leader = #{straightLeader,jdbcType=VARCHAR}
+		</if>
+		<if test="isCost != null and '' != isCost">  
+			and la.is_cost = #{isCost,jdbcType=INTEGER}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(la.create_date,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(la.create_date,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<select id="getStraightLeader" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.LeaveApply">
+		SELECT DISTINCT straight_leader FROM `emp_leave_apply` ;
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from emp_leave_apply
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.school.model.LeaveApply">
+		insert into emp_leave_apply (
+		<include refid="Base_Column_List" />
+		)values (
+					#{id,jdbcType=VARCHAR}
+					,#{empId,jdbcType=VARCHAR}
+					,#{checkId,jdbcType=VARCHAR}
+					,#{content,jdbcType=VARCHAR}
+					,#{startDate,jdbcType=TIMESTAMP}
+					,#{endDate,jdbcType=TIMESTAMP}
+					,#{leaveDate,jdbcType=DECIMAL}
+					,#{createDate,jdbcType=TIMESTAMP}
+					,#{checkDate,jdbcType=TIMESTAMP}
+					,#{checkFlag,jdbcType=INTEGER}
+					,#{costSalary,jdbcType=DECIMAL}
+					,#{isCost,jdbcType=INTEGER}
+					,#{leaveType,jdbcType=INTEGER}
+					,#{straightLeader,jdbcType=VARCHAR}
+				)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.school.model.LeaveApply">
+		update emp_leave_apply  set
+		ID= #{id,jdbcType=VARCHAR}
+			,emp_id = #{empId,jdbcType=VARCHAR}
+			,check_id = #{checkId,jdbcType=VARCHAR}
+			,content = #{content,jdbcType=VARCHAR}
+			,start_date = #{startDate,jdbcType=TIMESTAMP}
+			,end_date = #{endDate,jdbcType=TIMESTAMP}
+			,leave_date = #{leaveDate,jdbcType=DECIMAL}
+			,create_date = #{createDate,jdbcType=TIMESTAMP}
+			,check_date = #{checkDate,jdbcType=TIMESTAMP}
+			,check_flag = #{checkFlag,jdbcType=INTEGER}
+			,cost_salary = #{costSalary,jdbcType=FLOAT}
+			,is_cost = #{isCost,jdbcType=INTEGER}
+			,leave_type = #{leaveType,jdbcType=INTEGER}
+			,straight_leader = #{straightLeader,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

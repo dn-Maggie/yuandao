@@ -1,0 +1,192 @@
+@CHARSET "utf-8";
+	#divBody table tbody tr td{
+	    border-left: 1px solid Silver;
+	    border-top: 1px solid Silver;
+	    border-bottom: 1px solid Silver;
+	    padding: 0px;
+	    border-spacing: 0px;
+	}
+	tabel{
+		border-spacing: 2px;
+	    border-color: grey;
+	}
+	.trDetails,.trTotal{
+	    width: 1000px;
+	    height:60px;
+	    line-height:60px;
+	    border-right:1px solid Silver;
+	}
+	
+	#VoucherTopRow{
+   	 	line-height: 30px;
+	}
+	#tableVoucherHeader{
+	    z-index: 10;
+	    background-color: #fff;
+	}
+	#divNote{
+	    float: right;
+	    padding-top: 20px;
+	    margin-right: 20px;
+	    cursor: pointer;
+	    position:relative;
+	}
+	#divNote span{
+	    display: block;
+	    height: 24px;
+	    width: 20px;
+	    background-image: url('../images/010Voucher.png');
+	    background-position: -100px 0;
+	}
+	#divNote:hover span{
+	    background-position-x: -120px;
+	}
+	.moneyUint{
+		border-top: 1px solid #dadada;
+	    height: 30px;
+	    background-image: url('../images/1410MoneyUint.png');
+	    width: 220px;
+	}
+	.moneyUint span{
+	    float: left;
+	    display: inline;
+	    width: 19px;
+	    height: 100%;
+	    margin-right: 1px;
+	    background-color: #fff;
+	    text-align: center;
+	    font-size: 12px;
+	}
+	#divBody table tbody tr td{
+	    border-left: 1px solid Silver;
+	    border-top: 1px solid Silver;
+	    border-bottom: 1px solid Silver;
+	    padding: 0px;
+	    border-spacing: 0px;
+    }
+	#tableVoucher tbody:first-child td{
+	    border-top: 0px !important;
+	}
+	.DisplayText{
+	    height: 60px;
+	    font-weight: bold;
+	    font-size: 13px;
+	}
+	.DisplayTextZhaiyao{
+	    width: 208px;
+	    text-align: left;
+	}
+	.trDetails .DisplayMoney,.trTotal .DisplayMoney{
+    	background-image: url('../images/1410MoneyUint.png');
+	}
+	.DisplayMoney{
+	    font-family: 'tahoma';
+	    font-weight: bold;
+	    font-size: 14px;
+	    letter-spacing: 11px;
+	    overflow: hidden;
+	    text-align: right;
+	}
+	.DisplayMoney span{
+	    position: relative;
+	    right: -3px;
+	}
+	.hide{
+		display:none;
+	}
+	.InputText input{
+		font-weight: bold;
+	    font-size: 16px;
+	    color: gray;
+	}
+	.InputText textarea{
+		resize: none;
+	    font-weight: bold;
+	    font-size: 13px;
+	    color: gray;
+	    line-height: 20px;
+	    border:none;
+	}
+	.inputZhaiYao {
+	    height: 58px;
+	    width: 201px;
+	    padding-left: 5px;
+	    padding-top: 0;
+	    padding-right: 0;
+	    padding-bottom: 0;
+	}
+	.inputKemu {
+	    height: 58px;
+	    width: 301px;
+	    padding-left: 5px;
+	    padding-top: 0;
+	    padding-right: 0;
+	    padding-bottom: 0;
+	}
+	.inputJieFang{
+	    line-height: 58px;
+	    height: 58px;
+	    width: 212px;
+	    padding-left: 5px;
+	    padding-top: 0;
+	    padding-right: 0;
+	    padding-bottom: 0;
+	}
+	.inputDaiFang{
+	    line-height: 58px;
+	    height: 58px;
+	    width: 213px;
+	    padding-left: 5px;
+	    padding-top: 0;
+	    padding-right: 0;
+	    padding-bottom: 0;
+	}
+	div.accountList,div.digestList{
+	    position: absolute;
+	    display: none;
+	}
+	ul.allAccountList,ul.allDigestList{
+		max-height: 180px;
+	    overflow-y: scroll;
+	    border-top: 1px solid silver;
+	    border-bottom: 1px solid silver;
+	    z-index: 10;
+	    height: 180px;
+	    width: 307px;
+	    background: #fff;
+	}
+	ul.allDigestList{
+	    width: 208px;
+	}
+	ul.allAccountList>li,ul.allDigestList>li{
+		margin-left: 10px;
+		text-align:left;
+	    cursor: pointer;
+		width:90%;
+		height:22px;
+		line-height:22px;
+		color:gray;
+	}
+	ul.allAccountList>li:hover,ul.allDigestList>li:hover{
+		background: #ccc;
+	}
+	.noteBox{
+		resize:none;
+		position: absolute;
+		top:50px;
+	    left: -75px;
+	    height: 75px;
+	    width: 150px;
+	    background: #fff;
+	    z-index: 10;
+	    border: 1px solid silver;
+	    border-top-left-radius: 2px;
+	    border-top-right-radius: 2px;
+	    border-bottom-left-radius: 2px;
+	    border-bottom-right-radius: 2px;
+	    box-shadow: 2px 2px 5px #888;
+	    line-height: 25px;
+	    visibility: hidden;
+	    text-indent: 1em;
+	    color:gray;
+    }

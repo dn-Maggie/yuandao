@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.school.dao.StandardMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.school.model.Standard">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+		<result column="parent_name" property="parentName" jdbcType="VARCHAR" />
+		<result column="sub_id" property="subId" jdbcType="VARCHAR" />
+		<result column="sub_name" property="subName" jdbcType="VARCHAR" />
+		<result column="position_id" property="positionId" jdbcType="VARCHAR" />
+		<result column="position" property="position" jdbcType="VARCHAR" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+		<result column="rate" property="rate" jdbcType="VARCHAR" />
+		<result column="new_rate" property="newRate" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+						 				id
+										,parent_id
+										,parent_name
+										,sub_id
+										,sub_name
+										,position_id
+										,position
+										,note
+										,rate
+										,new_rate
+						</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from emp_appraisal_standard
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.Standard">
+		select
+		<include refid="Base_Column_List" />
+		from emp_appraisal_standard
+		where 1=1
+		<if test="id != null and '' != id">  
+			and id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="parentId != null and '' != parentId">  
+			and parent_id = #{parentId,jdbcType=VARCHAR}
+		</if>
+		<if test="parentName != null and '' != parentName">  
+			and parent_name = #{parentName,jdbcType=VARCHAR}
+		</if>
+		<if test="subId != null and '' != subId">  
+			and sub_id = #{subId,jdbcType=VARCHAR}
+		</if>
+		<if test="subName != null and '' != subName">  
+			and sub_name = #{subName,jdbcType=VARCHAR}
+		</if>
+		<if test="positionId != null and '' != positionId">  
+			and position_id = #{positionId,jdbcType=VARCHAR}
+		</if>
+		<if test="position != null and '' != position">  
+			and position like CONCAT('%',#{position,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="note != null and '' != note">  
+			and note = #{note,jdbcType=VARCHAR}
+		</if>
+		<if test="rate != null and '' != rate">  
+			and rate = #{rate,jdbcType=VARCHAR}
+		</if>
+				<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+         	</if>
+	</select>
+	
+	<select id="getAllResourceId" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.Standard">
+		select
+		distinct parent_id,parent_name
+		from emp_appraisal_standard
+	</select>
+	
+	<select id="getAllFollowerId" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.Standard">	
+		select
+		distinct position,position_id
+		from emp_appraisal_standard
+	</select>
+	
+	<select id="getAllSubResourceId" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.Standard">	
+		select
+		distinct sub_id,sub_name
+		from emp_appraisal_standard
+
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from emp_appraisal_standard
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.school.model.Standard">
+		insert into emp_appraisal_standard (
+		<include refid="Base_Column_List" />
+		)values (
+					#{id,jdbcType=VARCHAR}
+					,#{parentId,jdbcType=VARCHAR}
+					,#{parentName,jdbcType=VARCHAR}
+					,#{subId,jdbcType=VARCHAR}
+					,#{subName,jdbcType=VARCHAR}
+					,#{position_id,jdbcType=VARCHAR}
+					,#{position,jdbcType=VARCHAR}
+					,#{note,jdbcType=VARCHAR}
+					,#{rate,jdbcType=VARCHAR}
+					,#{newRate,jdbcType=VARCHAR}
+				)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.school.model.Standard">
+		update emp_appraisal_standard  set
+			ID= #{id,jdbcType=VARCHAR}
+			,parent_Id = #{parentId,jdbcType=VARCHAR}
+			,parent_name = #{parentName,jdbcType=VARCHAR}
+			,sub_Id = #{subId,jdbcType=VARCHAR}
+			,sub_name = #{subName,jdbcType=VARCHAR}
+			,position_id = #{positionId,jdbcType=VARCHAR}
+			,position = #{position,jdbcType=VARCHAR}
+			,note = #{note,jdbcType=VARCHAR}
+			,rate = #{rate,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

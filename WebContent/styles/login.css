@@ -1,0 +1,240 @@
+#login-body{
+
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: bottom;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	background-image: url(images/login_bg.png),linear-gradient(to left, #41bbda 0%,#6b8dee  100%); ;
+}
+#login-body .bg_flag{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 7%;
+}
+#login-body .bg_flag .left{
+	height: 100%;
+}
+#login-body .bg_flag .right{
+	-webkit-transform: scaleX(-1);
+	-moz-transform: scaleX(-1);
+	-ms-transform: scaleX(-1);
+	-o-transform: scaleX(-1);
+	transform: scaleX(-1);
+	height: 100%;
+	float: right;
+}
+#loginWindow{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	width: 300px;
+	min-width: 300px;
+	padding: 0 30px;
+	border: #eee;
+	background: #fefefe;
+	/* border-radius: 10px; */
+}
+#loginWindow table{
+	width: 100%;
+}
+#loginWindow table tr{
+	height: 65px;
+}
+#loginWindow .logo_box{
+	padding: 40px 50px 10px;
+	font-size: 16px;
+	color: #6295e9;
+	font-weight: bold;
+	letter-spacing: 5px;
+	font-family: monospace;
+}
+#loginWindow .logo_box img{
+	width: 100%;
+}
+#loginForm input{
+	background-color:#fff;
+}
+#loginForm div.group{
+	position:relative;
+	border: none;
+}
+#loginForm div.group span.addon{
+	width: 55px;
+	height: 100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	text-align:center;
+	font-size:18px;
+	background-color: #eee;
+	color: #b6b6b6;
+}
+#loginForm div.group span.addon::before{
+	position:relative;
+	top:30%;
+}
+/* #loginForm div.group span.addon.login_name{
+	background-color:#28b779;
+}
+#loginForm div.group span.addon.password{
+	background-color:#ffb848;
+} */
+#loginForm div.group.check_code{
+	border-radius: 0;
+	overflow: visible;
+	height: 34px;
+}
+#loginForm div.group.check_code span.addon{
+	background-color: #6295e9;
+	color:#fff;
+	width: 34px;
+	line-height: 34px;
+	height: 100%;
+	font-weight: bold;
+	text-align: center;
+	position: static;
+	display: inline-block;
+	float: left;
+	margin-right: 4px;
+	border: none;
+}
+#loginForm div.group.check_code input{
+	height: 100%;
+	width:90px;
+	display: inline-block;
+	text-indent: 10px;
+	line-height: 0;
+	border: 1px solid #e3e3e3;
+	box-sizing: border-box;
+}
+#loginForm div.group.check_code img{
+	position:absolute;
+	top:0px;
+	left:105%;
+	height: 100%;
+}
+#loginForm div.remb{
+	/* position:relative;
+	margin:20px 0px 10px 10px; */
+    position: relative;
+    height: 30px;
+    line-height: 30px;
+}
+#loginForm div.remb label{
+	color: #a3a7a8;
+	font-size: 14px;
+	/* font-weight: bolder; */
+}
+#loginForm div.remb .remb_label{
+	background: #acacac;
+	width: 1em;
+	height: 1em;
+	display: inline-block;
+	vertical-align: middle;
+	/* margin-left: 10px; */
+	margin-top: -2px;
+	position: relative;
+}
+#loginForm div.remb .remb_label:after{
+    content: '';
+	opacity: 0;
+    position: absolute;
+    width: 9px;
+    height: 5px;
+    background: transparent;
+    top: 4px;
+    left: 3px;
+    border: 3px solid #333;
+    border-top: none;
+    border-right: none;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+#loginForm div.remb input{
+	z-index: -100;
+	visibility: hidden;
+}
+#loginForm div.remb input#remb:checked~.remb_label:after{
+	opacity: 1;
+}
+#loginForm div.remb span{
+	position:absolute;
+	bottom:0px;
+	right:0px;
+	color:#fff;
+}
+#loginForm div.group input{
+	width: 100%;
+	height: 40px;
+	text-indent: 65px;
+	border:none;
+	font-size: 14px;
+	border-radius: 0;
+	color: #999;
+	outline: none;
+	background: #fff;
+}
+#loginForm button{
+	/* padding:0px 15px;
+	height:35px;
+	font-size:14px;
+	color:#fff;
+	border:none;
+	cursor:pointer;
+	margin-left:10px; */
+	padding: 0px 15px;
+	height: 30px;
+	font-size: 14px;
+	color: #fff;
+	font-family: 'yahei';
+	/* margin-left: 10px; */
+	background: #ff6f6f;
+	cursor: pointer;
+	outline: none;
+	border: none;
+}
+#loginForm button:hover{
+	opacity:.9;
+}
+#loginForm button{
+	width: 100%;
+	outline: none;
+}
+#loginForm button.btn_reset{
+	background-color: rgb(98,149,233);
+}
+#loginForm button.btn_login{
+	background-color:#46a5c1;
+}
+
+
+input.codeImg{
+    display: inline-block;
+    width: 30%;
+    height: 40px;
+    line-height: 40px;
+    position: absolute;
+    border: none;
+    
+    font-size: 1.1em;
+    font-style: italic;
+    font-family: arial;
+    font-weight: bolder;
+    letter-spacing: 7px;
+    text-decoration: line-through;
+   	text-shadow: 5px 5px 5px #000000;
+   	text-transform:uppercase;
+   	text-align: center;
+   	-webkit-user-select:none; 
+    -moz-user-select:none;
+    -ms-user-select:none;  /*IE10*/
+    user-select:none;
+   
+}

@@ -1,0 +1,88 @@
+/* Master Resets */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin:0;padding:0;} 
+table{border-collapse:collapse;border-spacing:0;} 
+fieldset,img{border:0;} 
+address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:normal;} 
+ul{list-style:none;} 
+caption,th{text-align:left;} 
+h1,h2,h3,h4,h5,h6{font-size:100%;}
+abbr,acronym{border:0;} 
+a,img{outline: none;}
+
+html,body {
+	height: 100%;
+	background: #fff;
+	color: #333;
+	/*font-family: Helvetica, Arial, Verdana, sans-serif;*/
+	font-family:'宋体';
+	font-size: 12px;
+	}
+.clear {clear: both;}
+.hide {display: none;}
+a {text-decoration: none;outline: none;}
+button:hover {cursor: pointer;}
+
+/* Breadcrumbs */
+#sub_nav ul li {
+	float: left;
+	}
+#sub_nav ul li a {
+	display: block;
+	float: left;
+	position: relative;
+	height: 32px;
+	padding: 0 10px;
+	background: url(../images/tab-white.gif) no-repeat 0px -30px;
+	color: #777;
+	font: bold 13px/36px Arial, Helvetica, sans-serif;
+	text-shadow: #fff 0px 1px 1px;
+	}
+#sub_nav ul li a span {
+	display: none;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	width: 4px;
+	height: 32px;
+	background: url(../images/tab-white-tail.gif) no-repeat left top;
+	}
+#sub_nav ul.breadcrumbs li {
+	position: relative;
+	height: 26px;
+	line-height: 26px;
+	padding: 0 30px 0 13px;
+	background: url(../images/background-sub_nav-breadcrumb.gif) no-repeat right top;
+	font-size: 12px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #999;
+	text-shadow: #fff 0px 1px 1px;
+	}
+#sub_nav ul.breadcrumbs li:hover {
+	cursor: default;
+	}
+#sub_nav ul.breadcrumbs li span {
+	display: none;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 18px;
+	height: 26px;
+	background: url(../images/background-sub_nav-breadcrumb-tail.gif) no-repeat left top;
+	}
+#sub_nav ul.breadcrumbs li.first span {
+	display: none;
+	background-image: url(../images/background-sub_nav-breadcrumb-tail-alt.gif);
+	}
+
+#sub_nav-wrap.done #sub_nav ul.breadcrumbs li.done span
+{
+	display: block;
+	}
+#sub_nav-wrap.done #sub_nav ul.breadcrumbs li.done{
+	margin-left: -17px;
+	padding-left: 31px;
+	background-position: right bottom;
+	color: #fff;
+	text-shadow: #326490 0px 1px 1px;
+	}

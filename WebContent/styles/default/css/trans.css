@@ -1,0 +1,178 @@
+@charset "utf-8";
+body.trans{
+	width:100%;
+	height:100%;
+}
+body.trans div.trans-north{
+	position:fixed;
+	width:100%;
+	top:0px;
+	left:0px;
+	right:0px;
+	bottom:310px;
+	overflow:auto;
+	border-bottom:1px dotted #e4e4e4;
+}
+body.trans div.trans-north div.trans-core-view{
+	width:100%;
+	height:100%;
+	position:absolute;
+}
+body.trans div.trans-north div.trans-core-view.trans-info-detail div.trans-charts-oper{
+	position:absolute;
+	top:0px;
+	left:0px;
+	right:250px;
+	height:30px;
+}
+body.trans div.trans-north div.trans-core-view.trans-info-detail div.trans-charts-oper ul{
+	margin-top:3px;
+}
+body.trans div.trans-north div.trans-core-view.trans-info-detail div.trans-charts-oper a.link-button{
+	float:right;
+	height:30px;
+	color:rgb(98,149,233);
+	margin-left:20px;
+	line-height:30px;
+}
+body.trans div.trans-north div.trans-core-view.trans-info-detail div.trans-charts-oper a.link-button:hover{
+	text-decoration: underline;
+}
+body.trans div.trans-north div.trans-core-view.trans-info-detail div.trans-charts-oper a.link-button i{
+	position:relative;
+	top:3px;
+}
+body.trans div.trans-north div.trans-core-view.trans-info-detail ul.trans-charts-list{
+	position:absolute;
+	background-color:#fff;
+	top:30px;
+	left:0px;
+	right:255px;
+	bottom:0px;
+	border:1px solid #e4e4e4;
+	border-left:none;
+	border-bottom:none;
+}
+body.trans div.trans-north div.trans-core-view.trans-info-detail ul.trans-charts-list.max{
+	right:0px;
+	z-index:9;
+}
+body.trans div.trans-north div.trans-core-view.trans-info-detail div.trans-charts-detail{
+	position:absolute;
+	top:20px;
+	right:0px;
+	bottom:0px;
+	width:250px;
+}
+body.trans div.trans-north div.trans-core-view.trans-info-detail ul.trans-charts-list li{
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0px;
+	left:0px;
+	display:none;
+}
+body.trans div.trans-north div.trans-core-view.trans-info-detail ul.trans-charts-list li div.trans-chart{
+	width:100%;
+	height:100%;
+}
+body.trans div.trans-south{
+	width:100%;
+	position:fixed;
+	height:300px;
+	min-width:1200px;
+	left:0px;
+	right:0px;
+	bottom:0px;
+	border-top:1px dotted #e4e4e4;
+}
+body.trans div.trans-south div.trans-block{
+	height:100%;
+	float:left;
+	padding:5px 0px;
+}
+body.trans div.trans-south div.trans-form{
+	width:280px;
+}
+body.trans div.trans-south div.trans-form ul{
+}
+body.trans div.trans-south div.trans-form ul li{
+	margin:5px 0px;
+	text-align: center;
+}
+body.trans div.trans-south div.trans-form ul li span{
+	display:inline-block;
+	width:20%;
+	text-align:right;
+}
+body.trans div.trans-south div.trans-form input.search_choose100{
+	float:none;
+	width:60%;
+	margin:0px;
+	padding:0px;
+	text-indent: 10px
+}
+body.trans div.trans-south div.trans-form input.order_btn{
+    width: 92px;
+    height: 28px;
+    line-height: 28px;
+    border: none;
+    background-color: rgb(98,149,233);
+    color: #FFF;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    background-image: url(../images/btn/search_btn1.png);
+    background-repeat: no-repeat;
+    background-position: 22px center;
+    text-indent: 15px;
+    cursor: pointer;
+    margin-top:10px;
+}
+div.trans-money-list{
+	width:180px;
+	padding:10px 0px;
+}
+div.trans-money-list dl,div.trans-money-list dl{
+	border:1px solid #e4e4e4;
+	border-bottom:none;
+	padding:5px 0px;
+}
+div.trans-money-list dl dt,div.trans-money-list dl dd,
+div.trans-money-list dl dt,div.trans-money-list dl dd{
+	width:23%;
+	display:inline-block;
+	margin:1px 0px;
+	text-align: center;
+}
+
+div.trans-money-list dl dd{
+	text-align: left;
+}
+div.trans-money-list dl.trans-list-sell dd:nth-child(4n+0){
+	color:blue;
+}
+div.trans-money-list dl.trans-list-buy dd:nth-child(4n+0){
+	color:red;
+}
+div.trans-money-list dl.trans-list-det dd:nth-child(4){
+	color:red;
+}
+div.trans-money-list dl.trans-list-det dd:nth-child(8){
+	color:green;
+}
+div.trans-money-list dl.trans-list-det{
+	border-bottom:1px solid #e4e4e4;
+}
+body.trans div.trans-south div.trans-positions{
+	position:absolute;
+	top:0px;
+	right:0px;
+	bottom:0px;
+	left:470px;
+}
+body.trans div.trans-south div.trans-positions div.trans-positions-grid{
+	padding:5px 5px 0px 5px;
+	height:100%;
+	margin:auto;
+}

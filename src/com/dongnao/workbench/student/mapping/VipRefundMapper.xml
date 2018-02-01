@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.student.dao.VipRefundMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.student.model.VipRefund">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="stu_id" property="stuId" jdbcType="VARCHAR" />
+		<result column="stu_name" property="stuName" jdbcType="VARCHAR" />
+		<result column="refund" property="refund" jdbcType="DOUBLE" />
+		<result column="reason" property="reason" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+		<result column="operator" property="operator" jdbcType="VARCHAR" />
+		<result column="notes" property="notes" jdbcType="VARCHAR" />
+		<result column="is_count" property="isCount" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+	 	id
+		,stu_id
+		,stu_name
+		,refund
+		,reason
+		,time
+		,operator
+		,notes
+		,is_count
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+			vr.id,
+			vr.stu_id,
+			vr.stu_name,
+			vr.refund,
+			vr.reason,
+			vr.time,
+			e.nick_name as operator,
+			vr.notes,
+			vr.is_count
+		from vip_refund as vr
+		LEFT JOIN employee as e on e.id = vr.operator 
+		where vr.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.student.model.VipRefund">
+		SELECT
+			vr.id,
+			vr.stu_id,
+			vr.stu_name,
+			vr.refund,
+			vr.reason,
+			vr.time,
+			vr.notes,
+			vr.is_count,
+			v.qq AS qq,
+			v.subject_name AS subjectName,
+			v.course_name AS courseName,
+			v.join_time AS stuJointime,
+			e.nick_name AS operator
+		FROM
+			vip_refund AS vr
+		LEFT JOIN vip_student AS v ON vr.stu_id = v.id
+		LEFT JOIN employee e ON e.id = vr.operator
+		WHERE
+			1 = 1
+		<if test="id != null and '' != id">  
+			and vr.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="stuId != null and '' != stuId">  
+			and vr.stu_id = #{stuId,jdbcType=VARCHAR}
+		</if>
+		<if test="subjectName != null and '' != subjectName">  
+			and v.subject_name = #{subjectName,jdbcType=VARCHAR}
+		</if>
+		<if test="courseName != null and '' != courseName">  
+			and v.course_name = #{courseName,jdbcType=VARCHAR}
+		</if>
+		<if test="stuName != null and '' != stuName">  
+			and vr.stu_name like CONCAT('%',#{stuName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="refund != null and '' != refund">  
+			and vr.refund = #{refund,jdbcType=DOUBLE}
+		</if>
+		<if test="reason != null and '' != reason">  
+			and vr.reason = #{reason,jdbcType=VARCHAR}
+		</if>
+		<if test="time != null and '' != time">  
+			and vr.time = #{time,jdbcType=TIMESTAMP}
+		</if>
+		<if test="isCount != null and '' != isCount">  
+			and vr.is_count = #{isCount,jdbcType=VARCHAR}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(vr.time,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(vr.time,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.joinStartDate and propsMap.joinStartDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(v.join_time,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.joinStartDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.joinEndDate and propsMap.joinEndDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(v.join_time,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.joinEndDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+        </if>
+        	
+	</select>
+	
+	<select id="getStatistical" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.student.model.VipRefund">
+		SELECT 
+			SUM(vr.refund) as refund
+		FROM vip_refund as vr
+		LEFT JOIN vip_student as v  ON	vr.stu_id=v.id 
+		WHERE 1=1 
+		<if test="subjectName != null and '' != subjectName">  
+			and v.subject_name = #{subjectName,jdbcType=VARCHAR}
+		</if>
+		<if test="null != startDate and startDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(vr.time,'%Y-%m-%d') >= DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != endDate and endDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(vr.time,'%Y-%m-%d') <= DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != joinStartDate and joinStartDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(v.join_time,'%Y-%m-%d') >= DATE_FORMAT(#{joinStartDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != joinEndDate and joinEndDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(v.join_time,'%Y-%m-%d') <= DATE_FORMAT(#{joinEndDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+	</select>
+	
+	
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from vip_refund
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.student.model.VipRefund">
+		insert into vip_refund (
+		<include refid="Base_Column_List" />
+		)values (
+			#{id,jdbcType=VARCHAR}
+			,#{stuId,jdbcType=VARCHAR}
+			,#{stuName,jdbcType=VARCHAR}
+			,#{refund,jdbcType=DOUBLE}
+			,#{reason,jdbcType=VARCHAR}
+			,#{time,jdbcType=TIMESTAMP}
+			,#{operator,jdbcType=VARCHAR}
+			,#{notes,jdbcType=VARCHAR}
+			,#{isCount,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.student.model.VipRefund">
+		update vip_refund  set
+			is_count = #{isCount,jdbcType=VARCHAR}
+			where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

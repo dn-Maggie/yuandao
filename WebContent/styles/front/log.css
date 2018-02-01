@@ -1,0 +1,74 @@
+@charset "utf-8";
+
+.login_bg{ background:url(../images/bg.jpg) center top no-repeat; }
+.container{ width:100%; height:100%; margin:0 auto;}
+.login_box{ margin:90px auto 20px auto;/*position:relative;*/ background:rgba(255, 255, 255, 0.48) none repeat scroll 0 0 !important;background-color:#fff;/*opacity:0.48; filter: alpha(opacity=48);-moz-opacity:0.48;*/z-index:1;}
+.login_inside{ top:10px;background:rgba(255, 255, 255, 0.82) none repeat scroll 0 0 !important; background-color:#fff;/*opacity:0.82;*/ z-index:2}
+/*仅对ie8 hack*/
+@media \0screen\,screen\9{.login_box{filter: progid:DXImageTransform.Microsoft.Alpha(opacity=48);}}
+@media \0screen\,screen\9{.login_inside{filter: progid:DXImageTransform.Microsoft.Alpha(opacity=82);}}
+
+/*ie9专有hack*/
+:root .login_box{-moz-opacity:0.48\9\0;}
+:root .login_inside{-moz-opacity:0.82\9\0;}
+
+.login_text{  width:355px; margin:0 auto; top:55px;}
+.text_top{ float:left; width:355px;}
+.title{ float:left; font-size:22px; color:#727171; line-height:36px;}
+.btn_fr{ float:right;}
+.btn_fr a{ width:80px; height:35px; line-height:35px; font-size:14px;color:#fff; background-color:#78c1c0; border:none; text-align:center;padding:8px 8px;}
+.error{ float:left;width:355px; height:30px; line-height:30px; color:#f39800; border:1px solid #f39800; margin:15px 0 15px 0;}
+.textbox_ui{ float:left; margin-bottom:25px;}
+.textbox_ui li{ float:left; height:38px; line-height:38px; margin-bottom:26px; width:355px;}
+.li_bg{  width:355px;border:1px solid #cececf;}
+.loginUser input{ width:314px; height:38px; border:none; background-position:-10px -31px; outline:0; line-height:38px; vertical-align:middle; padding-left:40px; position:relative;font-size:14px;font-family:"Microsoft YaHei",SimSun,SimHei;}
+.loginUser label{ position:absolute; left:0; top:0; background-color:#78c1c0; width:38px; height:40px;}
+.pwd input{ width:314px; height:38px; border:none; background-position:-10px -31px; outline:0; line-height:38px; vertical-align:middle; padding-left:40px; position:relative;font-size:14px;font-family:"Microsoft YaHei",SimSun,SimHei;}
+.pwd label{ position:absolute; left:0; background-color:#78c1c0; width:38px; height:38px;}
+.input-error{border:1px solid #f39800;}
+.input-error label{background-color:#f39800;}
+.check-box{ vertical-align:middle; margin-right:5px;}
+.focus_text{ position:absolute; left:0; height:24px; line-height:24px;}
+
+.fr a{ color:#f39800;}
+.fr a:hover{ text-decoration:underline;}
+.yzm{width:120px; height:38px;line-height:38px;  border:1px solid #cececf; padding-left:5px;font-family:"Microsoft YaHei",SimSun,SimHei;}
+.yzm_box{ display:inline;}
+.yzm_box img{ vertical-align:middle; /*margin-left:20px;*/position: relative;top: 0;}
+.textbox_ui li p{ width:355px; line-height:35px;display: inline;}
+.textbox_ui li p a{color:#f39800;}
+.textbox_ui li p a:hover{text-decoration:underline;}
+.loginbtn{ width:355px; height:40px; line-height:40px; background:#f39800; color:#fff; border:none; margin-top:50px; font-size:18px; font-family:"Microsoft YaHei",SimSun,SimHei; cursor:pointer;}
+
+/*register*/
+
+.r_tab{ width:768px; border-bottom:1px solid #dbdbdb; height:45px; }
+.r_tab ul{  float:left; position:relative;display:inline; height:45px; margin:0 20px;}
+.r_tab ul li{ float:left; font-size:18px; color:#727171; line-height:44px; height:44px; margin-left:60px; cursor:pointer;}
+.r_tab ul li span{font-size:18px; color:#727171;}
+.t_hover{ border-bottom:2px solid #78c1c0;}
+.re_form{ width:768px; margin-top:30px;}
+.re_form p{padding:5px 45px; font-size:14px; color:#727171;}
+.re_form ul{width:355px;position:relative; margin:0 auto;}
+.re_form ul li{ float:left;width:355px; line-height:38px; height:38px; margin-bottom:30px;}
+.re_form ul li .re-ipt{ width:345px; height:38px; line-height:38px; padding-left:10px; font-family:"Microsoft YaHei",SimSun,SimHei; font-size:14px;}
+.b_gray{border:1px solid #cececf;}
+.re-btn{ width:355px; height:40px; line-height:40px; background:#78c1c0; border:none; cursor:pointer; display:block;transition: .3s;-moz-transition: .3s;-o-transition: .3s;-webkit-transition: .3s; font-family:"Microsoft YaHei",SimSun,SimHei;  font-size:16px; color:#fff;-webkit-appearance:none; text-align:center;}
+
+.invalid{ /*width:355px;*/height:24px; line-height:24px;white-space: normal;word-break: normal; color:#f39800;}
+
+/*find password*/
+
+.l_header{ float:left; width:100%; height:173px; background:url(../images/l_topBg.jpg) center center no-repeat;}
+.l_content{width:998px; height:466px; margin:30px auto 30px auto; border:1px solid #d6d7d7;}
+.explain{ height:30px; line-height:30px;}
+.explain a{color:#f39800;}
+.explain a:hover{text-decoration:underline;}
+
+
+
+.login_footer{ position:relative; background:url(../images/l_footerBg.png) repeat-x; width:100%; height:130px; z-index:0; /*margin-top:35px;*/}
+.lfooter_text{width: 1000px;height: 130px;margin: 0 auto;color: #595757;position:relative; display:table;overflow: hidden;}
+.lfooter_text li{display:block; line-height:28px; text-align:left;}
+.lfooter_text li a{color:#595757;}
+.lfooter_text li a:hover{ color:#d38779; text-decoration:underline; }

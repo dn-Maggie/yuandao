@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.account.dao.AccountSubjectMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.account.model.AccountSubject">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+															<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+													<result column="parent_name" property="parentName" jdbcType="VARCHAR" />
+													<result column="account_id" property="accountId" jdbcType="INTEGER" />
+													<result column="account_name" property="accountName" jdbcType="VARCHAR" />
+													<result column="note" property="note" jdbcType="VARCHAR" />
+									</resultMap>
+	<sql id="Base_Column_List">
+						 	id
+										,parent_id
+										,parent_name
+										,account_id
+										,account_name
+										,note
+						</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from account_subject
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.AccountSubject">
+		select
+		<include refid="Base_Column_List" />
+		from account_subject
+		where 1=1
+		<if test="id != null and '' != id">  
+			and id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="parentId != null and '' != parentId">  
+			and parent_id = #{parentId,jdbcType=INTEGER}
+		</if>
+		<if test="parentName != null and '' != parentName">  
+			and parent_name = #{parentName,jdbcType=VARCHAR}
+		</if>
+		<if test="accountId != null and '' != accountId">  
+			and account_id = #{accountId,jdbcType=INTEGER}
+		</if>
+		<if test="accountName != null and '' != accountName">  
+			and account_name = #{accountName,jdbcType=VARCHAR}
+		</if>
+				<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+         	</if>
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from account_subject
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.account.model.AccountSubject">
+		insert into account_subject (
+		<include refid="Base_Column_List" />
+		)values (
+										#{id,jdbcType=VARCHAR}
+														,#{parentId,jdbcType=INTEGER}
+														,#{parentName,jdbcType=VARCHAR}
+														,#{accountId,jdbcType=INTEGER}
+														,#{accountName,jdbcType=VARCHAR}
+														,#{note,jdbcType=VARCHAR}
+									)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.account.model.AccountSubject">
+		update account_subject  set
+		ID= #{id,jdbcType=VARCHAR}
+													,parent_id = #{parentId,jdbcType=INTEGER}
+											,parent_name = #{parentName,jdbcType=VARCHAR}
+											,account_id = #{accountId,jdbcType=INTEGER}
+											,account_name = #{accountName,jdbcType=VARCHAR}
+											,note = #{note,jdbcType=VARCHAR}
+							where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

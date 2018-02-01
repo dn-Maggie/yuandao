@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.student.dao.MarketStudentMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.student.model.MarketStudent">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+													<result column="qq" property="qq" jdbcType="VARCHAR" />
+													<result column="subject_id" property="subjectId" jdbcType="VARCHAR" />
+													<result column="user_id" property="userId" jdbcType="VARCHAR" />
+													<result column="time" property="time" jdbcType="TIMESTAMP" />
+													<result column="notes" property="notes" jdbcType="VARCHAR" />
+													<result column="subjectname" property="subjectname" jdbcType="VARCHAR" />
+													<result column="coursename" property="coursename" jdbcType="VARCHAR" />
+													<result column="file_url" property="fileUrl" jdbcType="BLOB" />
+									</resultMap>
+	<sql id="Base_Column_List">
+						 	m.id
+							,m.qq
+							,m.subject_id
+							,m.user_id
+							,m.time
+							,m.notes
+							,file_url
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select s.name as subjectname,b.full_name as fullname, 
+		<include refid="Base_Column_List" />
+		from market_student as m 
+		left join subject as s on m.subject_id=s.id 
+		left join basic_user_info as b on m.user_id=b.id
+		where m.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getMarketStatistic" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.student.model.MarketStudent">
+		SELECT
+			COUNT(*) as notes,
+			user_id as user_id,
+			time as time,
+			e.nick_name as fullName
+		FROM
+			`market_student` as m 
+		LEFT JOIN employee as e on e.id = m.user_id
+		WHERE 1 = 1
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(time,'%Y%m%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y%m%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(time,'%Y%m%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y%m%d')
+			]]>
+		</if>
+		GROUP BY
+			user_id,
+			DATE_FORMAT(time, '%Y%m%d')
+	</select>
+	
+	<select id="getMarkStuCount" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select count(*) as markStuCount
+		from market_student
+		WHERE 1=1 
+		<if test="_parameter!=null and _parameter!=''"> 
+			AND DATE_FORMAT(time,'%Y%m%d') like CONCAT('%',#{month,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
+	
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.student.model.MarketStudent">
+		select 
+			s.name as subjectname,
+			b.full_name as fullname,
+			m.id,
+			m.qq,
+			m.subject_id,
+			m.user_id,
+			m.time,
+			m.notes
+		from market_student as m 
+		left join subject as s on m.subject_id=s.id 
+		left join basic_user_info as b on m.user_id=b.id
+		where 1=1
+		<if test="id != null and '' != id">  
+			and m.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="createdby != null and '' != createdby">
+			and b.createdby = #{createdby,jdbcType=VARCHAR}
+		</if>
+		<if test="qq != null and '' != qq">  
+			and m.qq = #{qq,jdbcType=VARCHAR}
+		</if>
+		<if test="subjectId != null and '' != subjectId">  
+			and m.subject_id = #{subjectId,jdbcType=VARCHAR}
+		</if>
+		<if test="userId != null and '' != userId">  
+			and m.user_id = #{userId,jdbcType=VARCHAR}
+		</if>
+		<if test="time != null and '' != time">  
+			and m.time = #{time,jdbcType=TIMESTAMP}
+		</if>
+		<if test="notes != null and '' != notes">  
+			and m.notes = #{notes,jdbcType=VARCHAR}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(m.time,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(m.time,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+				<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+         	</if>
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from market_student
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.student.model.MarketStudent">
+		insert into market_student(
+										id
+										,qq
+										,subject_id
+										,user_id
+										,time
+										,notes
+										,file_url
+		)values (
+										#{id,jdbcType=VARCHAR}
+										,#{qq,jdbcType=VARCHAR}
+										,#{subjectId,jdbcType=VARCHAR}
+										,#{userId,jdbcType=VARCHAR}
+										,#{time,jdbcType=TIMESTAMP}
+										,#{notes,jdbcType=VARCHAR}
+										,#{fileUrl,jdbcType=BLOB}
+									)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.student.model.MarketStudent">
+		update market_student  set
+		ID= #{id,jdbcType=VARCHAR}
+											,qq = #{qq,jdbcType=VARCHAR}
+											,subject_id = #{subjectId,jdbcType=VARCHAR}
+											,user_id = #{userId,jdbcType=VARCHAR}
+<!-- 											,time = #{time,jdbcType=TIMESTAMP} -->
+											,notes = #{notes,jdbcType=VARCHAR}
+											,file_url = #{fileUrl,jdbcType=BLOB}
+							where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

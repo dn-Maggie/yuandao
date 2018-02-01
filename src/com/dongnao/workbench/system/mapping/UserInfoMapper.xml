@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.system.dao.UserInfoMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.basic.model.UserInfo">
+		<id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="NEW_EMAIL" property="newEmail" jdbcType="VARCHAR" />
+		<result column="MEMO" property="memo" jdbcType="VARCHAR" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="USER_NICK" property="userNick" jdbcType="VARCHAR" />
+		<result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR" />
+		<result column="STATES" property="states" jdbcType="VARCHAR" />
+		<result column="VALIDATE_TIME" property="validateTime" jdbcType="DATE" />
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="EMAIL_VALID_TIME" property="emailValidTime" jdbcType="DATE" />
+		<result column="ENABLE_STATE_DATE" property="enableStateDate" jdbcType="DATE" />
+		<result column="USER_TYPE" property="userType" jdbcType="VARCHAR" />
+		<result column="ENABLE_END_DATE" property="enableEndDate" jdbcType="DATE" />
+		<result column="IS_DELETE" property="isDelete" jdbcType="VARCHAR" />
+		<result column="LAST_LOGIN_IP" property="lastLoginIp" jdbcType="VARCHAR" />
+		<result column="FULL_NAME" property="fullName" jdbcType="VARCHAR" />
+		<result column="USER_ACCOUNT" property="userAccount" jdbcType="VARCHAR" />
+		<result column="IS_UNIT_ADMIN" property="isUnitAdmin" jdbcType="CHAR" />
+		<result column="UPDATER_ID" property="updaterId" jdbcType="VARCHAR" />
+		<result column="LAST_LOGIN_TIME" property="lastLoginTime" jdbcType="TIMESTAMP" />
+		<result column="SKIN" property="skin" jdbcType="VARCHAR" />
+		<result column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+		<result column="DEPT_NAME" property="unitName" jdbcType="VARCHAR" />
+	     <result column="BUREAU_NAME" property="bureauName" jdbcType="VARCHAR"/>
+	     <result column="BUREAU_ID" property="bureauId" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		 CREATE_TIME
+		,NEW_EMAIL
+		,MEMO
+		,UPDATE_TIME
+		,USER_NICK
+		,CREATOR_ID
+		,STATES
+		,VALIDATE_TIME
+		,PASSWORD
+		,EMAIL_VALID_TIME
+		,ENABLE_STATE_DATE
+		,USER_TYPE
+		,ENABLE_END_DATE
+		,IS_DELETE
+		,USER_ID
+		,LAST_LOGIN_IP
+		,FULL_NAME
+		,USER_ACCOUNT
+		,IS_UNIT_ADMIN
+		,UPDATER_ID
+		,LAST_LOGIN_TIME
+		,SKIN
+		,DEPT_ID
+		,BUREAU_ID
+		,BUREAU_NAME
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		getNameByCode('userType',u.USER_TYPE) as userTypeName,
+		getNameByCode('status',u.STATES) as statesName,
+		getNameByCode('csstheme',u.SKIN) as skinName,
+		getNameByCode('yn_num',u.IS_UNIT_ADMIN) as isUnitAdminName,
+		D.DEPT_NAME,
+		U.CREATE_TIME,
+		U.NEW_EMAIL,
+		U.MEMO,
+		U.UPDATE_TIME,
+		U.USER_NICK,
+		U.CREATOR_ID,
+		U.STATES,
+		U.VALIDATE_TIME,
+		U.PASSWORD,
+		U.EMAIL_VALID_TIME,
+		U.ENABLE_STATE_DATE,
+		U.USER_TYPE,
+		U.ENABLE_END_DATE,
+		U.IS_DELETE,
+		U.USER_ID,
+		U.LAST_LOGIN_IP,
+		U.FULL_NAME,
+		U.USER_ACCOUNT,
+		U.IS_UNIT_ADMIN,
+		U.UPDATER_ID,
+		U.LAST_LOGIN_TIME,
+		U.SKIN,
+		U.DEPT_ID,
+		U.BUREAU_ID,
+		U.BUREAU_NAME
+		from USER_INFO u ,SJHZ_GYJC_RYQX_DEPT D
+ 		WHERE U.DEPT_ID = D.DEPT_ID
+		and U.USER_ID = #{userId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getByUserAccount" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		getNameByCode('userType',USER_TYPE) as userTypeName,
+		getNameByCode('status',STATES) as statesName,
+		getNameByCode('csstheme',u.SKIN) as skinName,
+		getNameByCode('yn_num',IS_UNIT_ADMIN) as isUnitAdminName,
+		<include refid="Base_Column_List" />
+		from basic_user_info u
+		where u.USER_ACCOUNT = #{userAccount,jdbcType=VARCHAR}
+		and u.is_delete='0' and u.states='1'
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.basic.model.UserInfo">
+		select
+		getNameByCode('userType',USER_TYPE) as userTypeName,
+		getNameByCode('status',STATES) as statesName,
+		getNameByCode('csstheme',u.SKIN) as skinName,
+		getNameByCode('yn_num',IS_UNIT_ADMIN) as isUnitAdminName,
+		D.DEPT_NAME,
+		U.CREATE_TIME,
+		U.NEW_EMAIL,
+		U.MEMO,
+		U.UPDATE_TIME,
+		U.USER_NICK,
+		U.CREATOR_ID,
+		U.STATES,
+		U.VALIDATE_TIME,
+		U.PASSWORD,
+		U.EMAIL_VALID_TIME,
+		U.ENABLE_STATE_DATE,
+		U.USER_TYPE,
+		U.ENABLE_END_DATE,
+		U.IS_DELETE,
+		U.USER_ID,
+		U.LAST_LOGIN_IP,
+		U.FULL_NAME,
+		U.USER_ACCOUNT,
+		U.IS_UNIT_ADMIN,
+		U.UPDATER_ID,
+		U.LAST_LOGIN_TIME,
+		U.SKIN,
+		U.DEPT_ID,
+		U.BUREAU_ID,
+		U.BUREAU_NAME
+		from USER_INFO u,SJHZ_GYJC_RYQX_DEPT D
+ 		WHERE U.DEPT_ID =  d.dept_id
+		<if test="createTime != null and '' != createTime">
+			and U.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="newEmail != null and '' != newEmail">
+			and U.NEW_EMAIL = #{newEmail,jdbcType=VARCHAR}
+		</if>
+		<if test="memo != null and '' != memo">
+			and U.MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="updateTime != null and '' != updateTime">
+			and U.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="userNick != null and '' != userNick">
+			and U.USER_NICK = #{userNick,jdbcType=VARCHAR}
+		</if>
+		<if test="creatorId != null and '' != creatorId">
+			and U.CREATOR_ID = #{creatorId,jdbcType=VARCHAR}
+		</if>
+		<if test="states != null and '' != states">
+			and U.STATES = #{states,jdbcType=VARCHAR}
+		</if>
+		<if test="validateTime != null and '' != validateTime">
+			and U.VALIDATE_TIME = #{validateTime,jdbcType=DATE}
+		</if>
+		<if test="password != null and '' != password">
+			and U.PASSWORD = #{password,jdbcType=VARCHAR}
+		</if>
+		<if test="emailValidTime != null and '' != emailValidTime">
+			and U.EMAIL_VALID_TIME = #{emailValidTime,jdbcType=DATE}
+		</if>
+		<if test="enableStateDate != null and '' != enableStateDate">
+			and U.ENABLE_STATE_DATE = #{enableStateDate,jdbcType=DATE}
+		</if>
+		<if test="userType != null and '' != userType">
+			and U.USER_TYPE = #{userType,jdbcType=VARCHAR}
+		</if>
+		<if test="enableEndDate != null and '' != enableEndDate">
+			and U.ENABLE_END_DATE = #{enableEndDate,jdbcType=DATE}
+		</if>
+		<if test="isDelete != null and '' != isDelete">
+			and U.IS_DELETE = #{isDelete,jdbcType=VARCHAR}
+		</if>
+		<if test="userId != null and '' != userId">
+			and U.USER_ID = #{userId,jdbcType=VARCHAR}
+		</if>
+		<if test="lastLoginIp != null and '' != lastLoginIp">
+			and U.LAST_LOGIN_IP = #{lastLoginIp,jdbcType=VARCHAR}
+		</if>
+		<if test="fullName != null and '' != fullName">
+			and u.FULL_NAME LIKE CONCAT('%',#{fullName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="userAccount != null and '' != userAccount">
+			and u.USER_ACCOUNT LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="isUnitAdmin != null and '' != isUnitAdmin">
+			and U.IS_UNIT_ADMIN = #{isUnitAdmin,jdbcType=CHAR}
+		</if>
+		<if test="updaterId != null and '' != updaterId">
+			and U.UPDATER_ID = #{updaterId,jdbcType=VARCHAR}
+		</if>
+		<if test="lastLoginTime != null and '' != lastLoginTime">
+			and U.LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="deptId != null and '' != deptId">
+			and U.DEPT_ID = #{deptId,jdbcType=VARCHAR}
+		</if>
+		 <if test="bureauId != null and '' != bureauId">
+		    and U.BUREAU_ID= #{bureauId,jdbcType=VARCHAR}
+		 </if>
+		<if test="deptIds != null and '' != deptIds">
+			and U.DEPT_ID IN
+			<foreach item="deptId" index="index" collection="deptIds"   
+			open="(" separator="," close=")">  
+                       #{deptId}  
+		</foreach>  
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<update id="logicDeleteByKey" parameterType="java.lang.String">
+	   update basic_user_info t 
+	   set t.is_delete='1' 
+	   where t.USER_ID = #{userId,jdbcType=VARCHAR}
+	   and t.user_id &lt;&gt;'00000000-0000-0000-0000-000000000000'
+	
+	</update>
+
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from USER_INFO
+		where USER_ID = #{userId,jdbcType=VARCHAR}
+		and USER_ID &lt;&gt; '00000000-0000-0000-0000-000000000000'
+	</delete>
+	
+		<select id="batchAddLater" resultMap="BaseResultMap" parameterType="java.util.Date">
+	<![CDATA[
+	select tab1.* from (select * from basic_user_info t2 where t2.create_time=
+    #{createTime,jdbcType=TIMESTAMP} ) tab1
+    left join (select * from basic_user_info t1 where t1.create_time<>#{createTime,jdbcType=TIMESTAMP}) tab2
+    on tab1.user_account=tab2.user_account
+    where tab1.user_account=tab2.user_account
+		]]>
+	</select>
+	
+	
+	<insert id="batchAdd" parameterType="java.util.List">
+		insert into USER_INFO (
+		<include refid="Base_Column_List" />
+		)
+		<foreach close=")" collection="list" item="item" index="index"
+			open="(" separator="union">
+			select
+		 #{item.createTime,jdbcType=TIMESTAMP}
+		,#{item.newEmail,jdbcType=VARCHAR}
+		,#{item.memo,jdbcType=VARCHAR}
+		,#{item.updateTime,jdbcType=TIMESTAMP}
+		,#{item.userNick,jdbcType=VARCHAR}
+		,#{item.creatorId,jdbcType=VARCHAR}
+		,#{item.states,jdbcType=VARCHAR}
+		,#{item.validateTime,jdbcType=DATE}
+		,#{item.password,jdbcType=VARCHAR}
+		,#{item.emailValidTime,jdbcType=DATE}
+		,#{item.enableStateDate,jdbcType=DATE}
+		,#{item.userType,jdbcType=VARCHAR}
+		,#{item.enableEndDate,jdbcType=DATE}
+		,#{item.isDelete,jdbcType=VARCHAR}
+		,#{item.userId,jdbcType=VARCHAR}
+		,#{item.lastLoginIp,jdbcType=VARCHAR}
+		,#{item.fullName,jdbcType=VARCHAR}
+		,#{item.userAccount,jdbcType=VARCHAR}
+		,#{item.isUnitAdmin,jdbcType=CHAR}
+		,#{item.updaterId,jdbcType=VARCHAR}
+		,#{item.lastLoginTime,jdbcType=TIMESTAMP}
+		,#{item.skin,jdbcType=VARCHAR}
+		,#{item.deptId,jdbcType=VARCHAR}
+		,#{item.bureauId,jdbcType=VARCHAR}
+		,#{item.bureauName,jdbcType=VARCHAR}
+			from dual
+		</foreach>
+	</insert>
+	
+	
+
+	<insert id="add" parameterType="com.dongnao.workbench.basic.model.UserInfo">
+		insert into USER_INFO (
+		<include refid="Base_Column_List" />
+		)values (
+		#{createTime,jdbcType=TIMESTAMP}
+		,#{newEmail,jdbcType=VARCHAR}
+		,#{memo,jdbcType=VARCHAR}
+		,#{updateTime,jdbcType=TIMESTAMP}
+		,#{userNick,jdbcType=VARCHAR}
+		,#{creatorId,jdbcType=VARCHAR}
+		,#{states,jdbcType=VARCHAR}
+		,#{validateTime,jdbcType=DATE}
+		,#{password,jdbcType=VARCHAR}
+		,#{emailValidTime,jdbcType=DATE}
+		,#{enableStateDate,jdbcType=DATE}
+		,#{userType,jdbcType=VARCHAR}
+		,#{enableEndDate,jdbcType=DATE}
+		,#{isDelete,jdbcType=VARCHAR}
+		,#{userId,jdbcType=VARCHAR}
+		,#{lastLoginIp,jdbcType=VARCHAR}
+		,#{fullName,jdbcType=VARCHAR}
+		,#{userAccount,jdbcType=VARCHAR}
+		,#{isUnitAdmin,jdbcType=CHAR}
+		,#{updaterId,jdbcType=VARCHAR}
+		,#{lastLoginTime,jdbcType=TIMESTAMP}
+		,#{skin,jdbcType=VARCHAR}
+		,#{deptId,jdbcType=VARCHAR}
+		,#{bureauId,jdbcType=VARCHAR}
+		,#{bureauName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="updateByKeys" parameterType="java.util.Map">
+		<if test="list!=null and list.size()>0">
+			update basic_user_info 
+			<set>
+				<trim suffixOverrides=",">
+					<if test="isDelete != null">
+						IS_DELETE = #{isDelete,jdbcType=VARCHAR},
+					</if>
+					<if test="updaterId != null">
+						UPDATER_ID = #{updaterId,jdbcType=VARCHAR},
+					</if>
+					<if test="updateTime != null">
+						UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+					</if>
+				</trim>
+			</set>
+			where  USER_ID in 
+			<foreach item="userId" index="index" collection="list" open="(" separator="," close=")">   
+				#{userId,jdbcType=VARCHAR}
+		    </foreach>
+		</if>
+	</update>
+
+	<update id="update" parameterType="com.dongnao.workbench.basic.model.UserInfo">
+		update USER_INFO set
+		<if test="userId != null and '' != userId">
+		USER_ID = #{userId,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null">
+		,CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="newEmail != null">
+		,NEW_EMAIL = #{newEmail,jdbcType=VARCHAR}
+		</if>
+		<if test="memo != null">
+		,MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="updateTime != null">
+		,UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="userNick != null">
+		,USER_NICK = #{userNick,jdbcType=VARCHAR}
+		</if>
+		<if test="creatorId != null">
+		,CREATOR_ID = #{creatorId,jdbcType=VARCHAR}
+		</if>
+		<if test="states != null">
+		,STATES = #{states,jdbcType=VARCHAR}
+		</if>
+		<if test="validateTime != null">
+		,VALIDATE_TIME = #{validateTime,jdbcType=DATE}
+		</if>
+		<if test="password != null">
+		,PASSWORD = #{password,jdbcType=VARCHAR}
+		</if>
+		<if test="emailValidTime != null">
+		,EMAIL_VALID_TIME = #{emailValidTime,jdbcType=DATE}
+		</if>
+		<if test="enableStateDate != null">
+		,ENABLE_STATE_DATE = #{enableStateDate,jdbcType=DATE}
+		</if>
+		<if test="userType != null">
+		,USER_TYPE = #{userType,jdbcType=VARCHAR}
+		</if>
+		<if test="enableEndDate != null">
+		,ENABLE_END_DATE = #{enableEndDate,jdbcType=DATE}
+		</if>
+		<if test="isDelete != null">
+		,IS_DELETE = #{isDelete,jdbcType=VARCHAR}
+		</if>
+		<if test="lastLoginIp != null">
+		,LAST_LOGIN_IP = #{lastLoginIp,jdbcType=VARCHAR}
+		</if>
+		<if test="fullName != null">
+		,FULL_NAME = #{fullName,jdbcType=VARCHAR}
+		</if>
+		<if test="userAccount != null">
+		,USER_ACCOUNT = #{userAccount,jdbcType=VARCHAR}
+		</if>
+		<if test="isUnitAdmin != null">
+		,IS_UNIT_ADMIN = #{isUnitAdmin,jdbcType=CHAR}
+		</if>
+		<if test="updaterId != null">
+		,UPDATER_ID = #{updaterId,jdbcType=VARCHAR}
+		</if>
+		<if test="lastLoginTime != null">
+		,LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="skin != null">
+		,SKIN = #{skin,jdbcType=VARCHAR}
+		</if>
+		<if test="deptId != null">
+		,DEPT_ID = #{deptId,jdbcType=VARCHAR}
+		</if>
+		where USER_ID = #{userId,jdbcType=VARCHAR}
+	</update>
+	
+	
+	
+	<select id="listUserByRid" parameterType="java.util.Map" resultType="java.util.Map">
+		select u.USER_ACCOUNT,u.FULL_NAME 
+		from basic_user_info u,sys_ro_personrole p 
+		where u.is_delete='0' and p.USER_ID=u.USER_ID and p.ROLE_ID=#{roleId,jdbcType=VARCHAR}
+		<if test="fullName != null and '' != fullName">
+			and u.FULL_NAME LIKE CONCAT('%',#{fullName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="userAccount != null and '' != userAccount">
+			and u.USER_ACCOUNT LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+</mapper>

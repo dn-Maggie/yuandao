@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.school.dao.EmployeeMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.school.model.Employee">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="emp_no" property="empNo" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="native_place" property="nativePlace" jdbcType="VARCHAR" />
+		<result column="nation" property="nation" jdbcType="VARCHAR" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="node_type" property="nodeType" jdbcType="VARCHAR" />
+		<result column="marital_status" property="maritalStatus" jdbcType="VARCHAR" />
+		<result column="current_address" property="currentAddress" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="mail_address" property="mailAddress" jdbcType="VARCHAR" />
+		<result column="postcode" property="postcode" jdbcType="VARCHAR" />
+		<result column="education_background" property="educationBackground" jdbcType="VARCHAR" />
+		<result column="profession" property="profession" jdbcType="VARCHAR" />
+		<result column="foreign_language" property="foreignLanguage" jdbcType="VARCHAR" />
+		<result column="professional_qualification" property="professionalQualification" jdbcType="VARCHAR" />
+		<result column="education_experience" property="educationExperience" jdbcType="VARCHAR" />
+		<result column="work_experience" property="workExperience" jdbcType="VARCHAR" />
+		<result column="family_member" property="familyMember" jdbcType="VARCHAR" />
+		<result column="emergency_contact" property="emergencyContact" jdbcType="VARCHAR" />
+		<result column="birth_date" property="birthDate" jdbcType="TIMESTAMP" />
+		<result column="entry_date" property="entryDate" jdbcType="TIMESTAMP" />
+		<result column="be_full_date" property="beFullDate" jdbcType="TIMESTAMP" />
+		<result column="leave_date" property="leaveDate" jdbcType="TIMESTAMP" />
+		<result column="duty_id" property="dutyId" jdbcType="VARCHAR" />
+		<result column="duty_rank" property="dutyRank" jdbcType="VARCHAR" />
+		<result column="position" property="position" jdbcType="VARCHAR" />
+		<result column="salary" property="salary" jdbcType="DOUBLE" />
+		<result column="sal_value" property="salValue" jdbcType="DOUBLE" />
+		<result column="stock_num" property="stockNum" jdbcType="INTEGER" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="dept_no" property="deptNo" jdbcType="VARCHAR" />
+		<result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+		<result column="bank_name" property="bankName" jdbcType="VARCHAR" />	
+		<result column="isassess" property="isAssess" jdbcType="INTEGER" />
+		<result column="checkname" property="checkName" jdbcType="VARCHAR" />
+		<result column="checkstanderd" property="checkStanderd" jdbcType="INTEGER" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+		<result column="curr_state" property="currState" jdbcType="VARCHAR" />
+		<result column="foxmail" property="foxmail" jdbcType="VARCHAR" />
+		<result column="probation" property="probation" jdbcType="VARCHAR" />
+		<result column="not_dining" property="notDining" jdbcType="CHAR" />
+	</resultMap>
+	<resultMap id="NationResultMap" type="com.dongnao.workbench.common.bean.Nation">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="nation_name" property="nationName" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="AreaResultMap" type="com.dongnao.workbench.common.bean.ChinaArea">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="Pid" property="pid" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+	 				id,
+	 				emp_no,
+					name,
+					sex,
+					(year(SYSDATE())-year(birth_date)) as age,
+					native_place,
+					nation,
+					id_card,
+					node_type,
+					marital_status,
+					current_address,
+					mobile,
+					mail_address,
+					postcode,
+					education_background,
+					profession,
+					foreign_language,
+					professional_qualification,
+					education_experience,
+					work_experience,
+					family_member,
+					emergency_contact,
+					birth_date,
+					entry_date,
+					be_full_date,
+					leave_date,
+					duty_id,
+					duty_rank,
+					position,
+					salary,
+					sal_value,
+					stock_num,
+					nick_name,
+					dept_no,
+					bank_card,
+					bank_name,
+					isassess,
+					checkname,	
+					checkstanderd,				
+					note,
+					curr_state,
+					foxmail,
+					probation
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+					e.id,
+	 				e.emp_no,
+					e.name,
+					e.sex,
+					(year(SYSDATE())-year(e.birth_date)) as age,
+					e.native_place,
+					e.nation,
+					e.id_card,
+					e.node_type,
+					e.marital_status,
+					e.current_address,
+					e.mobile,
+					e.mail_address,
+					e.postcode,
+					e.education_background,
+					e.profession,
+					e.foreign_language,
+					e.professional_qualification,
+					e.education_experience,
+					e.work_experience,
+					e.family_member,
+					e.emergency_contact,
+					e.birth_date,
+					e.entry_date,
+					e.be_full_date,
+					e.leave_date,
+					e.duty_id,
+					e.duty_rank,
+					e.position,
+					e.salary,
+					e.sal_value,
+					e.stock_num,
+					e.nick_name,
+					e.dept_no,
+					bo.org_name as dept,
+					bo.corp_man AS deptLeader,
+					e.bank_card,
+					e.bank_name,
+					e.isassess,
+					e.checkname,
+					e.checkstanderd,
+					e.note,
+					e.curr_state,
+					e.foxmail,
+					e.probation,
+					e.not_dining 
+		from employee as e
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		where e.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 获取所有民族 -->
+	<select id="getAllNation" resultMap="NationResultMap" parameterType="java.lang.String">
+		select 
+		*
+		from china_nation
+	</select>
+	
+	<select id="getEmpByEmpNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			e.id,
+			e.emp_no,
+			e.name,
+			e.mobile,
+			e.entry_date,
+			e.be_full_date,
+			e.leave_date,
+			e.duty_id,
+			e.duty_rank,
+			e.position,
+			e.salary,
+			e.sal_value,
+			e.stock_num,
+			e.nick_name,
+			e.dept_no,
+			bo.org_name as dept,
+			e.bank_card,
+			e.bank_name,
+			e.isassess,
+			e.checkname,
+			e.checkstanderd,
+			e.note,
+			e.curr_state,
+			e.foxmail,
+			e.probation,
+			e.not_dining 
+		from employee as e
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		where e.emp_no = #{empNo,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.Employee">
+		select
+				e.id,
+ 				e.emp_no,
+				e.name,
+				e.sex,
+				(year(SYSDATE())-year(e.birth_date)) as age,
+				e.native_place,
+				e.nation,
+				e.id_card,
+				e.node_type,
+				e.marital_status,
+				e.current_address,
+				e.mobile,
+				e.mail_address,
+				e.postcode,
+				e.education_background,
+				e.profession,
+				e.foreign_language,
+				e.professional_qualification,
+				e.education_experience,
+				e.work_experience,
+				e.family_member,
+				e.emergency_contact,
+				e.birth_date,
+				e.entry_date,
+				e.be_full_date,
+				e.leave_date,
+				e.duty_id,
+				e.duty_rank,
+				e.position,
+				e.salary,
+				e.sal_value,
+				e.stock_num,
+				e.nick_name,
+				e.dept_no,
+				bo.org_name as dept,
+				e.bank_card,
+				e.bank_name,
+				e.isassess,
+				e.checkname,
+				e.checkstanderd,
+				e.note,
+				e.curr_state,
+				e.foxmail,
+				e.probation
+		from employee as e
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		where 1=1
+		<if test="id != null and '' != id">  
+			and e.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="empNo != null and '' != empNo">  
+			and e.emp_no = #{empNo,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null and '' != name">  
+			and e.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="sex != null and '' != sex">  
+			and e.sex = #{sex,jdbcType=VARCHAR}
+		</if>
+		<if test="nativePlace != null and '' != nativePlace">  
+			and e.native_place = #{nativePlace,jdbcType=VARCHAR}
+		</if>
+		<if test="nation != null and '' != nation">  
+			and e.nation = #{nation,jdbcType=VARCHAR}
+		</if>
+		<if test="idCard != null and '' != idCard">  
+			and e.id_card = #{idCard,jdbcType=VARCHAR}
+		</if>
+		<if test="maritalStatus != null and '' != maritalStatus">  
+			and e.marital_status = #{maritalStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="currentAddress != null and '' != currentAddress">  
+			and e.current_address = #{currentAddress,jdbcType=VARCHAR}
+		</if>
+		<if test="mobile != null and '' != mobile">  
+			and e.mobile = #{mobile,jdbcType=VARCHAR}
+		</if>
+		<if test="mailAddress != null and '' != mailAddress">  
+			and e.mail_address = #{mailAddress,jdbcType=VARCHAR}
+		</if>
+		<if test="postcode != null and '' != postcode">  
+			and e.postcode = #{postcode,jdbcType=VARCHAR}
+		</if>
+		<if test="educationBackground != null and '' != educationBackground">  
+			and e.education_background = #{educationBackground,jdbcType=VARCHAR}
+		</if>
+		<if test="profession != null and '' != profession">  
+			and e.profession = #{profession,jdbcType=VARCHAR}
+		</if>
+		<if test="foreignLanguage != null and '' != foreignLanguage">  
+			and e.foreign_language = #{foreignLanguage,jdbcType=VARCHAR}
+		</if>
+		<if test="professionalQualification != null and '' != professionalQualification">  
+			and e.professional_qualification = #{professionalQualification,jdbcType=VARCHAR}
+		</if>
+		<if test="educationExperience != null and '' != educationExperience">  
+			and e.education_experience = #{educationExperience,jdbcType=VARCHAR}
+		</if>
+		<if test="workExperience != null and '' != workExperience">  
+			and e.work_experience = #{workExperience,jdbcType=VARCHAR}
+		</if>
+		<if test="familyMember != null and '' != familyMember">  
+			and e.family_member = #{familyMember,jdbcType=VARCHAR}
+		</if>
+		<if test="emergencyContact != null and '' != emergencyContact">  
+			and e.emergency_contact = #{emergencyContact,jdbcType=VARCHAR}
+		</if>
+		<if test="entryDate != null and '' != entryDate">  
+			and e.entry_date = #{entryDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="position != null and '' != position">  
+			and e.position = #{position,jdbcType=VARCHAR}
+		</if>
+		<if test="dutyId != null and '' != dutyId">  
+			and e.duty_id = #{dutyId,jdbcType=VARCHAR}
+		</if>
+		<if test="salary != null and '' != salary">  
+			and e.salary = #{salary,jdbcType=DOUBLE}
+		</if>
+		<if test="nickName != null and '' != nickName">  
+			and e.nick_name = #{nickName,jdbcType=VARCHAR}
+		</if>
+		<if test="deptNo != null and '' != deptNo">  
+			and e.dept_no like CONCAT(#{deptNo,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="dept != null and '' != dept">  
+			and bo.org_name = #{dept,jdbcType=VARCHAR}
+		</if>
+		<if test="bankCard != null and '' != bankCard">  
+			and e.bank_card = #{bankCard,jdbcType=VARCHAR}
+		</if>
+		<if test="position != null and '' != position">  
+			and e.position = #{position,jdbcType=VARCHAR}
+		</if>
+		<if test="bankName != null and '' != bankName">  
+			and e.bank_name = #{bankName,jdbcType=VARCHAR}
+		</if>
+		<if test="isAssess != null and '' != isAssess">  
+			and e.isassess = #{isAssess,jdbcType=INTEGER}
+		</if>
+		<if test="checkName != null and '' != checkName">  
+			and e.checkname = #{checkName,jdbcType=VARCHAR}
+		</if>
+		<if test="checkStanderd != null and '' != checkStanderd">  
+			and e.checkstanderd = #{checkStanderd,jdbcType=INTEGER}
+		</if>
+		<if test="currState != null and '' != currState">  
+			and e.curr_state = #{currState,jdbcType=VARCHAR}
+		</if>
+		<if test="currState == null or '' == currState">  
+			and e.curr_state in('1','2','3','4')
+		</if>
+		
+		<if test="propsMap.startDate != null  and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(e.entry_date,'%Y-%m-%c') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%c')
+			]]>
+		</if>
+		<if test="propsMap.endDate != null and propsMap.endDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(e.entry_date,'%Y-%m-%c') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%c')
+			]]>
+		</if>
+		<if test="propsMap.beFullDateStart  != null and propsMap.beFullDateStart != ''">
+			<![CDATA[
+			and DATE_FORMAT(e.be_full_date,'%Y-%m-%c') >= DATE_FORMAT(#{propsMap.beFullDateStart,jdbcType=TIMESTAMP},'%Y-%m-%c')
+			]]>
+		</if>
+		<if test="propsMap.beFullDateEnd  != null and propsMap.beFullDateEnd != ''">
+			<![CDATA[
+			and DATE_FORMAT(e.be_full_date,'%Y-%m-%c') <= DATE_FORMAT(#{propsMap.beFullDateEnd,jdbcType=TIMESTAMP},'%Y-%m-%c')
+			]]>
+		</if>
+		<if test="propsMap.leaveDateStart  != null and propsMap.leaveDateStart != ''">
+			<![CDATA[
+			and DATE_FORMAT(e.leave_date,'%Y-%m-%c') >= DATE_FORMAT(#{propsMap.leaveDateStart,jdbcType=TIMESTAMP},'%Y-%m-%c')
+			]]>
+		</if>
+		<if test="propsMap.leaveDateEnd  != null and propsMap.leaveDateEnd != ''">
+			<![CDATA[
+			and DATE_FORMAT(e.leave_date,'%Y-%m-%c') <= DATE_FORMAT(#{propsMap.leaveDateEnd,jdbcType=TIMESTAMP},'%Y-%m-%c')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+          	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<select id="countEmployeeSal" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.Employee">
+		SELECT
+			e.id,
+			e.emp_no,
+			bo.org_name AS dept,
+			e. NAME,
+			e.nick_name,
+			e.bank_card,
+			e.mobile,
+			SUM(ela.leave_date) AS leaveDays,
+			e.entry_date,
+			e.be_full_date,
+			e.leave_date,
+			e.sal_value,
+			e.salary,
+			e.note,
+			e.foxmail
+		FROM
+			employee AS e
+		LEFT JOIN basic_org bo ON e.dept_no = bo.org_no
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				emp_leave_apply
+			WHERE
+				check_flag = 2
+				<if test="null != propsMap.startDate and propsMap.startDate != ''">
+					<![CDATA[
+					and DATE_FORMAT(create_date,'%Y%m') = DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y%m')
+					]]>
+				</if>
+		)ela ON ela.emp_id = e.id
+		WHERE 1=1 
+		<if test="name != null and '' != name">  
+			and e.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="nickName != null and '' != nickName">  
+			and e.nick_name = #{nickName,jdbcType=VARCHAR}
+		</if>
+		<if test="empNo != null and '' != empNo">  
+			and e.emp_no like CONCAT('%',#{empNo,jdbcType=VARCHAR},'%')
+		</if>
+		group by e.id
+	</select>
+	
+	<select id="getEmpCount" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select 
+			count(*) as empCount
+		from employee
+		WHERE 1=1 
+		<if test="_parameter!=null and _parameter!=''"> 
+			AND DATE_FORMAT(entry_date,'%Y%m') =  #{month,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<select id="getNowEmpNo" resultMap="BaseResultMap">
+		SELECT
+			SUBSTR(MAX(emp_no) FROM 4) as empNo
+		FROM
+			`employee`
+		WHERE
+		emp_no LIKE '%DN%';
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from employee
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.school.model.Employee">
+		insert into employee (
+				 id            
+				 ,emp_no           
+				 ,name           
+				 ,sex               
+				 ,native_place           
+				 ,nation           
+				 ,id_card           
+				 ,node_type           
+				 ,marital_status           
+				 ,current_address           
+				 ,mobile           
+				 ,mail_address           
+				 ,postcode           
+				 ,education_background           
+				 ,profession           
+				 ,foreign_language           
+				 ,professional_qualification           
+				 ,education_experience           
+				 ,work_experience           
+				 ,family_member           
+				 ,emergency_contact           
+				 ,birth_date           
+				 ,entry_date  
+				 ,be_full_date
+				 ,leave_date
+				 ,duty_id       
+				 ,duty_rank           
+				 ,position           
+				 ,salary           
+				 ,sal_value           
+				 ,stock_num           
+				 ,nick_name           
+				 ,dept_no           
+				 ,bank_card           
+				 ,bank_name 
+				 ,isassess
+				 ,checkname    
+				 ,checkstanderd    
+				 ,note           
+				 ,curr_state  
+				 ,foxmail    
+				 ,probation      
+				 ,not_dining     
+		)values (
+					#{id,jdbcType=VARCHAR}
+					,#{empNo,jdbcType=VARCHAR}
+					,#{name,jdbcType=VARCHAR}
+					,#{sex,jdbcType=VARCHAR}
+					,#{nativePlace,jdbcType=VARCHAR}
+					,#{nation,jdbcType=VARCHAR}
+					,#{idCard,jdbcType=VARCHAR}
+					,#{nodeType,jdbcType=VARCHAR}
+					,#{maritalStatus,jdbcType=VARCHAR}
+					,#{currentAddress,jdbcType=VARCHAR}
+					,#{mobile,jdbcType=VARCHAR}
+					,#{mailAddress,jdbcType=VARCHAR}
+					,#{postcode,jdbcType=VARCHAR}
+					,#{educationBackground,jdbcType=VARCHAR}
+					,#{profession,jdbcType=VARCHAR}
+					,#{foreignLanguage,jdbcType=VARCHAR}
+					,#{professionalQualification,jdbcType=VARCHAR}
+					,#{educationExperience,jdbcType=VARCHAR}
+					,#{workExperience,jdbcType=VARCHAR}
+					,#{familyMember,jdbcType=VARCHAR}
+					,#{emergencyContact,jdbcType=VARCHAR}
+					,#{birthDate,jdbcType=TIMESTAMP}
+					,#{entryDate,jdbcType=TIMESTAMP}
+					,#{beFullDate,jdbcType=TIMESTAMP}
+					,#{leaveDate,jdbcType=TIMESTAMP}
+					,#{dutyId,jdbcType=VARCHAR}
+					,#{dutyRank,jdbcType=VARCHAR}
+					,#{position,jdbcType=VARCHAR}
+					,#{salary,jdbcType=DOUBLE}
+					,#{salValue,jdbcType=DOUBLE}
+					,#{stockNum,jdbcType=INTEGER}
+					,#{nickName,jdbcType=VARCHAR}
+					,#{deptNo,jdbcType=VARCHAR}
+					,#{bankCard,jdbcType=VARCHAR}
+					,#{bankName,jdbcType=VARCHAR}
+					,#{isAssess,jdbcType=INTEGER}
+					,#{checkName,jdbcType=VARCHAR}
+					,#{checkStanderd,jdbcType=INTEGER}
+					,#{note,jdbcType=VARCHAR}
+					,#{currState,jdbcType=VARCHAR}
+					,#{foxmail,jdbcType=VARCHAR}
+					,#{probation,jdbcType=INTEGER}
+					,'0'
+				)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.school.model.Employee">
+		update employee  set
+				ID= #{id,jdbcType=VARCHAR}
+				,emp_no = #{empNo,jdbcType=VARCHAR}
+				,name = #{name,jdbcType=VARCHAR}
+				,sex = #{sex,jdbcType=VARCHAR}
+				,native_place = #{nativePlace,jdbcType=VARCHAR}
+				,nation = #{nation,jdbcType=VARCHAR}
+				,id_card = #{idCard,jdbcType=VARCHAR}
+				,node_type = #{nodeType,jdbcType=VARCHAR}
+				,marital_status = #{maritalStatus,jdbcType=VARCHAR}
+				,current_address = #{currentAddress,jdbcType=VARCHAR}
+				,mobile = #{mobile,jdbcType=VARCHAR}
+				,mail_address = #{mailAddress,jdbcType=VARCHAR}
+				,postcode = #{postcode,jdbcType=VARCHAR}
+				,education_background = #{educationBackground,jdbcType=VARCHAR}
+				,profession = #{profession,jdbcType=VARCHAR}
+				,foreign_language = #{foreignLanguage,jdbcType=VARCHAR}
+				,professional_qualification = #{professionalQualification,jdbcType=VARCHAR}
+				,education_experience = #{educationExperience,jdbcType=VARCHAR}
+				,work_experience = #{workExperience,jdbcType=VARCHAR}
+				,family_member = #{familyMember,jdbcType=VARCHAR}
+				,emergency_contact = #{emergencyContact,jdbcType=VARCHAR}
+				,birth_date = #{birthDate,jdbcType=TIMESTAMP}
+				,entry_date = #{entryDate,jdbcType=TIMESTAMP}
+				,be_full_date = #{beFullDate,jdbcType=TIMESTAMP}
+				,leave_date = #{leaveDate,jdbcType=TIMESTAMP}
+				,duty_id = #{dutyId,jdbcType=VARCHAR}
+				,duty_rank = #{dutyRank,jdbcType=VARCHAR}
+				,position = #{position,jdbcType=VARCHAR}
+				,salary = #{salary,jdbcType=DOUBLE}
+				,sal_value = #{salValue,jdbcType=DOUBLE}
+				,stock_num = #{stockNum,jdbcType=INTEGER}
+				,nick_name = #{nickName,jdbcType=VARCHAR}
+				,dept_no = #{deptNo,jdbcType=VARCHAR}
+				,bank_card = #{bankCard,jdbcType=VARCHAR}
+				,bank_name = #{bankName,jdbcType=VARCHAR}
+				,isassess = #{isAssess,jdbcType=INTEGER}
+				,checkname = #{checkName,jdbcType=VARCHAR}
+				,checkstanderd = #{checkStanderd,jdbcType=INTEGER}
+				,note = #{note,jdbcType=VARCHAR}
+				,curr_state = #{currState,jdbcType=VARCHAR}
+				,foxmail = #{foxmail,jdbcType=VARCHAR}
+				,probation = #{probation,jdbcType=INTEGER}
+			where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="checkNameValidation" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(*) from employee where name=#{checkName,jdbcType=VARCHAR} or nick_name=#{checkName,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectByPid" resultMap="AreaResultMap" parameterType="com.dongnao.workbench.common.bean.ChinaArea">
+		select
+			Id
+			,Name
+			,Pid
+		from CHINA_AREA
+		where 1=1 and id!=0 and Pid = #{pid,jdbcType=INTEGER}
+	</select>
+</mapper>

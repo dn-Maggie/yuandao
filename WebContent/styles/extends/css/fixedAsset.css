@@ -1,0 +1,58 @@
+@CHARSET "utf-8";
+	.wrap{
+		width:96%;
+		margin:auto;
+	}
+	.top_head{
+		width:97%;
+		height:40px;
+		line-height:40px;
+		text-align: center;
+		position: relative;
+	}
+	
+	.top_name{
+		display: inline-block;
+		margin: auto;
+		height:40px;
+		line-height:40px;
+		width: 100px;
+	}
+	
+	.table td{
+		border-right:none;
+		border-bottom:none;
+	}
+	.table tr td.cut{
+		text-indent: 4em;
+	}
+	.table td .text{
+		height:30px;
+		line-height:30px;
+	}
+	.zjSubjectList{
+	    position: absolute;
+	    display: none;
+	}
+	.allZjSubjectList{
+		max-height: 180px;
+	    overflow-y: scroll;
+	    border-top: 1px solid silver;
+	    border-bottom: 1px solid silver;
+	    z-index: 10;
+	    height: 180px;
+	    width: 167px;
+	    background: #fff;
+	}
+	ul.allZjSubjectList>li{
+		margin-left: 10px;
+		text-align:left;
+	    cursor: pointer;
+		width:90%;
+		height:22px;
+		line-height:22px;
+		color:gray;
+	}
+	ul.allZjSubjectList>li:hover{
+		background: #ccc;
+	}

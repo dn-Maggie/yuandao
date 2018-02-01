@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.system.dao.ModuleMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.system.model.Module">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="MODULE_MEMO" property="moduleMemo" jdbcType="VARCHAR" />
+		<result column="NAVURL" property="navurl" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="ENABLED" property="enabled" jdbcType="INTEGER" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="NEED_RIGHT" property="needRight" jdbcType="INTEGER" />
+		<result column="MODULE_NAME" property="moduleName" jdbcType="VARCHAR" />
+		<result column="UPDATER_ID" property="updateId" jdbcType="VARCHAR" />
+		<result column="SERIAL_INDEX" property="serialIndex" jdbcType="INTEGER" />
+		<result column="MODULE_CODE" property="moduleCode" jdbcType="VARCHAR" />
+		<result column="CREATOR_ID" property="createId" jdbcType="VARCHAR" />
+		<result column="RESOURCE_ID" property="resourceId" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		MODULE_MEMO
+		,NAVURL
+		,ID
+		,CREATE_TIME
+		,ENABLED
+		,UPDATE_TIME
+		,NEED_RIGHT
+		,MODULE_NAME
+		,UPDATER_ID
+		,SERIAL_INDEX
+		,MODULE_CODE
+		,CREATOR_ID
+		,RESOURCE_ID
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		M.MODULE_MEMO
+		,M.NAVURL
+		,M.ID
+		,M.CREATE_TIME
+		,M.ENABLED
+		,M.UPDATE_TIME
+		,M.NEED_RIGHT
+		,M.MODULE_NAME
+		,M.UPDATER_ID
+		,M.SERIAL_INDEX
+		,M.MODULE_CODE
+		,M.CREATOR_ID
+		,M.RESOURCE_ID
+		from SYS_RO_MODULE M
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.system.model.Module">
+		select
+		M.MODULE_MEMO
+		,M.NAVURL
+		,M.ID
+		,M.CREATE_TIME
+		,M.ENABLED
+		,M.UPDATE_TIME
+		,M.NEED_RIGHT
+		,M.MODULE_NAME
+		,M.UPDATER_ID
+		,M.SERIAL_INDEX
+		,M.MODULE_CODE
+		,M.CREATOR_ID
+		,M.RESOURCE_ID
+		from SYS_RO_MODULE M
+		where 1=1
+		<if test="moduleMemo != null and '' != moduleMemo">
+			and M.MODULE_MEMO = #{moduleMemo,jdbcType=VARCHAR}
+		</if>
+		<if test="navurl != null and '' != navurl">
+			and M.NAVURL = #{navurl,jdbcType=VARCHAR}
+		</if>
+		<if test="id != null and '' != id">
+			and M.ID = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null and '' != createTime">
+			and M.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="enabled != null  ">
+			and M.ENABLED = #{enabled,jdbcType=INTEGER}
+		</if>
+		<if test="updateTime != null and '' != updateTime">
+			and M.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="needRight != null  ">
+			and M.NEED_RIGHT = #{needRight,jdbcType=INTEGER}
+		</if>
+		<if test="moduleName != null and '' != moduleName">
+			and M.MODULE_NAME like CONCAT('%',#{moduleName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="updateId != null and '' != updateId">
+			and M.UPDATER_ID = #{updateId,jdbcType=VARCHAR}
+		</if>
+		<if test="serialIndex != null  ">
+			and M.SERIAL_INDEX = #{serialIndex,jdbcType=INTEGER}
+		</if>
+		<if test="moduleCode != null and '' != moduleCode">
+			and M.MODULE_CODE like CONCAT('%',#{moduleCode,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="createId != null and '' != createId">
+			and M.CREATOR_ID = #{createId,jdbcType=VARCHAR}
+		</if>
+		<choose>  
+			<when test="sortFild != null and '' != sortFild">  
+            	order by ${sortFild} ${sortBy}
+			</when>  
+			<otherwise>  
+				order by M.SERIAL_INDEX asc
+			</otherwise>  
+		</choose> 
+	</select>
+
+	<resultMap id="ModuleLocationResultMap" type="com.dongnao.workbench.system.model.ModuleLocation">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="mid" property="mid" jdbcType="VARCHAR" />
+		<result column="pid" property="pid" jdbcType="VARCHAR" />
+		<result column="mtype" property="mtype" jdbcType="INTEGER" />
+		<result column="mname" property="mname" jdbcType="VARCHAR" />
+		<result column="murl" property="murl" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="listModuleLocationList" resultMap="ModuleLocationResultMap" >
+select 1 as mtype,m.id as mid,m.id as pid,m.module_name as mname, m.navurl as murl 
+from sys_ro_module m 
+ UNION 
+select 2 as mtype,mr.id as mid,mr.muuid as pid ,mr.resource_name as mname, mr.resurl as murl 
+from sys_ro_moduleres mr where mr.resurl is not null
+UNION 
+select 3 as mtype,r.id as mid,r.resuu_id as pid,r.act_name as mname,r.act_url as murl 
+from sys_ro_resact r where r.act_url is not null 
+	</select>
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from
+		SYS_RO_MODULE
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="add" parameterType="com.dongnao.workbench.system.model.Module">
+		insert into SYS_RO_MODULE (
+		<include refid="Base_Column_List" />
+		)
+		values (
+		#{moduleMemo,jdbcType=VARCHAR}
+		,#{navurl,jdbcType=VARCHAR}
+		,#{id,jdbcType=VARCHAR}
+		,#{createTime,jdbcType=TIMESTAMP}
+		,#{enabled,jdbcType=INTEGER}
+		,#{updateTime,jdbcType=TIMESTAMP}
+		,#{needRight,jdbcType=INTEGER}
+		,#{moduleName,jdbcType=VARCHAR}
+		,#{updateId,jdbcType=VARCHAR}
+		,#{serialIndex,jdbcType=INTEGER}
+		,#{moduleCode,jdbcType=VARCHAR}
+		,#{createId,jdbcType=VARCHAR}
+		,#{resourceId,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.dongnao.workbench.system.model.Module">
+		update SYS_RO_MODULE set
+		MODULE_MEMO = #{moduleMemo,jdbcType=VARCHAR}
+		,NAVURL = #{navurl,jdbcType=VARCHAR}
+		,ID = #{id,jdbcType=VARCHAR}
+		,ENABLED = #{enabled,jdbcType=INTEGER}
+		,UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		,NEED_RIGHT = #{needRight,jdbcType=INTEGER}
+		,MODULE_NAME = #{moduleName,jdbcType=VARCHAR}
+		,UPDATER_ID = #{updateId,jdbcType=VARCHAR}
+		,SERIAL_INDEX = #{serialIndex,jdbcType=INTEGER}
+		,MODULE_CODE = #{moduleCode,jdbcType=VARCHAR}
+		,RESOURCE_ID = #{resourceId,jdbcType=VARCHAR}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="queryForMenuByAdmin" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> from SYS_RO_MODULE   
+		    where ENABLED=1
+		ORDER BY SERIAL_INDEX
+	</select>
+	
+	<select id="queryForMenuByPcode" parameterType="java.lang.String" resultMap="BaseResultMap" >
+		<!-- select * from (
+				select DISTINCT M.ID,M.MODULE_NAME,M.MODULE_CODE,M.NAVURL,M.SERIAL_INDEX from SYS_RO_PERSONROLE A 
+									left join SYS_RO_ROLERIGHT B on A.role_id=B.ROLEID
+									left join SYS_RO_MODULERES MR ON B.RESUUID = MR.ID
+									left join SYS_RO_MODULE M on  M.ID = MR.MUUID 
+									where (A.user_id= #{pcode,jdbcType=VARCHAR} and B.ID is not null) AND M.ENABLED=1
+				union
+					select M.ID,M.MODULE_NAME,M.MODULE_CODE,M.NAVURL,M.SERIAL_INDEX from SYS_RO_MODULE M where M.ENABLED=1 and M.NEED_RIGHT=0
+			) M
+			ORDER BY M.SERIAL_INDEX -->
+		select M.* from (
+		    select 
+			    DISTINCT M.ID,
+			    M.MODULE_NAME,
+			    M.MODULE_CODE,
+			    M.NAVURL,
+			    M.SERIAL_INDEX,
+			    M.RESOURCE_ID 
+		    from 
+		    	SYS_RO_PERSONROLE A 
+		    left join 
+		    	SYS_RO_ROLERIGHT B 
+		    on 
+		    	A.role_id=B.ROLEID
+		    left join 
+		    	SYS_RO_MODULERES MR 
+		    ON 
+		    	B.RESUUID = MR.ID
+		    left join 
+		    	SYS_RO_MODULE M 
+		    on  
+		    	M.ID = MR.MUUID 
+		    where (A.user_id= #{pcode,jdbcType=VARCHAR} and B.ID is not null) AND M.ENABLED=1
+		    union
+		        select M.ID,M.MODULE_NAME,M.MODULE_CODE,M.NAVURL,M.SERIAL_INDEX,M.RESOURCE_ID from SYS_RO_MODULE M where M.ENABLED=1 and M.NEED_RIGHT=0
+		) M
+               
+		ORDER BY M.SERIAL_INDEX
+	</select>
+</mapper>

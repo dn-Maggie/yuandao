@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.account.dao.AccountFinanceMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.account.model.AccountFinance">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+															<result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+													<result column="account_name" property="accountName" jdbcType="VARCHAR" />
+													<result column="account_type" property="accountType" jdbcType="INTEGER" />
+													<result column="intro" property="intro" jdbcType="VARCHAR" />
+									</resultMap>
+	<sql id="Base_Column_List">
+						 	id
+										,account_no
+										,account_name
+										,account_type
+										,intro
+						</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from account_finance
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.AccountFinance">
+		select
+		<include refid="Base_Column_List" />
+		from account_finance
+		where 1=1
+		<if test="id != null and '' != id">  
+			and id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="accountNo != null and '' != accountNo">  
+			and account_no like CONCAT('%',#{accountNo,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="accountName != null and '' != accountName">  
+			and account_name = #{accountName,jdbcType=VARCHAR}
+		</if>
+		<if test="accountType != null and '' != accountType">  
+			and account_type = #{accountType,jdbcType=INTEGER}
+		</if>
+		<if test="intro != null and '' != intro">  
+			and intro = #{intro,jdbcType=VARCHAR}
+		</if>
+				<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+         	</if>
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from account_finance
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.account.model.AccountFinance">
+		insert into account_finance (
+		<include refid="Base_Column_List" />
+		)values (
+										#{id,jdbcType=VARCHAR}
+														,#{accountNo,jdbcType=VARCHAR}
+														,#{accountName,jdbcType=VARCHAR}
+														,#{accountType,jdbcType=INTEGER}
+														,#{intro,jdbcType=VARCHAR}
+									)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.account.model.AccountFinance">
+		update account_finance  set
+		ID= #{id,jdbcType=VARCHAR}
+													,account_no = #{accountNo,jdbcType=VARCHAR}
+											,account_name = #{accountName,jdbcType=VARCHAR}
+											,account_type = #{accountType,jdbcType=INTEGER}
+											,intro = #{intro,jdbcType=VARCHAR}
+							where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

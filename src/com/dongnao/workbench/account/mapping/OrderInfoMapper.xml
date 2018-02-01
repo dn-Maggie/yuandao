@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.account.dao.OrderInfoMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.account.model.OrderInfo">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="order_type" property="orderType" jdbcType="INTEGER" />
+		<result column="stu_id" property="stuId" jdbcType="VARCHAR" />
+		<result column="should_pay" property="shouldPay" jdbcType="DOUBLE" />
+		<result column="actual_pay" property="actualPay" jdbcType="DOUBLE" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+	 	id
+		,order_type
+		,stu_id
+		,should_pay
+		,actual_pay
+		,create_time
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			oi.id,
+			oi.order_type,
+			oi.stu_id,
+			oi.should_pay,
+			oi.actual_pay,
+			oi.create_time,
+			v.`NAME` as stuName,
+			v.edu_back as wangwang,
+			v.subject_name as subjectName,
+			v.course_name as courseName
+		from vip_order_info oi
+		LEFT JOIN  vip_student v on oi.stu_id = v.id
+		where oi.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.OrderInfo">
+		select
+			oi.id,
+			oi.order_type,
+			oi.stu_id,
+			oi.should_pay,
+			oi.actual_pay,
+			oi.create_time,
+			v.`NAME` as stuName,
+			v.edu_back as wangwang,
+			v.subject_name as subjectName,
+			v.course_name as courseName,
+		from vip_order_info oi
+		LEFT JOIN  vip_student v on oi.stu_id = v.id
+		where 1=1
+		<if test="id != null and '' != id">  
+			and oi.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="orderType != null and '' != orderType">  
+			and oi.order_type = #{orderType,jdbcType=INTEGER}
+		</if>
+		<if test="stuId != null and '' != stuId">  
+			and oi.stu_id = #{stuId,jdbcType=VARCHAR}
+		</if>
+		<if test="stuName != null and '' != stuName">  
+			and stuName = #{stuName,jdbcType=VARCHAR}
+		</if>
+		<if test="subjectName != null and '' != subjectName">  
+			and subjectName = #{subjectName,jdbcType=VARCHAR}
+		</if>
+		<if test="courseName != null and '' != courseName">  
+			and courseName = #{courseName,jdbcType=VARCHAR}
+		</if>
+		<if test="shouldPay != null and '' != shouldPay">  
+			and oi.should_pay = #{shouldPay,jdbcType=DOUBLE}
+		</if>
+		<if test="actualPay != null and '' != actualPay">  
+			and oi.actual_pay = #{actualPay,jdbcType=DOUBLE}
+		</if>
+		<if test="createTime != null and '' != createTime">  
+			and oi.create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	
+	<select id="sumOrder" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.OrderInfo">
+		<if test="groupBy != null and '' != groupBy">
+		SELECT 
+				subjectName,
+				COUNT(DISTINCT stu_id) AS cnt,
+				sum(o.should_pay) AS shouldPay,
+				sum(o.actual_pay) AS actualPay
+			FROM
+				(
+		</if>
+				select	oi.id,
+						oi.stu_id,
+						v.`NAME` as stuName,
+						v.subject_name as subjectName,
+						v.course_name as courseName,
+						sum(oi.should_pay) as shouldPay,
+						sum(oi.actual_pay) as actualPay,
+						oi.create_time
+				from vip_order_info oi
+				LEFT JOIN  vip_student v on oi.stu_id = v.id
+				where 1=1
+				<if test="id != null and '' != id">  
+					and oi.id = #{id,jdbcType=VARCHAR}
+				</if>
+				<if test="orderType != null and '' != orderType">  
+					and oi.order_type = #{orderType,jdbcType=INTEGER}
+				</if>
+				<if test="stuId != null and '' != stuId">  
+					and oi.stu_id = #{stuId,jdbcType=VARCHAR}
+				</if>
+				<if test="stuName != null and '' != stuName">  
+					and V.NAME = #{stuName,jdbcType=VARCHAR}
+				</if>
+				<if test="subjectName != null and '' != subjectName">  
+					and V.subject_id = #{subjectName,jdbcType=VARCHAR}
+				</if>
+				<if test="courseName != null and '' != courseName">  
+					and v.course_name = #{courseName,jdbcType=VARCHAR}
+				</if>
+				<if test="shouldPay != null and '' != shouldPay">  
+					and oi.should_pay = #{shouldPay,jdbcType=DOUBLE}
+				</if>
+				<if test="actualPay != null and '' != actualPay">  
+					and oi.actual_pay = #{actualPay,jdbcType=DOUBLE}
+				</if>
+				<if test="createTime != null and '' != createTime">  
+					and oi.create_time = #{createTime,jdbcType=TIMESTAMP}
+				</if>
+				<if test="null != propsMap.startDate and propsMap.startDate != ''">
+					<![CDATA[and DATE_FORMAT(oi.create_time,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')]]>
+				</if>
+				<if test="null != propsMap.endDate and propsMap.endDate != ''">
+					<![CDATA[and DATE_FORMAT(oi.create_time,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')]]>
+				</if>		
+		       	GROUP BY oi.stu_id
+		       	<if test="orderFields != null and '' != orderFields">  
+		           	order by ${orderFields} ${order}
+		       	</if>
+		<if test="groupBy != null and '' != groupBy">
+			) o
+				<if test="groupBy == 'subjectName'">
+					GROUP BY o.subjectName
+				</if>
+		</if>	
+	</select>
+	
+	<select id="subgridlist" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.OrderInfo">
+		select		
+	 			oi.id,
+	 			oi.order_type,
+				oi.stu_id,
+				v.`NAME` as stuName,
+				v.subject_name as subjectName,
+				v.course_name as courseName,
+				oi.should_pay as should_pay,
+				oi.actual_pay as actual_pay,
+				oi.create_time
+		from vip_order_info oi
+		LEFT JOIN vip_student v on oi.stu_id = v.id
+		where 1=1
+		<if test="stuId != null and '' != stuId">  
+			and stu_id = #{stuId,jdbcType=VARCHAR}
+		</if>
+		<if test="stuName != null and '' != stuName">  
+			and v.`NAME` = #{stuName,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<select id="sumAllOrder" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.OrderInfo">
+		select
+		sum(case when order_type='1' then should_pay else 0 end) as shouldxfsr,
+		sum(case when order_type='1' then actual_pay else 0 end) as actualxfsr,
+		sum(case when order_type='2' then actual_pay else 0 end) as xfbk,
+		sum(case when order_type='3' then actual_pay else 0 end) as xftk,
+		sum(case when order_type='4' then should_pay else 0 end) as xftz
+		from vip_order_info
+		where 1=1
+		<if test="_parameter!=null and _parameter!=''"> 
+			AND DATE_FORMAT(create_time,'%Y%m') like CONCAT('%',#{month,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from vip_order_info
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.account.model.OrderInfo">
+		insert into vip_order_info (
+		<include refid="Base_Column_List" />
+		)values (
+										#{id,jdbcType=VARCHAR}
+														,#{orderType,jdbcType=INTEGER}
+														,#{stuId,jdbcType=VARCHAR}
+														,#{shouldPay,jdbcType=DOUBLE}
+														,#{actualPay,jdbcType=DOUBLE}
+														,#{createTime,jdbcType=TIMESTAMP}
+									)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.account.model.OrderInfo">
+		update vip_order_info  set
+		ID= #{id,jdbcType=VARCHAR}
+											,order_type = #{orderType,jdbcType=INTEGER}
+											,stu_id = #{stuId,jdbcType=VARCHAR}
+											,should_pay = #{shouldPay,jdbcType=DOUBLE}
+											,actual_pay = #{actualPay,jdbcType=DOUBLE}
+											,create_time = #{createTime,jdbcType=TIMESTAMP}
+							where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

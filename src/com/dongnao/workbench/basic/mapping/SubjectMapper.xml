@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.basic.dao.SubjectMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.basic.model.Subject">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="creatDate" property="creatdate" jdbcType="TIMESTAMP" />
+		<result column="perf_target" property="perfTarget" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id
+		,NAME
+		,creatDate
+		,perf_target
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from subject
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="queryPerfTarget" resultType="java.lang.Integer" >
+		 SELECT IFNULL(sum(perf_target),0) from subject 
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.basic.model.Subject">
+		select
+		<include refid="Base_Column_List" />
+		from subject
+		where 1=1
+		<if test="id != null and '' != id">  
+			and id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null and '' != name">  
+			and NAME = #{name,jdbcType=VARCHAR}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(creatDate,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(creatDate,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+				<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+         	</if>
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from subject
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.basic.model.Subject">
+		insert into subject (
+		<include refid="Base_Column_List" />
+		)values (
+				#{id,jdbcType=VARCHAR}
+				,#{name,jdbcType=VARCHAR}
+				,#{creatdate,jdbcType=TIMESTAMP}
+				,#{perfTarget,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.basic.model.Subject">
+		update subject  set
+		ID= #{id,jdbcType=VARCHAR}
+		,NAME = #{name,jdbcType=VARCHAR}
+		,creatDate = #{creatdate,jdbcType=TIMESTAMP}
+		,perf_target = #{perfTarget,jdbcType=INTEGER}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

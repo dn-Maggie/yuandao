@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.school.dao.EmpNoticeMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.school.model.EmpNotice">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_id" property="createId" jdbcType="VARCHAR" />
+		<result column="notice_title" property="noticeTitle" jdbcType="VARCHAR" />
+		<result column="notice_content" property="noticeContent" jdbcType="VARCHAR" />
+		<result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+		<result column="edit_id" property="editId" jdbcType="VARCHAR" />
+		<result column="file_size" property="fileSize" jdbcType="VARCHAR" />
+		<result column="file_suffix" property="fileSuffix" jdbcType="VARCHAR" />
+		<result column="file_url" property="fileUrl" jdbcType="VARCHAR" />
+		<result column="file_name" property="fileName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+	 	id,
+		create_time,
+		create_id,
+		notice_title,
+		notice_content,
+		edit_time,
+		edit_id,
+		file_size,
+		file_suffix,
+		file_url,
+		file_name
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			en.id,
+			en.create_time,
+			en.edit_time,
+			e.nick_name as createName,
+			e1.nick_name as editName,
+			en.notice_title,
+			en.notice_content,
+			en.file_size,
+			en.file_suffix,
+			en.file_url,
+			en.file_name
+		from emp_notice as en
+		LEFT JOIN employee e on e.id = en.create_id
+		LEFT JOIN employee e1 on e1.id = en.edit_id
+		where en.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.EmpNotice">
+		select
+			en.id,
+			en.create_time,
+			en.edit_time,
+			e.nick_name as createName,
+			e1.nick_name as editName,
+			en.notice_title,
+			en.notice_content,
+			en.file_size,
+			en.file_suffix,
+			en.file_url,
+			en.file_name
+		from emp_notice as en
+		LEFT JOIN employee e on e.id = en.create_id
+		LEFT JOIN employee e1 on e1.id = en.edit_id
+		where 1=1
+		<if test="id != null and '' != id">  
+			and en.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="createId != null and '' != createId">  
+			and en.create_id = #{createId,jdbcType=VARCHAR}
+		</if>
+		<if test="createName != null and '' != createName">  
+			and e.nick_name like concat('%',#{createName,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="editName != null and '' != editName">  
+			and e1.nick_name like concat('%',#{editName,jdbcType=VARCHAR},'%') 
+		</if>
+		<if test="noticeTitle != null and '' != noticeTitle">  
+			and en.notice_title = #{noticeTitle,jdbcType=VARCHAR}
+		</if>
+		<if test="noticeContent != null and '' != noticeContent">  
+			and en.notice_content = #{noticeContent,jdbcType=VARCHAR}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(en.create_time,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(en.create_time,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from emp_notice
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.school.model.EmpNotice">
+		insert into emp_notice (
+		<include refid="Base_Column_List" />
+		)values (
+			#{id,jdbcType=VARCHAR}
+			,#{createTime,jdbcType=TIMESTAMP}
+			,#{createId,jdbcType=VARCHAR}
+			,#{noticeTitle,jdbcType=VARCHAR}
+			,#{noticeContent,jdbcType=VARCHAR}
+			,#{editTime,jdbcType=TIMESTAMP}
+			,#{editId,jdbcType=VARCHAR}
+			,#{fileSize,jdbcType=VARCHAR}
+			,#{fileSuffix,jdbcType=VARCHAR}
+			,#{fileUrl,jdbcType=VARCHAR}
+			,#{fileName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.school.model.EmpNotice">
+		update emp_notice  set
+			ID= #{id,jdbcType=VARCHAR}
+			,notice_title = #{noticeTitle,jdbcType=VARCHAR}
+			,notice_content = #{noticeContent,jdbcType=VARCHAR}
+			,edit_time = #{editTime,jdbcType=TIMESTAMP}
+			,edit_id = #{editId,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

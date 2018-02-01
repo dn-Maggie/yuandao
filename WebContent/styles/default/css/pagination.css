@@ -1,0 +1,66 @@
+.pagebox{width:100%; position:relative;margin:8px 0;}
+.pageInfo{ float:left;line-height:37px; margin-left:14px;}
+.pagination{ 
+    /*clear:both;*/
+	color:#999;
+	padding:5px 0px 5px 0px;
+	font-size:13px;
+	float:right;
+	margin-right:14px;
+	}
+
+.pagination A {
+	float: left;
+	border: 2px solid #58a2f1;
+	display: inline;
+	padding: 3px 7px 3px 7px;
+	margin-right: 5px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	cursor: pointer;
+	background: #58a2f1;
+	text-decoration:none;
+	color:#fff;
+}
+
+.pagination a:hover {
+    border: 2px solid #58a2f1;
+	background: #58a2f1;
+	color:#fff;
+}
+
+.pagination SPAN {
+	float: left;
+	/*border: 1px solid #ccc;*/
+	display: inline;
+	padding: 3px 7px 3px 7px;
+	margin-right: 5px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	cursor: pointer;
+	/*background: #90b8e0*/
+	text-decoration:none;
+	color:#333;
+}
+.pagination .current {
+	float: left;
+	border: 2px solid #F66516;
+	display: inline;
+	padding: 3px 7px 3px 7px;
+	margin-right: 5px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	background: #fff;
+	color: #F66516;
+}
+.pagination .prev.current {
+	border:none;
+	BORDER-BOTTOM-COLOR: #999; BORDER-TOP-COLOR: #999; BACKGROUND: #fff; COLOR: rgb(98,149,233); BORDER-RIGHT-COLOR: #999; BORDER-LEFT-COLOR: #999
+}
+.pagination .next.current {
+	border:none;
+	BORDER-BOTTOM-COLOR: #999; BORDER-TOP-COLOR: #999; BACKGROUND: #fff; COLOR: rgb(98,149,233); BORDER-RIGHT-COLOR: #999; BORDER-LEFT-COLOR: #999
+}

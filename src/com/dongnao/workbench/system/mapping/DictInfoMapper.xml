@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.system.dao.DictInfoMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.system.model.DictInfo">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="IS_DELETE" property="isDelete" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="ORDER_NO" property="orderNo" jdbcType="VARCHAR" />
+		<result column="MEMO" property="memo" jdbcType="VARCHAR" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="DICT_CODE" property="dictCode" jdbcType="VARCHAR" />
+		<result column="DICT_TYPE_CODE" property="dictTypeCode" jdbcType="VARCHAR" />
+		<result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR" />
+		<result column="STATES" property="states" jdbcType="VARCHAR" />
+		<result column="DICT_NAME" property="dictName" jdbcType="VARCHAR" />
+		<result column="UPDATER_ID" property="updaterId" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		IS_DELETE
+		,ID
+		,CREATE_TIME
+		,ORDER_NO
+		,MEMO
+		,UPDATE_TIME
+		,DICT_CODE
+		,DICT_TYPE_CODE
+		,CREATOR_ID
+		,STATES
+		,DICT_NAME
+		,UPDATER_ID
+	</sql>
+	
+	<select id="getByDictCode" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.system.model.DictInfo" >
+		select
+		<include refid="Base_Column_List" />
+		from sys_dict_info
+		where dict_code = #{dictCode,jdbcType=VARCHAR}
+		and dict_type_code=#{dictTypeCode,jdbcType=VARCHAR}
+		and is_delete = '0'
+	</select>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from SYS_DICT_INFO
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.system.model.DictInfo" >
+		select
+		(select TYPE_NAME from sys_dict_type where TYPE_CODE=DICT_TYPE_CODE) as dictTypeName,
+		<include refid="Base_Column_List" />
+		from SYS_DICT_INFO
+		where 1=1
+		<if test="id != null and '' != id">
+			and ID = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="isDelete != null and '' != isDelete">
+			and IS_DELETE = #{isDelete,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null and '' != createTime">
+			and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="orderNo != null and '' != orderNo">
+			and ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+		</if>
+		<if test="memo != null and '' != memo">
+			and MEMO LIKE CONCAT('%',#{memo,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="updateTime != null and '' != updateTime">
+			and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="dictCode != null and '' != dictCode">
+			and DICT_CODE LIKE CONCAT('%',#{dictCode,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="dictTypeCode != null and '' != dictTypeCode">
+			and DICT_TYPE_CODE = #{dictTypeCode,jdbcType=VARCHAR}
+		</if>
+		<if test="creatorId != null and '' != creatorId">
+			and CREATOR_ID = #{creatorId,jdbcType=VARCHAR}
+		</if>
+		<if test="states != null and '' != states">
+			and STATES = #{states,jdbcType=VARCHAR}
+		</if>
+		<if test="dictName != null and '' != dictName">
+			and DICT_NAME LIKE CONCAT('%',#{dictName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="updaterId != null and '' != updaterId">
+			and UPDATER_ID = #{updaterId,jdbcType=VARCHAR}
+		</if>
+		<choose>  
+        	<when test="sortFild != null and '' != sortFild">  
+            	order by ${sortFild} ${sortBy}
+        	</when>  
+        	<otherwise>  
+            	order by  DICT_TYPE_CODE ,ORDER_NO asc
+        	</otherwise>  
+    	</choose>  
+	</select>
+
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from
+		SYS_DICT_INFO
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="add" parameterType="com.dongnao.workbench.system.model.DictInfo">
+		insert into SYS_DICT_INFO (
+		<include refid="Base_Column_List" />
+		)
+		values (
+		#{isDelete,jdbcType=VARCHAR}
+		,#{id,jdbcType=VARCHAR}
+		,#{createTime,jdbcType=TIMESTAMP}
+		,#{orderNo,jdbcType=VARCHAR}
+		,#{memo,jdbcType=VARCHAR}
+		,#{updateTime,jdbcType=TIMESTAMP}
+		,#{dictCode,jdbcType=VARCHAR}
+		,#{dictTypeCode,jdbcType=VARCHAR}
+		,#{creatorId,jdbcType=VARCHAR}
+		,#{states,jdbcType=VARCHAR}
+		,#{dictName,jdbcType=VARCHAR}
+		,#{updaterId,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.dongnao.workbench.system.model.DictInfo">
+		update SYS_DICT_INFO set
+		<if test="id != null and '' != id">
+			ID = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="isDelete != null">
+			,IS_DELETE = #{isDelete,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null">
+			,CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="orderNo != null">
+			,ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+		</if>
+		<if test="memo != null">
+			,MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="updateTime != null">
+			,UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="dictCode != null">
+			,DICT_CODE = #{dictCode,jdbcType=VARCHAR}
+		</if>
+		<if test="dictTypeCode != null">
+			,DICT_TYPE_CODE = #{dictTypeCode,jdbcType=VARCHAR}
+		</if>
+		<if test="creatorId != null">
+			,CREATOR_ID = #{creatorId,jdbcType=VARCHAR}
+		</if>
+		<if test="states != null">
+			,STATES = #{states,jdbcType=VARCHAR}
+		</if>
+		<if test="dictName != null">
+			,DICT_NAME = #{dictName,jdbcType=VARCHAR}
+		</if>
+		<if test="updaterId != null">
+			,UPDATER_ID = #{updaterId,jdbcType=VARCHAR}
+		</if>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="getDictByTypeCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select dict_name,dict_code from sys_dict_info 
+			where DICT_TYPE_CODE = #{dictTypeCode,jdbcType=VARCHAR}
+			and STATES!= '0' and is_delete = '0'
+			order by DICT_TYPE_CODE, ORDER_NO
+	</select>
+</mapper>

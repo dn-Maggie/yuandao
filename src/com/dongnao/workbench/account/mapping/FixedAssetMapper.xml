@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.account.dao.FixedAssetMapper">
+	<resultMap id="BaseResultMap"
+		type="com.dongnao.workbench.account.model.FixedAsset">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="asset_no" property="assetNo" jdbcType="VARCHAR" />
+		<result column="asset_name" property="assetName" jdbcType="VARCHAR" />
+		<result column="enter_date" property="enterDate" jdbcType="TIMESTAMP" />
+		<result column="model" property="model" jdbcType="VARCHAR" />
+		
+		<result column="add_type" property="addType" jdbcType="VARCHAR" />
+		<result column="asset_item_id" property="assetItemId" jdbcType="VARCHAR" />
+		<result column="begin_date" property="beginDate" jdbcType="TIMESTAMP" />
+		<result column="use_org" property="useOrg" jdbcType="VARCHAR" />
+		<result column="work_number" property="workNumber" jdbcType="VARCHAR" />
+		
+		<result column="depre_method" property="depreMethod" jdbcType="VARCHAR" />
+		<result column="is_deprenow" property="isDeprenow" jdbcType="VARCHAR" />
+		<result column="ljzj_subject" property="ljzjSubject" jdbcType="VARCHAR" />
+		<result column="zjfy_subject" property="zjfySubject" jdbcType="VARCHAR" />
+		<result column="zichan_clear" property="zichanClear" jdbcType="VARCHAR" />
+		
+		<result column="initial_value" property="initialValue"
+			jdbcType="DOUBLE" />
+		<result column="remain_ratio" property="remainRatio" jdbcType="INTEGER" />
+		<result column="remain_value" property="remainValue" jdbcType="DOUBLE" />
+		<result column="use_period" property="usePeriod" jdbcType="INTEGER" />
+		<result column="depred_month" property="depredMonth" jdbcType="INTEGER" />
+		
+		<result column="remain_use_month" property="remainUseMonth"
+			jdbcType="INTEGER" />
+		<result column="used_depre" property="usedDepre" jdbcType="DOUBLE" />
+		<result column="currdate" property="currdate" jdbcType="TIMESTAMP" />
+		<result column="per_depred" property="perDepred" jdbcType="DOUBLE" />
+		<result column="property_state" property="propertyState" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="AssetItemResultMap"
+		type="com.dongnao.workbench.account.model.AssetItem">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="asset_name" property="assetName" jdbcType="VARCHAR" />
+		<result column="asset_type" property="assetType" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		asset_no
+		,asset_name
+		,enter_date
+		,model
+		,add_type
+		,asset_item_id
+		,begin_date
+		,use_org
+		,work_number
+		,depre_method
+		,is_deprenow
+		,ljzj_subject
+		,zjfy_subject
+		,zichan_clear
+		,initial_value
+		,remain_ratio
+		,remain_value
+		,use_period
+		,depred_month
+		,remain_use_month
+		,used_depre
+		,currdate
+		,per_depred
+		,property_state
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		fa.id,
+		fa.asset_no,
+		fa.asset_name,
+		date_format(fa.enter_date,'%Y-%m-%d') as enter_date,
+		fa.model,
+		fa.add_type,
+		ad.asset_name as asset_item_id,
+		date_format(fa.begin_date,'%Y-%m-%d') as begin_date,
+		bo.org_name as use_org,
+		fa.work_number,
+		fa.depre_method,
+		fa.is_deprenow,
+		fa.ljzj_subject,
+		fa.zjfy_subject,
+		fa.zichan_clear,
+		fa.initial_value,
+		fa.remain_ratio,
+		fa.remain_value,
+		fa.use_period,
+		fa.depred_month,
+		fa.remain_use_month,
+		fa.used_depre,
+		fa.currdate,
+		fa.per_depred,
+		fa.property_state
+		from company_property as fa
+		LEFT JOIN employee e ON e.emp_no = fa.work_number
+		LEFT join basic_org bo on fa.use_org = bo.org_no
+		LEFT join asset_details ad on ad.id = fa.asset_item_id
+		where fa.id =
+		#{id,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.account.model.FixedAsset">
+		select
+		fa.id,
+		fa.asset_no,
+		fa.asset_name,
+		date_format(fa.enter_date,'%Y-%m-%d') as enter_date,
+		fa.model,
+		fa.add_type,
+		ad.asset_name as asset_item_id,
+		date_format(fa.begin_date,'%Y-%m-%d') as begin_date,
+		bo.org_name as use_org,
+		fa.work_number,
+		fa.depre_method,
+		fa.is_deprenow,
+		fa.ljzj_subject,
+		fa.zjfy_subject,
+		fa.zichan_clear,
+		fa.initial_value,
+		fa.remain_ratio,
+		fa.remain_value,
+		fa.use_period,
+		fa.depred_month,
+		fa.remain_use_month,
+		fa.used_depre,
+		fa.currdate,
+		fa.per_depred,
+		fa.property_state
+		from company_property as fa
+		LEFT JOIN employee e ON e.emp_no = fa.work_number
+		LEFT join basic_org bo on fa.use_org = bo.org_no
+		LEFT join asset_details ad on ad.id = fa.asset_item_id
+		where 1=1
+		<if test="id != null and '' != id">
+			and fa.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="assetNo != null and '' != assetNo">
+			and fa.asset_no = #{assetNo,jdbcType=VARCHAR}
+		</if>
+		<if test="assetName != null and '' != assetName">
+			and fa.asset_name = #{assetName,jdbcType=VARCHAR}
+		</if>
+		<if test="enterDate != null and '' != enterDate">
+			and fa.enter_date = #{enterDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="model != null and '' != model">
+			and fa.model = #{model,jdbcType=VARCHAR}
+		</if>
+		<if test="addType != null and '' != addType">
+			and fa.add_type = #{addType,jdbcType=VARCHAR}
+		</if>
+		<if test="assetItemId != null and '' != assetItemId">
+			and fa.asset_item_id = #{assetItemId,jdbcType=VARCHAR}
+		</if>
+		<if test="useOrg != null and '' != useOrg">
+			and e.dept = #{useOrg,jdbcType=VARCHAR}
+		</if>
+		<if test="workNumber != null and '' != workNumber">
+			and fa.work_number = #{workNumber,jdbcType=VARCHAR}
+		</if>
+		<if test="depreMethod != null and '' != depreMethod">
+			and fa.depre_method = #{depreMethod,jdbcType=VARCHAR}
+		</if>
+		<if test="isDeprenow != null and '' != isDeprenow">
+			and fa.is_deprenow = #{isDeprenow,jdbcType=VARCHAR}
+		</if>
+		<if test="ljzjSubject != null and '' != ljzjSubject">
+			and fa.ljzj_subject = #{ljzjSubject,jdbcType=VARCHAR}
+		</if>
+		<if test="zjfySubject != null and '' != zjfySubject">
+			and fa.zjfy_subject = #{zjfySubject,jdbcType=VARCHAR}
+		</if>
+		<if test="zichanClear != null and '' != zichanClear">
+			and fa.zichan_clear = #{zichanClear,jdbcType=VARCHAR}
+		</if>
+		<if test="initialValue != null and '' != initialValue">
+			and fa.initial_value = #{initialValue,jdbcType=DOUBLE}
+		</if>
+		<if test="remainRatio != null and '' != remainRatio">
+			and fa.remain_ratio = #{remainRatio,jdbcType=INTEGER}
+		</if>
+		<if test="remainValue != null and '' != remainValue">
+			and fa.remain_value = #{remainValue,jdbcType=DOUBLE}
+		</if>
+		<if test="usePeriod != null and '' != usePeriod">
+			and fa.use_period = #{usePeriod,jdbcType=INTEGER}
+		</if>
+		<if test="depredMonth != null and '' != depredMonth">
+			and fa.depred_month = #{depredMonth,jdbcType=INTEGER}
+		</if>
+		<if test="remainUseMonth != null and '' != remainUseMonth">
+			and fa.remain_use_month = #{remainUseMonth,jdbcType=INTEGER}
+		</if>
+		<if test="usedDepre != null and '' != usedDepre">
+			and fa.used_depre = #{usedDepre,jdbcType=DOUBLE}
+		</if>
+		<if test="currdate != null and '' != currdate">
+			and fa.currdate = #{currdate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="perDepred != null and '' != perDepred">
+			and fa.per_depred = #{perDepred,jdbcType=DOUBLE}
+		</if>
+		<if test="propertyState != null and '' != propertyState">
+			and fa.property_state = #{propertyState,jdbcType=INTEGER}
+		</if>
+		<if test="propsMap.startDate != null  and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(fa.begin_date,'%Y-%m-%c') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%c')
+			]]>
+		</if>
+		<if test="propsMap.endDate != null and propsMap.endDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(fa.begin_date,'%Y-%m-%c') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%c')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">
+			order by ${orderFields} ${order}
+		</if>
+		
+	</select>
+
+
+	<select id="listRecovery" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.account.model.FixedAsset">
+		select
+		fa.id,
+		fa.asset_no,
+		fa.asset_name,
+		date_format(fa.enter_date,'%Y-%m-%d') as enter_date,
+		fa.model,
+		fa.add_type,
+		ad.asset_name as asset_item_id,
+		date_format(fa.begin_date,'%Y-%m-%d') as begin_date,
+		bo.org_name as use_org,
+		fa.work_number,
+		fa.depre_method,
+		fa.is_deprenow,
+		fa.ljzj_subject,
+		fa.zjfy_subject,
+		fa.zichan_clear,
+		fa.initial_value,
+		fa.remain_ratio,
+		fa.remain_value,
+		fa.use_period,
+		fa.depred_month,
+		fa.remain_use_month,
+		fa.used_depre,
+		fa.currdate,
+		fa.per_depred,
+		fa.property_state
+		from company_property as fa
+		LEFT JOIN employee e ON e.emp_no = fa.work_number
+		LEFT join basic_org bo on fa.use_org = bo.org_no
+		LEFT join asset_details ad on ad.id = fa.asset_item_id
+		where e.emp_no = fa.work_number and e.curr_state=3
+		<if test="orderFields != null and '' != orderFields">
+			order by ${orderFields} ${order}
+		</if>
+	</select>
+
+
+	<select id="listAssetItem" resultMap="AssetItemResultMap"
+		parameterType="com.dongnao.workbench.account.model.AssetItem">
+		select
+		fa.id,
+		fa.asset_name,
+		fa.asset_type
+		from
+		asset_details as fa
+		where 1=1
+	</select>
+
+
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from company_property
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="add" parameterType="com.dongnao.workbench.account.model.FixedAsset">
+		insert into company_property (
+		<include refid="Base_Column_List" />
+		)values (
+		#{assetNo,jdbcType=VARCHAR}
+		,#{assetName,jdbcType=VARCHAR}
+		,#{enterDate,jdbcType=TIMESTAMP}
+		,#{model,jdbcType=VARCHAR}
+		,#{addType,jdbcType=VARCHAR}
+		,#{assetItemId,jdbcType=VARCHAR}
+		,#{beginDate,jdbcType=TIMESTAMP}
+		,#{useOrg,jdbcType=VARCHAR}
+		,#{workNumber,jdbcType=VARCHAR}
+		,#{depreMethod,jdbcType=VARCHAR}
+		,#{isDeprenow,jdbcType=VARCHAR}
+		,#{ljzjSubject,jdbcType=VARCHAR}
+		,#{zjfySubject,jdbcType=VARCHAR}
+		,#{zichanClear,jdbcType=VARCHAR}
+		,#{initialValue,jdbcType=DOUBLE}
+		,#{remainRatio,jdbcType=INTEGER}
+		,#{remainValue,jdbcType=DOUBLE}
+		,#{usePeriod,jdbcType=INTEGER}
+		,#{depredMonth,jdbcType=INTEGER}
+		,#{remainUseMonth,jdbcType=INTEGER}
+		,#{usedDepre,jdbcType=DOUBLE}
+		,#{currdate,jdbcType=TIMESTAMP}
+		,#{perDepred,jdbcType=DOUBLE}
+		,#{propertyState,jdbcType=INTEGER}
+		)
+	</insert>
+
+	<insert id="addAssetItem" parameterType="com.dongnao.workbench.account.model.AssetItem">
+		insert into
+		asset_details (
+		asset_name
+		,asset_type
+		)values (
+		#{assetName,jdbcType=VARCHAR}
+		,#{assetType,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.dongnao.workbench.account.model.FixedAsset">
+		update company_property set
+		asset_no = #{assetNo,jdbcType=VARCHAR}
+		,asset_name = #{assetName,jdbcType=VARCHAR}
+		,enter_date = #{enterDate,jdbcType=TIMESTAMP}
+		,model = #{model,jdbcType=VARCHAR}
+		,add_type = #{addType,jdbcType=VARCHAR}
+		,asset_item_id = #{assetItemId,jdbcType=VARCHAR}		
+		,begin_date = #{beginDate,jdbcType=TIMESTAMP}
+		,use_org = #{useOrg,jdbcType=VARCHAR}
+		,work_number = #{workNumber,jdbcType=VARCHAR}
+		,depre_method = #{depreMethod,jdbcType=VARCHAR}
+		,is_deprenow = #{isDeprenow,jdbcType=VARCHAR}
+		,ljzj_subject = #{ljzjSubject,jdbcType=VARCHAR}
+		,zjfy_subject = #{zjfySubject,jdbcType=VARCHAR}
+		,zichan_clear = #{zichanClear,jdbcType=VARCHAR}
+		,initial_value = #{initialValue,jdbcType=DOUBLE}
+		,remain_ratio = #{remainRatio,jdbcType=INTEGER}
+		,remain_value = #{remainValue,jdbcType=DOUBLE}
+		,use_period = #{usePeriod,jdbcType=INTEGER}
+		,depred_month = #{depredMonth,jdbcType=INTEGER}
+		,remain_use_month = #{remainUseMonth,jdbcType=INTEGER}
+		,used_depre = #{usedDepre,jdbcType=DOUBLE}
+		,currdate = #{currdate,jdbcType=TIMESTAMP}
+		,per_depred = #{perDepred,jdbcType=DOUBLE}
+		,property_state = #{propertyState,jdbcType=INTEGER}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="recovery" parameterType="com.dongnao.workbench.account.model.FixedAsset">
+		update company_property cp 
+		set
+			 work_number = #{workNumber,jdbcType=VARCHAR}
+			,property_state = #{propertyState,jdbcType=INTEGER}
+		where  
+			cp.work_number in(select emp_no from employee where curr_state=3)
+	</update>
+</mapper>

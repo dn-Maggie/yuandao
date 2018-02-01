@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.student.dao.ContinuePayMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.student.model.ContinuePay">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="stu_id" property="stuId" jdbcType="VARCHAR" />
+		<result column="stu_name" property="stuName" jdbcType="VARCHAR" />
+		<result column="money" property="money" jdbcType="DOUBLE" />
+		<result column="operator" property="operator" jdbcType="VARCHAR" />
+		<result column="TIME" property="time" jdbcType="TIMESTAMP" />
+		<result column="notes" property="notes" jdbcType="VARCHAR" />
+		<result column="is_count" property="isCount" jdbcType="VARCHAR" />
+		<result column="subject_id" property="subjectId" jdbcType="VARCHAR" />
+		<result column="course_id" property="courseId" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id
+		,stu_id
+		,stu_name
+		,money
+		,operator
+		,TIME
+		,notes
+		,is_count
+		,subject_id
+		,course_id
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			c.id,
+			c.stu_id,
+			c.stu_name,
+			c.money,
+			e.nick_name as operator,
+			c.TIME,
+			c.notes,
+			c.is_count,
+			c.subject_id,
+			c.course_id,
+			v.qq as qq,
+			v.name as stuname,
+			b.full_name as fullname
+		from vip_continue_pay as c
+		LEFT JOIN vip_student as v on c.stu_id=v.id 
+		LEFT JOIN basic_user_info as b on c.operator=b.id
+		LEFT JOIN employee e ON e.id = c.operator
+		where c.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 获取补款统计数据 -->
+	<select id="getStatistical" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.student.model.ContinuePay">
+		SELECT 
+			SUM(c.money) as money 
+			from vip_continue_pay as c 
+		LEFT JOIN vip_student as v  ON	c.stu_id=v.id 
+		WHERE 1=1 
+		<if test="subjectName != null and '' != subjectName">  
+			and v.subject_name = #{subjectName,jdbcType=VARCHAR}
+		</if>
+		<if test="null != startDate and startDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(c.time,'%Y-%m-%d') >= DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != endDate and endDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(c.time,'%Y-%m-%d') <= DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != joinStartDate and joinStartDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(v.join_time,'%Y-%m-%d') >= DATE_FORMAT(#{joinStartDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != joinEndDate and joinEndDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(v.join_time,'%Y-%m-%d') <= DATE_FORMAT(#{joinEndDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+	</select>
+	
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.student.model.ContinuePay">
+		select
+			c.id,
+			c.stu_id,
+			c.stu_name,
+			c.money,
+			c.TIME,
+			c.notes,
+			c.is_count,
+			c.subject_id,
+			c.course_id,
+			v.qq as qq ,
+			v.com_source as comSource,
+			v.join_time as stuJointime,
+			v.subject_name as subjectName,
+			v.course_name as subname,
+			e.nick_name AS operator
+		from 
+			vip_continue_pay as c 
+		LEFT JOIN vip_student as v  ON	c.stu_id=v.id 
+		LEFT JOIN employee e ON e.id = c.operator
+		where 1=1
+		<if test="subjectName != null and '' != subjectName">  
+			and v.subject_name = #{subjectName,jdbcType=VARCHAR}
+		</if>
+		<if test="id != null and '' != id">  
+			and c.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="stuId != null and '' != stuId">  
+			and c.stu_id = #{stuId,jdbcType=VARCHAR}
+		</if>
+		<if test="stuName != null and '' != stuName">  
+			and c.stu_name like CONCAT('%',#{stuName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="money != null and '' != money">  
+			and c.money = #{money,jdbcType=DOUBLE}
+		</if>
+		<if test="operator != null and '' != operator">  
+			and c.operator = #{operator,jdbcType=VARCHAR}
+		</if>
+		<if test="time!=null and time!=''"> 
+			AND DATE_FORMAT(c.time,'%Y-%m') = DATE_FORMAT(#{time,jdbcType=VARCHAR},'%Y-%m')
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(c.time,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(c.time,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != propsMap.joinStartDate and propsMap.joinStartDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(v.join_time,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.joinStartDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != propsMap.joinEndDate and propsMap.joinEndDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(v.join_time,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.joinEndDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="notes != null and '' != notes">  
+			and c.notes = #{notes,jdbcType=VARCHAR}
+		</if>
+		<if test="isCount != null and '' != isCount">  
+			and c.is_count = #{isCount,jdbcType=VARCHAR}
+		</if>
+		<if test="subjectId != null and '' != subjectId">  
+			and c.subject_id = #{subjectId,jdbcType=VARCHAR}
+		</if>
+		<if test="courseId != null and '' != courseId">  
+			and c.course_id = #{courseId,jdbcType=VARCHAR}
+		</if>
+		<if test="qq != null and '' != qq">  
+			and v.qq like CONCAT('%',#{qq,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="stuname != null and '' != stuname">  
+			and v.name = #{stuname,jdbcType=VARCHAR}
+		</if>
+		<if test="fullname != null and '' != fullname">  
+			and b.full_name = #{fullname,jdbcType=VARCHAR}
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+        </if>
+	</select>
+	
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from vip_continue_pay
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.student.model.ContinuePay">
+		insert into vip_continue_pay (
+		<include refid="Base_Column_List" />
+		)values (
+			 #{id,jdbcType=VARCHAR}
+			,#{stuId,jdbcType=VARCHAR}
+			,#{stuName,jdbcType=VARCHAR}
+			,#{money,jdbcType=DOUBLE}
+			,#{operator,jdbcType=VARCHAR}
+			,#{time,jdbcType=TIMESTAMP}
+			,#{notes,jdbcType=VARCHAR}
+			,#{isCount,jdbcType=VARCHAR}
+			,#{subjectId,jdbcType=VARCHAR}
+			,#{courseId,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.student.model.ContinuePay">
+		update vip_continue_pay  set
+			is_count = #{isCount,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.student.dao.VipStudentMapper">
+	<resultMap id="BaseResultMap"
+		type="com.dongnao.workbench.student.model.VipStudent">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="age" property="age" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="qq" property="qq" jdbcType="VARCHAR" />
+		<result column="qq_nick" property="qqNick" jdbcType="VARCHAR" />
+		<result column="payer_name" property="payerName" jdbcType="VARCHAR" />
+		<result column="pay_account" property="payAccount" jdbcType="VARCHAR" />
+		<result column="pay_type" property="payType" jdbcType="VARCHAR" />
+		<result column="receive_account" property="receiveAccount" jdbcType="VARCHAR" />
+		<result column="serial_no" property="serialNo" jdbcType="VARCHAR" />
+		<result column="subject_id" property="subjectId" jdbcType="VARCHAR" />
+		<result column="subject_name" property="subjectName" jdbcType="VARCHAR" />
+		<result column="course_id" property="courseId" jdbcType="VARCHAR" />
+		<result column="course_name" property="courseName" jdbcType="VARCHAR" />
+		<result column="teacher_id" property="teacherId" jdbcType="VARCHAR" />
+		<result column="tutor_id" property="tutorId" jdbcType="VARCHAR" />
+		<result column="follower_type" property="followerType" jdbcType="VARCHAR" />
+		<result column="follower_position" property="followerPosition" jdbcType="VARCHAR" />
+		<result column="follower_id" property="followerId" jdbcType="VARCHAR" />
+		<result column="follower_name" property="followerName" jdbcType="VARCHAR" />
+		<result column="should_pay" property="shouldPay" jdbcType="DOUBLE" />
+		<result column="actual_pay" property="actualPay" jdbcType="DOUBLE" />
+		<result column="owe_pay" property="owePay" jdbcType="DOUBLE" />
+		<result column="is_goclass" property="isGoclass" jdbcType="INTEGER" />
+		<result column="notes" property="notes" jdbcType="VARCHAR" />
+		<result column="join_time" property="joinTime" jdbcType="TIMESTAMP" />
+		<result column="com_source" property="comSource" jdbcType="VARCHAR" />
+		<result column="source_subclass" property="sourceSubclass" jdbcType="VARCHAR" />
+		<result column="curr_status" property="currStatus" jdbcType="VARCHAR" />
+		<result column="is_count" property="isCount" jdbcType="VARCHAR" />
+		<result column="follower_rate" property="followerRate" jdbcType="VARCHAR" />
+		<result column="edu_back" property="eduBack" jdbcType="VARCHAR" />
+		<result column="curr_company" property="currCompany" jdbcType="VARCHAR" />
+		<result column="curr_position" property="currPosition" jdbcType="VARCHAR" />
+		<result column="working_year" property="workingYear" jdbcType="VARCHAR" />
+		<result column="salary" property="salary" jdbcType="VARCHAR" />
+		<result column="enter_emp" property="enterEmp" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="StudentBarMap"
+		type="com.dongnao.workbench.school.model.StudentBarData">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="s1" property="s1" jdbcType="INTEGER" />
+		<result column="s2" property="s2" jdbcType="INTEGER" />
+		<result column="s3" property="s3" jdbcType="INTEGER" />
+		<result column="s4" property="s4" jdbcType="INTEGER" />
+		<result column="s5" property="s5" jdbcType="INTEGER" />
+		<result column="s6" property="s6" jdbcType="INTEGER" />
+		<result column="s7" property="s7" jdbcType="INTEGER" />
+		<result column="s8" property="s8" jdbcType="INTEGER" />
+		<result column="s9" property="s9" jdbcType="INTEGER" />
+		<result column="s10" property="s10" jdbcType="INTEGER" />
+		<result column="s11" property="s11" jdbcType="INTEGER" />
+		<result column="s12" property="s12" jdbcType="INTEGER" />
+		<result column="year" property="year" jdbcType="VARCHAR" />
+		<result column="subjectName" property="subjectName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id
+		,NAME
+		,age
+		,phone
+		,qq
+		,qq_nick
+		,payer_name
+		,pay_account
+		,pay_type
+		,receive_account
+		,serial_no
+		,subject_id
+		,subject_name
+		,course_id
+		,course_name
+		,teacher_id
+		,tutor_id
+		,follower_type
+		,follower_position
+		,follower_id
+		,follower_name
+		,should_pay
+		,actual_pay
+		,owe_pay
+		,is_goclass
+		,notes
+		,join_time
+		,com_source
+		,source_subclass
+		,curr_status
+		,is_count
+		,follower_rate
+		,edu_back
+		,curr_company
+		,curr_position
+		,working_year
+		,salary
+		,enter_emp
+	</sql>
+	
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+			a.parent_name as comSourceName,
+			a.sub_name as sourceSubclass,
+		<include refid="Base_Column_List" />
+		from vip_student as v
+		left join (select distinct parent_id,parent_name,sub_id,sub_name from emp_appraisal_standard ) a on v.com_source=a.parent_id and v.source_subclass=a.sub_id
+		where v.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getStatistical" resultType="com.dongnao.workbench.student.model.Statistical" parameterType="com.dongnao.workbench.student.model.VipStudent">
+		SELECT 
+			COUNT(qq) cnt,
+			COUNT(DISTINCT qq) vipcnt,
+			SUM(should_pay) shouldPay,
+			SUM(actual_pay) actualPay,
+			SUM(owe_pay) owePay,
+			(SELECT sum(money) AS xfsr FROM account_flow WHERE 1 = 1 AND ACCOUNT_NO = 'XFSR' <if test="jointime!=null and jointime!=''"> AND DATE_FORMAT(create_date, '%Y%m') LIKE CONCAT(#{jointime,jdbcType=VARCHAR},'%')</if>) xfsr,
+			(SELECT sum(money) AS xfsr FROM account_flow WHERE 1 = 1 AND ACCOUNT_NO = 'XFBK' <if test="jointime!=null and jointime!=''"> AND DATE_FORMAT(create_date, '%Y%m') LIKE CONCAT(#{jointime,jdbcType=VARCHAR},'%')</if>) xfbk,
+			(SELECT sum(money) AS xfsr FROM account_flow WHERE 1 = 1 AND ACCOUNT_NO = 'XFTK' <if test="jointime!=null and jointime!=''"> AND DATE_FORMAT(create_date, '%Y%m') LIKE CONCAT(#{jointime,jdbcType=VARCHAR},'%')</if>) xftk
+			FROM 
+			 	vip_student
+			WHERE 1=1 
+		<if test="jointime!=null and jointime!=''"> 
+			AND DATE_FORMAT(join_time,'%Y%m') like CONCAT(#{jointime,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="subjectId!=null and subjectId!=''"> 
+			AND subject_id = #{subjectId,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+		
+	<select id="getStatisticaltoday" resultType="com.dongnao.workbench.student.model.Statistical" parameterType="java.lang.String">
+		SELECT 
+		(select sum(case WHEN ACCOUNT_NO ='XFSR' THEN MONEY ELSE 0 END) AS xfsr from account_flow where 1=1 AND DATE_FORMAT(create_date,'%Y%m%d') = DATE_FORMAT(#{today,jdbcType=VARCHAR},'%Y%m%d')) xfsr,
+		(select sum(case WHEN ACCOUNT_NO ='XFBK' THEN MONEY ELSE 0 END) AS xfbk from account_flow where 1=1 AND DATE_FORMAT(create_date,'%Y%m%d') = DATE_FORMAT(#{today,jdbcType=VARCHAR},'%Y%m%d')) xfbk,
+		(select sum(case WHEN ACCOUNT_NO ='XFTK' THEN MONEY ELSE 0 END) AS xftk from account_flow where 1=1 AND DATE_FORMAT(create_date,'%Y%m%d') = DATE_FORMAT(#{today,jdbcType=VARCHAR},'%Y%m%d')) xftk
+		FROM 
+		 	vip_student
+		WHERE DATE_FORMAT(join_time,'%Y%m%d') = DATE_FORMAT(#{today,jdbcType=VARCHAR},'%Y%m%d') limit 0,1
+	</select>
+	<!-- 获取学员表所有学员数量、应收款项、实收款项和欠款 -->
+	<select id="getTotal" resultType="com.dongnao.workbench.student.model.Statistical" parameterType="com.dongnao.workbench.student.model.VipStudent">
+		SELECT 
+			COUNT(*) cnt,
+			COUNT(DISTINCT v.qq) vipcnt,
+			SUM(v.should_pay) shouldPay,
+			SUM(v.actual_pay) actualPay,
+			SUM(v.owe_pay) owePay
+		FROM 
+		 	vip_student as v
+		WHERE 1=1 
+		<if test="qq != null and '' != qq">
+			and v.qq like CONCAT('%',#{qq,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="qqNick != null and '' != qqNick">
+			and v.qq_nick = #{qqNick,jdbcType=VARCHAR}
+		</if>
+		<if test="eduBack != null and '' != eduBack">
+			and v.edu_back = #{eduBack,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null and '' != name">
+			and v.NAME like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="followerName != null and '' != followerName">
+			and v.follower_name like CONCAT('%',#{followerName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="subjectId != null and '' != subjectId">
+			and v.subject_id like CONCAT('%',#{subjectId,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="subjectName != null and '' != subjectName">
+			and v.subject_name = #{subjectName,jdbcType=VARCHAR}
+		</if> 
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(v.join_time,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(v.join_time,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="currStatus != null and '' != currStatus">  
+			and v.curr_status = #{currStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="null != joinStartDate and joinStartDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(v.join_time,'%Y-%m-%d') >= DATE_FORMAT(#{joinStartDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="null != joinEndDate and joinEndDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(v.join_time,'%Y-%m-%d') <= DATE_FORMAT(#{joinEndDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+		</if>
+		<if test="jointime != null and '' != jointime">  
+			AND DATE_FORMAT(v.join_time,'%Y%c') = #{jointime,jdbcType=VARCHAR}
+		</if>
+		 <if test="orderFields != null and '' != orderFields">
+			order by ${orderFields} ${order}
+		</if>
+	</select>
+	
+	
+	<select id="getStudentBarData" resultMap="StudentBarMap"
+		parameterType="com.dongnao.workbench.school.model.StudentBarData">
+		SELECT * from ( (SELECT  count(DISTINCT qq) as s1 FROM `vip_student` where join_time like concat('%',#{year,jdbcType=VARCHAR},'-01%') <if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s1,
+							  (SELECT  count(DISTINCT qq) as s2 FROM `vip_student` where   join_time like concat('%',#{year,jdbcType=VARCHAR},'-02%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s2,
+								(SELECT  count(DISTINCT qq) as s3 FROM `vip_student` where   join_time like concat('%',#{year,jdbcType=VARCHAR},'-03%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s3,
+								(SELECT  count(DISTINCT qq) as s4 FROM `vip_student` where   join_time like concat('%',#{year,jdbcType=VARCHAR},'-04%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s4,
+								(SELECT  count(DISTINCT qq) as s5 FROM `vip_student` where   join_time like concat('%',#{year,jdbcType=VARCHAR},'-05%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s5,
+								(SELECT  count(DISTINCT qq) as s6 FROM `vip_student` where   join_time like concat('%',#{year,jdbcType=VARCHAR},'-06%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s6,
+								(SELECT  count(DISTINCT qq) as s7 FROM `vip_student` where   join_time like concat('%',#{year,jdbcType=VARCHAR},'-07%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s7,
+								(SELECT  count(DISTINCT qq) as s8 FROM `vip_student` where   join_time like concat('%',#{year,jdbcType=VARCHAR},'-08%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s8,
+								(SELECT  count(DISTINCT qq) as s9 FROM `vip_student` where   join_time like concat('%',#{year,jdbcType=VARCHAR},'-09%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s9,
+								(SELECT  count(DISTINCT qq) as s10 FROM `vip_student` where  join_time like concat('%',#{year,jdbcType=VARCHAR},'-10%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s10,
+								(SELECT  count(DISTINCT qq) as s11 FROM `vip_student` where  join_time like concat('%',#{year,jdbcType=VARCHAR},'-11%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s11,
+								(SELECT  count(DISTINCT qq) as s12 FROM `vip_student` where  join_time like concat('%',#{year,jdbcType=VARCHAR},'-12%')<if test="subjectName != null and '' != subjectName">and subject_name = #{subjectName,jdbcType=VARCHAR}</if>) as s12) 
+	</select>
+	
+	<select id="getByStu" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.student.model.VipStudent">
+		select 
+		<include refid="Base_Column_List" />
+		from 
+			vip_student v
+		where 1=1
+		<if test="qq != null and '' != qq">
+			and qq = #{qq,jdbcType=VARCHAR}
+		</if>
+		<if test="subjectId != null and '' != subjectId">
+			and subject_id = #{subjectId,jdbcType=VARCHAR}
+		</if>
+		<if test="courseId != null and '' != courseId">
+			and course_id = #{courseId,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.student.model.VipStudent">
+		SELECT
+			DISTINCT a1.parent_name, 
+			v1.id,
+			v1.qq,
+			v1.name,
+			v1.phone,
+			v1.subject_name,
+			v1.course_name,
+			v1.teacher_id,
+			v1.follower_name,
+			v1.should_pay,
+			v1.actual_pay,
+			v1.owe_pay,
+			v1.curr_status,
+			v1.join_time,
+			v1.edu_back,
+			a.nick_name AS enterEmpname
+		FROM
+			vip_student v1
+		LEFT JOIN emp_appraisal_standard a1 ON v1.com_source = a1.parent_id
+		LEFT JOIN employee a ON v1.enter_emp = a.id
+		WHERE
+			1 = 1
+		<if test="enterEmpname != null and '' != enterEmpname">
+			and enterEmpname like CONCAT(#{enterEmpname,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="id != null and '' != id">
+			and v1.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null and '' != name">
+			and v1.NAME like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="age != null and '' != age">
+			and age = #{age,jdbcType=VARCHAR}
+		</if>
+		<if test="phone != null and '' != phone">
+			and phone like CONCAT('%',#{phone,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="qq != null and '' != qq">
+			and v1.qq like CONCAT('%',#{qq,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="eduBack != null and '' != eduBack">
+			and v1.edu_back like CONCAT('%',#{eduBack,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="qqNick != null and '' != qqNick">
+			and v1.qq_nick like CONCAT('%',#{qqNick,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="payerName != null and '' != payerName">
+			and v1.payer_name = #{payerName,jdbcType=VARCHAR}
+		</if>
+		<if test="payAccount != null and '' != payAccount">
+			and v1.pay_account = #{payAccount,jdbcType=VARCHAR}
+		</if>
+		<if test="payType != null and '' != payType">
+			and pay_type = #{payType,jdbcType=VARCHAR}
+		</if>
+		<if test="receiveAccount != null and '' != receiveAccount">
+			and receive_account = #{receiveAccount,jdbcType=VARCHAR}
+		</if>
+		<if test="serialNo != null and '' != serialNo">
+			and serial_no = #{serialNo,jdbcType=VARCHAR}
+		</if>
+		<if test="subjectId != null and '' != subjectId">
+			and v1.subject_id like CONCAT('%',#{subjectId,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="subjectName != null and '' != subjectName">
+			and v1.subject_name like CONCAT('%',#{subjectName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="teacherId != null and '' != teacherId">
+			and teacher_id like CONCAT('%',#{teacherId,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="tutorId != null and '' != tutorId">
+			and tutor_id like CONCAT('%',#{tutorId,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="followerType != null and '' != followerType">
+			and follower_type like CONCAT('%',#{followerType,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="followerId != null and '' != followerId">
+			and follower_id like CONCAT('%',#{followerId,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="followerName != null and '' != followerName">
+			and v1.follower_name like CONCAT('%',#{followerName,jdbcType=VARCHAR},'%') or v1.enter_emp = #{enterEmp,jdbcType=VARCHAR}
+		</if>
+		<if test="shouldPay != null and '' != shouldPay">
+			and should_pay = #{shouldPay,jdbcType=DOUBLE}
+		</if>
+		<if test="actualPay != null and '' != actualPay">
+			and actual_pay = #{actualPay,jdbcType=DOUBLE}
+		</if>
+		<if test="owePay != null and '' != owePay">
+			and v1.owe_pay > #{owePay,jdbcType=DOUBLE}
+		</if>
+		<if test="isGoclass != null and '' != isGoclass">
+			and is_goclass = #{isGoclass,jdbcType=INTEGER}
+		</if>
+		<if test="notes != null and '' != notes">
+			and notes = #{notes,jdbcType=VARCHAR}
+		</if>
+		<if test="currStatus != null and '' != currStatus">  
+			and curr_status = #{currStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="isCount != null and '' != isCount">  
+			and is_count = #{isCount,jdbcType=VARCHAR}
+		</if>
+		<if test="joinTime != null and '' != joinTime">
+			and join_time = #{joinTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(join_time,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(join_time,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != minOwePay and minOwePay != ''">
+			and owe_pay > #{minOwePay,jdbcType=DOUBLE}
+		</if>
+		<if test="comSource != null and '' != comSource">  
+			and com_source = #{comSource,jdbcType=VARCHAR}
+		</if>
+		<if test="sourceSubclass != null and '' != sourceSubclass">  
+			and source_subclass = #{sourceSubclass,jdbcType=VARCHAR}
+		</if>
+		<if test="orderFields != null and '' != orderFields">
+			order by ${orderFields} ${order}
+		</if>
+	</select>
+	
+	<select id="listVipStudentFromMarket" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.student.model.VipStudent">
+		select 
+			v.*
+		from 
+			vip_student v
+		WHERE exists (SELECT qq from market_student where qq = v.qq)
+		<if test="id != null and '' != id">
+			and v.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null and '' != name">
+			and v.NAME like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="age != null and '' != age">
+			and age = #{age,jdbcType=VARCHAR}
+		</if>
+		<if test="phone != null and '' != phone">
+			and phone like CONCAT('%',#{phone,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="qq != null and '' != qq">
+			and v.qq like CONCAT('%',#{qq,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="qqNick != null and '' != qqNick">
+			and v.qq_nick like CONCAT('%',#{qqNick,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="eduBack != null and '' != eduBack">
+			and v.edu_back like CONCAT('%',#{eduBack,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="subjectId != null and '' != subjectId">
+			and v.subject_id like CONCAT('%',#{subjectId,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="subjectName != null and '' != subjectName">
+			and v.subject_name like CONCAT('%',#{subjectName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="joinTime != null and '' != joinTime">
+			and join_time = #{joinTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(join_time,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(join_time,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">
+			order by ${orderFields} ${order}
+		</if>
+	</select>
+	
+	<select id="listCntByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.student.model.VipStudent">		
+		SELECT * FROM( 
+			SELECT 
+				id,
+				qq,
+				qq_nick,
+				phone,
+				NAME,
+				COUNT(course_name)AS courses,
+				SUM(should_pay)AS shouldPay ,
+				SUM(actual_pay)AS actualPay ,
+				SUM(owe_pay)AS owePay ,
+				join_time
+			FROM 
+				`vip_student`  
+			GROUP BY 
+				qq
+		)a
+		WHERE 1=1
+		<if test="qq != null and '' != qq">
+			and a.qq = #{qq,jdbcType=VARCHAR}
+		</if>
+		<if test="qqNick != null and '' != qqNick">
+			and a.qq_nick = #{qqNick,jdbcType=VARCHAR}
+		</if>
+		<if test="eduBack != null and '' != eduBack">
+			and a.edu_back = #{eduBack,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null and '' != name">
+			and a.NAME like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+		 <if test="orderFields != null and '' != orderFields">
+			order by ${orderFields} ${order}
+		</if>
+	</select>
+	
+
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from vip_student
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="add" parameterType="com.dongnao.workbench.student.model.VipStudent">
+		insert into vip_student (
+		<include refid="Base_Column_List" />
+		)values (
+			#{id,jdbcType=VARCHAR}
+			,#{name,jdbcType=VARCHAR}
+			,#{age,jdbcType=VARCHAR}
+			,#{phone,jdbcType=VARCHAR}
+			,#{qq,jdbcType=VARCHAR}
+			,#{qqNick,jdbcType=VARCHAR}
+			,#{payerName,jdbcType=VARCHAR}
+			,#{payAccount,jdbcType=VARCHAR}
+			,#{payType,jdbcType=VARCHAR}
+			,#{receiveAccount,jdbcType=VARCHAR}
+			,#{serialNo,jdbcType=VARCHAR}
+			,#{subjectId,jdbcType=VARCHAR}
+			,#{subjectName,jdbcType=VARCHAR}
+			,#{courseId,jdbcType=VARCHAR}
+			,#{courseName,jdbcType=VARCHAR}
+			,#{teacherId,jdbcType=VARCHAR}
+			,#{tutorId,jdbcType=VARCHAR}
+			,#{followerType,jdbcType=VARCHAR}
+			,#{followerPosition,jdbcType=VARCHAR}
+			,#{followerId,jdbcType=VARCHAR}
+			,#{followerName,jdbcType=VARCHAR}
+			,#{shouldPay,jdbcType=DOUBLE}
+			,#{actualPay,jdbcType=DOUBLE}
+			,#{owePay,jdbcType=DOUBLE}
+			,#{isGoclass,jdbcType=INTEGER}
+			,#{notes,jdbcType=VARCHAR}
+			,#{joinTime,jdbcType=TIMESTAMP}
+			,#{comSource,jdbcType=VARCHAR}
+			,#{sourceSubclass,jdbcType=VARCHAR}
+			,#{currStatus,jdbcType=VARCHAR}
+			,#{isCount,jdbcType=VARCHAR}
+			,#{followerRate,jdbcType=VARCHAR}
+			,#{eduBack,jdbcType=VARCHAR}
+			,#{currCompany,jdbcType=VARCHAR}
+			,#{currPosition,jdbcType=VARCHAR}
+			,#{workingYear,jdbcType=VARCHAR}
+			,#{salary,jdbcType=VARCHAR}
+			,#{enterEmp,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.dongnao.workbench.student.model.VipStudent">
+		update vip_student set
+		ID= #{id,jdbcType=VARCHAR}
+		,NAME = #{name,jdbcType=VARCHAR}
+		,age = #{age,jdbcType=VARCHAR}
+		,phone = #{phone,jdbcType=VARCHAR}
+		,qq = #{qq,jdbcType=VARCHAR}
+		,qq_nick = #{qqNick,jdbcType=VARCHAR}
+		,is_goclass = #{isGoclass,jdbcType=INTEGER}
+		,subject_id = #{subjectId,jdbcType=VARCHAR}
+		,subject_name = #{subjectName,jdbcType=VARCHAR}
+		,course_id = #{courseId,jdbcType=VARCHAR}
+		,course_name = #{courseName,jdbcType=VARCHAR}
+		,teacher_id = #{teacherId,jdbcType=VARCHAR}
+		,tutor_id = #{tutorId,jdbcType=VARCHAR}
+		,notes = #{notes,jdbcType=VARCHAR}
+		,should_pay = #{shouldPay,jdbcType=DOUBLE}
+		,actual_pay = #{actualPay,jdbcType=DOUBLE}
+		,owe_pay = #{owePay,jdbcType=DOUBLE}
+		,curr_status = #{currStatus,jdbcType=VARCHAR}
+		,is_count = #{isCount,jdbcType=VARCHAR}
+		,edu_back = #{eduBack,jdbcType=VARCHAR}
+		,curr_company= #{currCompany,jdbcType=VARCHAR}
+		,curr_position = #{currPosition,jdbcType=VARCHAR}
+		,working_year = #{workingYear,jdbcType=VARCHAR}
+		,salary = #{salary,jdbcType=VARCHAR}
+<!-- 		,enterEmp = #{enterEmp,jdbcType=VARCHAR} -->
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateEmpPerform" parameterType="com.dongnao.workbench.student.model.VipStudent">
+		update vip_student set
+		ID= #{id,jdbcType=VARCHAR}
+		,is_count = #{isCount,jdbcType=VARCHAR}
+		,follower_type = #{followerType,jdbcType=VARCHAR}
+		,follower_position = #{followerPosition,jdbcType=VARCHAR}
+		,follower_id = #{followerId,jdbcType=VARCHAR}
+		,follower_name = #{followerName,jdbcType=VARCHAR}
+		,com_source = #{comSource,jdbcType=VARCHAR}
+		,source_subclass = #{sourceSubclass,jdbcType=VARCHAR}
+		,follower_rate = #{followerRate,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateOwe" parameterType="com.dongnao.workbench.student.model.VipStudent">
+		update vip_student set
+		ID = #{id,jdbcType=VARCHAR}
+		,should_pay = #{shouldPay,jdbcType=DOUBLE}
+		,actual_pay = #{actualPay,jdbcType=DOUBLE}
+		,owe_pay = #{owePay,jdbcType=DOUBLE}
+		,curr_status = #{currStatus,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	
+</mapper>

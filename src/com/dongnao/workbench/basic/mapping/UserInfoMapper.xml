@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.basic.dao.UserInfoMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.basic.model.UserInfo">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="USER_ACCOUNT" property="userAccount" jdbcType="VARCHAR" />
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="FULL_NAME" property="fullName" jdbcType="VARCHAR" />
+		<result column="USER_TYPE" property="userType" jdbcType="INTEGER" />
+		<result column="USER_TYPE_NAME" property="userTypeName" jdbcType="VARCHAR" />
+		<result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+		<result column="ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+		<result column="ORG_CLASS" property="orgClass" jdbcType="INTEGER" />
+		<result column="LAST_LOGIN_TIME" property="lastLoginTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_LOGIN_IP" property="lastLoginIp" jdbcType="VARCHAR" />
+		<result column="STATES" property="states" jdbcType="INTEGER" />
+		<result column="MEMO" property="memo" jdbcType="VARCHAR" />
+		<result column="ENABLE_STATE_DATE" property="enableStateDate" jdbcType="TIMESTAMP" />
+		<result column="ENABLE_END_DATE" property="enableEndDate" jdbcType="TIMESTAMP" />
+		<result column="UPDATED" property="updated" jdbcType="TIMESTAMP" />
+		<result column="UPDATEDBY" property="updatedby" jdbcType="VARCHAR" />
+		<result column="CREATEDBY" property="createdby" jdbcType="VARCHAR" />
+		<result column="CREATED" property="created" jdbcType="TIMESTAMP" />
+		<result column="IS_ACTIVE" property="isActive" jdbcType="INTEGER" />
+		<result column="DUTY_ID" property="dutyId" jdbcType="VARCHAR" />
+		<!-- <result column="DUTY_NAME" property="dutyName" jdbcType="VARCHAR" /> -->
+		<result column="role_id" property="roleId" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+						 	ID
+							,USER_ACCOUNT
+							,PASSWORD
+							,FULL_NAME
+							,USER_TYPE
+							,USER_TYPE_NAME
+							,ORG_ID
+							,ORG_NAME
+							,ORG_CLASS
+							,LAST_LOGIN_TIME
+							,LAST_LOGIN_IP
+							,STATES
+							,MEMO
+							,ENABLE_STATE_DATE
+							,ENABLE_END_DATE
+							,UPDATED
+							,UPDATEDBY
+							,CREATEDBY
+							,CREATED
+							,IS_ACTIVE
+							,DUTY_ID
+							,DUTY_NAME
+							,role_id
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			bui.ID
+			,bui.USER_ACCOUNT
+			,bui.PASSWORD
+			,bui.USER_TYPE
+			,bui.USER_TYPE_NAME
+			,bui.ORG_ID
+			,bo.ORG_NAME as ORG_NAME
+			,bui.ORG_CLASS
+			,bui.LAST_LOGIN_TIME
+			,bui.LAST_LOGIN_IP
+			,bui.STATES
+			,bui.MEMO
+			,bui.ENABLE_STATE_DATE
+			,bui.ENABLE_END_DATE
+			,bui.UPDATED
+			,bui.UPDATEDBY
+			,bui.CREATEDBY
+			,bui.CREATED
+			,bui.IS_ACTIVE
+			,bui.DUTY_ID
+			,bui.role_id
+			,(CASE
+				WHEN e.name IS NOT NULL THEN
+					e.name
+				ELSE
+					bui.FULL_NAME
+			END) AS FULL_NAME
+			,(CASE
+				WHEN e.position IS NOT NULL THEN
+					e.position
+				ELSE
+					bui.DUTY_NAME
+			END) AS DUTY_NAME
+		from BASIC_USER_INFO bui
+		LEFT JOIN employee e ON bui.id = e.id
+		LEFT JOIN basic_org bo ON bo.org_no = e.dept_no
+		where bui.ID = #{id,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据账号判断用户是否存在 -->
+	<select id="getByUserAccount" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from BASIC_USER_INFO 
+		where USER_ACCOUNT = #{userAccount,jdbcType=VARCHAR}
+		and IS_ACTIVE=1 
+		and STATES=1
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.basic.model.UserInfo">
+		select
+			 bui.ID
+			,bui.USER_ACCOUNT
+			,bui.PASSWORD
+			,bui.USER_TYPE
+			,bui.USER_TYPE_NAME
+			,bui.ORG_ID
+			,bo.ORG_NAME as ORG_NAME
+			,bui.ORG_CLASS
+			,bui.LAST_LOGIN_TIME
+			,bui.LAST_LOGIN_IP
+			,bui.STATES
+			,bui.MEMO
+			,bui.ENABLE_STATE_DATE
+			,bui.ENABLE_END_DATE
+			,bui.UPDATED
+			,bui.UPDATEDBY
+			,bui.CREATEDBY
+			,bui.CREATED
+			,bui.IS_ACTIVE
+			,bui.DUTY_ID
+			,bui.role_id
+			,(CASE
+				WHEN e.name IS NOT NULL THEN
+					e.name
+				ELSE
+					bui.FULL_NAME
+			END) AS FULL_NAME
+			,(CASE
+				WHEN e.position IS NOT NULL THEN
+					e.position
+				ELSE
+					bui.DUTY_NAME
+			END) AS DUTY_NAME
+		from BASIC_USER_INFO bui
+		LEFT JOIN employee e ON bui.id = e.id
+		LEFT JOIN basic_org bo ON bo.org_no = e.dept_no
+		where bui.IS_ACTIVE=1
+		<if test="userAccount != null and '' != userAccount">  
+			and bui.USER_ACCOUNT LIKE CONCAT(#{userAccount,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="roleId != null and '' != roleId">  
+			and bui.role_id = #{roleId,jdbcType=VARCHAR}
+		</if>
+		<if test="fullName != null and '' != fullName">  
+			and bui.FULL_NAME LIKE CONCAT('%',#{fullName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="userType != null and '' != userType">  
+			and bui.USER_TYPE = #{userType,jdbcType=INTEGER}
+		</if>
+		<if test="userTypeName != null and '' != userTypeName">  
+			and bui.USER_TYPE_NAME LIKE CONCAT('%',#{userTypeName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orgId != null and '' != orgId">  
+			and bui.ORG_ID = #{orgId,jdbcType=VARCHAR}
+		</if>
+		<if test="orgName != null and '' != orgName">  
+			and bo.ORG_NAME LIKE CONCAT('%',#{orgName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orgClass != null and '' != orgClass">  
+			and bui.ORG_CLASS = #{orgClass,jdbcType=INTEGER}
+		</if>
+		<if test="lastLoginTime != null and '' != lastLoginTime">  
+			and bui.LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="lastLoginIp != null and '' != lastLoginIp">  
+			and bui.LAST_LOGIN_IP = #{lastLoginIp,jdbcType=VARCHAR}
+		</if>
+		<if test="states != null and '' != states">  
+			and bui.STATES = #{states,jdbcType=INTEGER}
+		</if>
+		<if test="memo != null and '' != memo">  
+			and bui.MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="enableStateDate != null and '' != enableStateDate">  
+			and bui.ENABLE_STATE_DATE = #{enableStateDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="enableEndDate != null and '' != enableEndDate">  
+			and bui.ENABLE_END_DATE = #{enableEndDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updated != null and '' != updated">  
+			and bui.UPDATED = #{updated,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updatedby != null and '' != updatedby">  
+			and bui.UPDATEDBY = #{updatedby,jdbcType=VARCHAR}
+		</if>
+		<if test="createdby != null and '' != createdby">  
+			and bui.CREATEDBY = #{createdby,jdbcType=VARCHAR}
+		</if>
+		<if test="created != null and '' != created">  
+			and bui.CREATED = #{created,jdbcType=TIMESTAMP}
+		</if>
+		<if test="isActive != null and '' != isActive">  
+			and bui.IS_ACTIVE = #{isActive,jdbcType=INTEGER}
+		</if>
+		<if test="dutyId != null and '' != dutyId">  
+			and bui.DUTY_ID = #{dutyId,jdbcType=VARCHAR}
+		</if>
+		<if test="dutyName != null and '' != dutyName">  
+			and bui.DUTY_NAME = #{dutyName,jdbcType=VARCHAR}
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	
+	<!-- 逻辑删除 -->
+	<update id="logicDeleteByKey" parameterType="java.lang.String">
+	   update BASIC_USER_INFO t 
+	   set t.IS_ACTIVE=0 
+	   where t.ID = #{id,jdbcType=VARCHAR}
+	   and t.id &lt;&gt;'00000000-0000-0000-0000-000000000000'
+	</update>
+	
+	<!-- 改变用户角色后更新roleid -->
+	<update id="updateRoleid" parameterType="com.dongnao.workbench.basic.model.UserInfo">
+		update BASIC_USER_INFO t
+	   set ROLE_ID = #{roleId,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from BASIC_USER_INFO
+		where ID = #{id,jdbcType=VARCHAR}
+		and ID &lt;&gt; '00000000-0000-0000-0000-000000000000'
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.basic.model.UserInfo">
+		insert into BASIC_USER_INFO (
+		<include refid="Base_Column_List" />
+		)values (
+                 #{id,jdbcType=VARCHAR}
+				,#{userAccount,jdbcType=VARCHAR}
+				,#{password,jdbcType=VARCHAR}
+				,#{fullName,jdbcType=VARCHAR}
+				,#{userType,jdbcType=INTEGER}
+				,#{userTypeName,jdbcType=VARCHAR}
+				,#{orgId,jdbcType=VARCHAR}
+				,#{orgName,jdbcType=VARCHAR}
+				,#{orgClass,jdbcType=INTEGER}
+				,#{lastLoginTime,jdbcType=TIMESTAMP}
+				,#{lastLoginIp,jdbcType=VARCHAR}
+				,#{states,jdbcType=INTEGER}
+				,#{memo,jdbcType=VARCHAR}
+				,#{enableStateDate,jdbcType=TIMESTAMP}
+				,#{enableEndDate,jdbcType=TIMESTAMP}
+				,#{updated,jdbcType=TIMESTAMP}
+				,#{updatedby,jdbcType=VARCHAR}
+				,#{createdby,jdbcType=VARCHAR}
+				,#{created,jdbcType=TIMESTAMP}
+				,#{isActive,jdbcType=INTEGER}
+				,#{dutyId,jdbcType=VARCHAR}
+				,#{dutyName,jdbcType=VARCHAR}
+				,#{roleId,jdbcType=VARCHAR}
+			)
+	</insert>
+	
+	
+	
+	<update id="updatePassWord" parameterType="com.dongnao.workbench.basic.model.UserInfo">
+			update BASIC_USER_INFO  set PASSWORD = #{password,jdbcType=VARCHAR} where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="update" parameterType="com.dongnao.workbench.basic.model.UserInfo">
+		update BASIC_USER_INFO  set
+                 USER_ACCOUNT = #{userAccount,jdbcType=VARCHAR}
+				,FULL_NAME = #{fullName,jdbcType=VARCHAR}
+				,USER_TYPE = #{userType,jdbcType=INTEGER}
+				,USER_TYPE_NAME = #{userTypeName,jdbcType=VARCHAR}
+				,ORG_ID = #{orgId,jdbcType=VARCHAR}
+				,ORG_NAME = #{orgName,jdbcType=VARCHAR}
+				,ORG_CLASS = #{orgClass,jdbcType=CHAR}
+				,STATES = #{states,jdbcType=INTEGER}
+				,MEMO = #{memo,jdbcType=VARCHAR}
+				,ENABLE_STATE_DATE = #{enableStateDate,jdbcType=TIMESTAMP}
+				,ENABLE_END_DATE = #{enableEndDate,jdbcType=TIMESTAMP}
+				,UPDATED = #{updated,jdbcType=TIMESTAMP}
+				,UPDATEDBY = #{updatedby,jdbcType=VARCHAR}
+				,DUTY_ID = #{dutyId,jdbcType=VARCHAR}
+				,DUTY_NAME = #{dutyName,jdbcType=VARCHAR}
+				,role_id = #{roleId,jdbcType=VARCHAR}
+			where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateLastLoginInfo" parameterType="com.dongnao.workbench.basic.model.UserInfo">
+		update BASIC_USER_INFO  set
+			LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=TIMESTAMP}
+			,LAST_LOGIN_IP = #{lastLoginIp,jdbcType=VARCHAR}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="listUserByRid" parameterType="java.util.Map" resultType="java.util.Map">
+		select 
+			u.USER_ACCOUNT,
+			u.FULL_NAME 
+		from BASIC_USER_INFO u,sys_ro_personrole p 
+		where 
+			u.IS_ACTIVE=1 
+		and p.user_id=u.id 
+		and p.role_id LIKE CONCAT('%',#{roleId,jdbcType=VARCHAR},'%')
+		<if test="fullName != null and '' != fullName">
+			and u.FULL_NAME LIKE CONCAT('%',#{fullName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="userAccount != null and '' != userAccount">
+			and u.USER_ACCOUNT LIKE CONCAT('%',#{userAccount,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+		</if>
+	</select>
+</mapper>

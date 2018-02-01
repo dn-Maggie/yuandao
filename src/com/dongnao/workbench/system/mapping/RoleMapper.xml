@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.system.dao.RoleMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.system.model.Role">
+		<id column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+		<result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="ROLE_DESC" property="roleDesc" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="MEMO" property="memo" jdbcType="VARCHAR" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR" />
+		<result column="STATES" property="states" jdbcType="VARCHAR" />
+		<result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+		<result column="ROLE_CODE" property="roleCode" jdbcType="VARCHAR" />
+		<result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="UPDATER_ID" property="updaterId" jdbcType="VARCHAR" />
+		<result column="BUREAU_ID" property="bureauId" jdbcType="VARCHAR" />
+		<result column="IS_DELETE" property="isDelete" jdbcType="VARCHAR" />
+		<result column="hpvp" property="hpvp" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Edit_List">
+		START_TIME
+		,ROLE_DESC
+		,ROLE_ID
+		,CREATE_TIME
+		,MEMO
+		,UPDATE_TIME
+		,CREATOR_ID
+		,STATES
+		,ROLE_NAME
+		,ROLE_CODE
+		,END_TIME
+		,UPDATER_ID
+		,hpvp
+	</sql>
+
+	<sql id="Base_Query_List">
+		r.START_TIME
+		,r.ROLE_DESC
+		,r.ROLE_ID
+		,r.CREATE_TIME
+		,r.MEMO
+		,r.UPDATE_TIME
+		,r.CREATOR_ID
+		,r.STATES
+		,r.ROLE_NAME
+		,r.ROLE_CODE
+		,r.END_TIME
+		,r.UPDATER_ID
+		,r.hpvp
+	</sql>
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			<include refid="Base_Edit_List" />
+		from SYS_RO_ROLE
+			where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+				AND IS_DELETE='0'
+	</select>
+	
+	
+	
+	<select id="verifyNameAdd" parameterType="java.lang.String" resultType="java.lang.String">
+	select A.ROLE_NAME  FROM SYS_RO_ROLE A 
+	WHERE A.ROLE_NAME=#{roleName,jdbcType=VARCHAR}
+	AND A.IS_DELETE ='0'
+	LIMIT 1
+	</select>
+	
+	
+	<select id="verifyNameUpdate" parameterType="com.dongnao.workbench.system.model.Role" resultType="java.lang.String">
+	select A.ROLE_NAME  FROM SYS_RO_ROLE A 
+	WHERE A.ROLE_NAME=#{roleName,jdbcType=VARCHAR}
+	AND A.IS_DELETE ='0'
+	AND A.ROLE_ID &lt;&gt; #{roleId,jdbcType=VARCHAR}
+	LIMIT 1
+	</select>
+	
+	
+	
+	
+	
+	<select id="verifyCodeAdd" parameterType="java.lang.String" resultType="java.lang.String">
+	select A.ROLE_CODE  FROM SYS_RO_ROLE A 
+	WHERE A.ROLE_CODE=#{roleCode,jdbcType=VARCHAR}
+	AND A.IS_DELETE ='0'
+	LIMIT 1
+	</select>
+	
+	<select id="verifyCodeUpdate" parameterType="com.dongnao.workbench.system.model.Role" resultType="java.lang.String">
+	select A.ROLE_CODE  FROM SYS_RO_ROLE A 
+	WHERE A.ROLE_CODE=#{roleCode,jdbcType=VARCHAR}
+	AND A.IS_DELETE ='0'
+	AND A.ROLE_ID &lt;&gt; #{roleId,jdbcType=VARCHAR}
+	LIMIT 1
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.system.model.Role">
+		select
+			<include refid="Base_Query_List" />
+		from SYS_RO_ROLE r
+		where 1=1 AND IS_DELETE='0'
+		<if test="bureauId != null and '' != bureauId">
+			and r.BUREAU_ID = #{bureauId,jdbcType=VARCHAR}
+		</if>
+		<if test="startTime != null and '' != startTime">
+			and r.START_TIME = #{startTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="roleDesc != null and '' != roleDesc">
+			and r.ROLE_DESC = #{roleDesc,jdbcType=VARCHAR}
+		</if>
+		<if test="roleId != null and '' != roleId">
+			and r.ROLE_ID = #{roleId,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null and '' != createTime">
+			and r.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="memo != null and '' != memo">
+			and r.MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="updateTime != null and '' != updateTime">
+			and r.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="creatorId != null and '' != creatorId">
+			and r.CREATOR_ID = #{creatorId,jdbcType=VARCHAR}
+		</if>
+		<if test="states != null and '' != states">
+			and r.STATES = #{states,jdbcType=VARCHAR}
+		</if>
+		<if test="roleName != null and '' != roleName">
+			and r.ROLE_NAME LIKE CONCAT('%',#{roleName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="roleCode != null and '' != roleCode">
+			and r.ROLE_CODE = #{roleCode,jdbcType=VARCHAR}
+		</if>
+		<if test="endTime != null and '' != endTime">
+			and r.END_TIME = #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updaterId != null and '' != updaterId">
+			and r.UPDATER_ID = #{updaterId,jdbcType=VARCHAR}
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+
+	<update id="deleteByKey" parameterType="java.lang.String">
+		update SYS_RO_ROLE set IS_DELETE='1'
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</update>
+
+	<insert id="add" parameterType="com.dongnao.workbench.system.model.Role">
+		insert into SYS_RO_ROLE (
+		<include refid="Base_Edit_List" />
+		,IS_DELETE
+		)values (
+		 #{startTime,jdbcType=TIMESTAMP}
+		,#{roleDesc,jdbcType=VARCHAR}
+		,#{roleId,jdbcType=VARCHAR}
+		,#{createTime,jdbcType=TIMESTAMP}
+		,#{memo,jdbcType=VARCHAR}
+		,#{updateTime,jdbcType=TIMESTAMP}
+		,#{creatorId,jdbcType=VARCHAR}
+		,#{states,jdbcType=VARCHAR}
+		,#{roleName,jdbcType=VARCHAR}
+		,#{roleCode,jdbcType=VARCHAR}
+		,#{endTime,jdbcType=TIMESTAMP}
+		,#{updaterId,jdbcType=VARCHAR}
+		,#{hpvp,jdbcType=INTEGER}
+		,'0'
+		)
+	</insert>
+
+	<update id="update" parameterType="com.dongnao.workbench.system.model.Role">
+		update SYS_RO_ROLE set
+		ROLE_NAME = #{roleName,jdbcType=VARCHAR}
+		<if test="startTime != null">
+			,START_TIME = #{startTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="roleDesc != null">
+			,ROLE_DESC = #{roleDesc,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null">
+			,CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="memo != null">
+			,MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="updateTime != null">
+			,UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="creatorId != null">
+			,CREATOR_ID = #{creatorId,jdbcType=VARCHAR}
+		</if>
+		<if test="states != null">
+			,STATES = #{states,jdbcType=VARCHAR}
+		</if>
+		<if test="roleCode != null">
+			,ROLE_CODE = #{roleCode,jdbcType=VARCHAR}
+		</if>
+		<if test="endTime != null">
+			,END_TIME = #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updaterId != null">
+			,UPDATER_ID = #{updaterId,jdbcType=VARCHAR}
+		</if>
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="getForRoleTree" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT 
+			RR.RESUUID,
+			RA.ID AS ACTID 
+		FROM SYS_RO_ROLERIGHT RR
+	    LEFT JOIN SYS_RO_RESACT RA ON RR.RESUUID = RA.RESUU_ID AND INSTR(RR.ACTCODES,RA.ACT_CODE)>0
+	    WHERE ROLEID = #{roleRid,jdbcType=INTEGER}
+	    ORDER BY RR.RESUUID 
+	</select>
+</mapper>

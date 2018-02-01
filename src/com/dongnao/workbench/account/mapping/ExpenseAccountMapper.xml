@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.account.dao.ExpenseAccountMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.account.model.ExpenseAccount">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+													<result column="expense_type" property="expenseType" jdbcType="VARCHAR" />
+													<result column="expense_way" property="expenseWay" jdbcType="VARCHAR" />
+													<result column="expense_money" property="expenseMoney" jdbcType="DOUBLE" />
+													<result column="content" property="content" jdbcType="VARCHAR" />
+													<result column="dept_no" property="deptNo" jdbcType="VARCHAR" />
+													<result column="dept_name" property="deptName" jdbcType="VARCHAR" />
+													<result column="enter_pid" property="enterPid" jdbcType="VARCHAR" />
+													<result column="enter_name" property="enterName" jdbcType="VARCHAR" />
+													<result column="check_pid" property="checkPid" jdbcType="VARCHAR" />
+													<result column="check_name" property="checkName" jdbcType="VARCHAR" />
+													<result column="enter_date" property="enterDate" jdbcType="TIMESTAMP" />
+													<result column="check_date" property="checkDate" jdbcType="TIMESTAMP" />
+													<result column="doc_attach" property="docAttach" jdbcType="INTEGER" />
+													<result column="check_flag" property="checkFlag" jdbcType="INTEGER" />
+													<result column="assign_flag" property="assignFlag" jdbcType="INTEGER" />
+													<result column="file_url" property="fileUrl" jdbcType="BLOB" />
+													<result column="check_pizhu" property="checkPizhu" jdbcType="BLOB" />
+									</resultMap>
+	<sql id="Base_Column_List">
+						 	id
+										,expense_type
+										,expense_way
+										,expense_money
+										,content
+										,dept_no
+										,dept_name
+										,enter_pid
+										,enter_name
+										,check_pid
+										,check_name
+										,enter_date
+										,check_date
+										,doc_attach
+										,check_flag
+										,assign_flag
+										,file_url
+										,check_pizhu
+						</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from emp_expense_account
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getMyExpense" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.ExpenseAccount">
+		select
+			count(*) as docAttach,
+			sum(expense_money)as expenseMoney
+		from 
+			emp_expense_account
+		WHERE 1=1 
+		<if test="_parameter!=null and _parameter!=''"> 
+			<![CDATA[
+				and DATE_FORMAT(enter_date,'%Y-%m') like DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m')
+			]]>
+		</if>
+		<if test="_parameter!=null and _parameter!=''"> 
+			AND enter_pid = #{enterPid,jdbcType=VARCHAR}
+		</if>
+			AND expense_type = '个人报销'
+	</select>
+<!-- 	<select id="listByEmployee" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.ExpenseAccount"> -->
+<!-- 		select -->
+<!-- 		dept_no,dept_name,enter_pid,enter_name, SUM(expense_money) as expenseMoney -->
+<!-- 		from emp_expense_account  -->
+<!-- 		group by enter_pid -->
+<!-- 		order by expenseMoney desc -->
+<!-- 	</select> -->
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.ExpenseAccount">
+		SELECT
+			ea.id,
+			ea.expense_type,
+			ea.expense_money,
+			ea.content,
+			ea.enter_date,
+			ea.check_flag,
+			ea.doc_attach,
+			ea.assign_flag,
+			ea.expense_way,
+			e.nick_name AS enterName,
+			bo.org_name AS deptName
+		FROM
+			emp_expense_account ea
+		LEFT JOIN employee e ON e.id = ea.enter_pid
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		where 1=1
+		<if test="id != null and '' != id">  
+			and ea.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="expenseType != null and '' != expenseType">  
+			and ea.expense_type = #{expenseType,jdbcType=VARCHAR}
+		</if>
+		<if test="expenseWay != null and '' != expenseWay">  
+			and ea.expense_way = #{expenseWay,jdbcType=VARCHAR}
+		</if>
+		<if test="content != null and '' != content">  
+			and ea.content = #{content,jdbcType=VARCHAR}
+		</if>
+		<if test="deptName != null and '' != deptName">  
+			and bo.org_name = #{deptName,jdbcType=VARCHAR}
+		</if>
+		<if test="enterPid != null and '' != enterPid">  
+			and enter_pid = #{enterPid,jdbcType=VARCHAR}
+		</if>
+		<if test="checkPid != null and '' != checkPid">  
+			and check_pid = #{checkPid,jdbcType=VARCHAR}
+		</if>
+		<if test="checkName != null and '' != checkName">  
+			and check_name = #{checkName,jdbcType=VARCHAR}
+		</if>
+		<if test="enterDate != null and '' != enterDate">  
+			and enter_date = #{enterDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="checkDate != null and '' != checkDate">  
+			and check_date = #{checkDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="docAttach != null and '' != docAttach">  
+			and doc_attach = #{docAttach,jdbcType=INTEGER}
+		</if>
+		<if test="checkFlag != null and '' != checkFlag">  
+			and check_flag = #{checkFlag,jdbcType=INTEGER}
+		</if>
+		<if test="assignFlag != null and '' != assignFlag">  
+			and assign_flag = #{assignFlag,jdbcType=INTEGER}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+          	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<select id="staticExpenseAccount" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.ExpenseAccount">
+		SELECT '总报销金额' as id,SUM(expense_money)as expense_money FROM `emp_expense_account` ea
+		LEFT JOIN employee e ON e.id = ea.enter_pid
+		WHERE 1 = 1
+			<if test="enterName != null and '' != enterName">  
+				and e.nick_name = #{enterName,jdbcType=VARCHAR}
+			</if>
+			<if test="null != startDate and startDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') >= DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+			<if test="null != endDate and endDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') <= DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+		UNION all
+		SELECT '已发放总金额' as id,SUM(expense_money)as expense_money FROM `emp_expense_account` ea
+		LEFT JOIN employee e ON e.id = ea.enter_pid
+			WHERE ea.assign_flag = 2
+			<if test="enterName != null and '' != enterName">  
+				and e.nick_name = #{enterName,jdbcType=VARCHAR}
+			</if>
+			<if test="null != startDate and startDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') >= DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+			<if test="null != endDate and endDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') <= DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+		UNION all
+		SELECT '未发放总金额' as id,SUM(expense_money)as expense_money FROM `emp_expense_account` ea
+		LEFT JOIN employee e ON e.id = ea.enter_pid
+			WHERE  ea.assign_flag = 1
+			<if test="enterName != null and '' != enterName">  
+				and e.nick_name = #{enterName,jdbcType=VARCHAR}
+			</if>
+			<if test="null != startDate and startDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') >= DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+			<if test="null != endDate and endDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') <= DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+		UNION all
+		SELECT '未审核未发放' as id,SUM(expense_money)as expense_money FROM `emp_expense_account` ea
+		LEFT JOIN employee e ON e.id = ea.enter_pid
+			WHERE  ea.assign_flag = 1 and ea.check_flag=1
+			<if test="enterName != null and '' != enterName">  
+				and e.nick_name = #{enterName,jdbcType=VARCHAR}
+			</if>
+			<if test="null != startDate and startDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') >= DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+			<if test="null != endDate and endDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') <= DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+		UNION all
+		SELECT '已审核未发放' as id,SUM(expense_money)as expense_money FROM `emp_expense_account` ea
+		LEFT JOIN employee e ON e.id = ea.enter_pid
+			WHERE  ea.assign_flag = 1 and ea.check_flag=2
+			<if test="enterName != null and '' != enterName">  
+				and e.nick_name = #{enterName,jdbcType=VARCHAR}
+			</if>
+			<if test="null != startDate and startDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') >= DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+			<if test="null != endDate and endDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') <= DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+		<if test="orderFields != null and '' != orderFields">  
+          	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	
+	
+	<select id="sumAllExpense" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.ExpenseAccount">
+			select	ea.id
+					,ea.expense_type
+					,ea.expense_way
+					,sum(ea.expense_money) as expense_money
+					,ea.content
+					,ea.dept_no
+					,ea.enter_pid
+					,ea.check_pid
+					,ea.enter_date
+					,ea.check_date
+					,ea.doc_attach
+					,ea.check_flag
+					,e.nick_name AS enterName
+					,bo.org_name AS deptName
+			from emp_expense_account ea
+			LEFT JOIN employee e ON e.id = ea.enter_pid
+			LEFT join basic_org bo on e.dept_no = bo.org_no
+			where 1=1
+			<if test="id != null and '' != id">  
+				and ea.id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="expenseType != null and '' != expenseType">  
+				and ea.expense_type = #{expenseType,jdbcType=VARCHAR}
+			</if>
+			<if test="expenseWay != null and '' != expenseWay">  
+				and ea.expense_way = #{expenseWay,jdbcType=VARCHAR}
+			</if>
+			<if test="expenseMoney != null and '' != expenseMoney">  
+				and ea.expense_money = #{expenseMoney,jdbcType=DOUBLE}
+			</if>
+			<if test="content != null and '' != content">  
+				and ea.content = #{content,jdbcType=VARCHAR}
+			</if>
+			<if test="deptNo != null and '' != deptNo">  
+				and ea.dept_no = #{deptNo,jdbcType=VARCHAR}
+			</if>
+			<if test="deptName != null and '' != deptName">  
+				and bo.org_name = #{deptName,jdbcType=VARCHAR}
+			</if>
+			<if test="enterPid != null and '' != enterPid">  
+				and ea.enter_pid = #{enterPid,jdbcType=VARCHAR}
+			</if>
+			<if test="enterName != null and '' != enterName">  
+				and e.nick_name = #{enterName,jdbcType=VARCHAR}
+			</if>
+			<if test="checkPid != null and '' != checkPid">  
+				and ea.check_pid = #{checkPid,jdbcType=VARCHAR}
+			</if>
+			<if test="checkName != null and '' != checkName">  
+				and ea.check_name = #{checkName,jdbcType=VARCHAR}
+			</if>
+			<if test="enterDate != null and '' != enterDate">  
+				and ea.enter_date = #{enterDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="checkDate != null and '' != checkDate">  
+				and ea.check_date = #{checkDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="docAttach != null and '' != docAttach">  
+				and ea.doc_attach = #{docAttach,jdbcType=INTEGER}
+			</if>
+			<if test="checkFlag != null and '' != checkFlag">  
+				and ea.check_flag = #{checkFlag,jdbcType=INTEGER}
+			</if>
+			<if test="null != propsMap.startDate and propsMap.startDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+			<if test="null != propsMap.endDate and propsMap.endDate != ''">
+				<![CDATA[
+					and DATE_FORMAT(ea.enter_date,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+				]]>
+			</if>
+	 	GROUP BY ea.enter_pid
+		 <if test="orderFields != null and '' != orderFields">  
+		           	order by ${orderFields} ${order}
+		 </if>
+	</select>
+	
+	<select id="subgridlist" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.account.model.ExpenseAccount">
+		select
+		<include refid="Base_Column_List" />
+		from emp_expense_account
+		where 1=1
+		<if test="enterPid != null and '' != enterPid">  
+			and enter_pid = #{enterPid,jdbcType=VARCHAR}
+		</if>
+		<if test="enterName != null and '' != enterName">  
+			and enter_name = #{enterName,jdbcType=VARCHAR}
+		</if>
+		<if test="null != startDate and startDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(enter_date,'%Y-%m-%d') >= DATE_FORMAT(#{startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != endDate and endDate != ''">
+				<![CDATA[
+				and DATE_FORMAT(enter_date,'%Y-%m-%d') <= DATE_FORMAT(#{endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+		]]>
+		</if>		
+	</select>
+	
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from emp_expense_account
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.account.model.ExpenseAccount">
+		insert into emp_expense_account (
+		<include refid="Base_Column_List" />
+		)values (
+				#{id,jdbcType=VARCHAR}
+				,#{expenseType,jdbcType=VARCHAR}
+				,#{expenseWay,jdbcType=VARCHAR}
+				,#{expenseMoney,jdbcType=DOUBLE}
+				,#{content,jdbcType=VARCHAR}
+				,#{deptNo,jdbcType=VARCHAR}
+				,#{deptName,jdbcType=VARCHAR}
+				,#{enterPid,jdbcType=VARCHAR}
+				,#{enterName,jdbcType=VARCHAR}
+				,#{checkPid,jdbcType=VARCHAR}
+				,#{checkName,jdbcType=VARCHAR}
+				,#{enterDate,jdbcType=TIMESTAMP}
+				,#{checkDate,jdbcType=TIMESTAMP}
+				,#{docAttach,jdbcType=INTEGER}
+				,#{checkFlag,jdbcType=INTEGER}
+				,#{assignFlag,jdbcType=INTEGER}
+				,#{fileUrl,jdbcType=BLOB}
+				,#{checkPizhu,jdbcType=BLOB}
+			)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.account.model.ExpenseAccount">
+		update emp_expense_account  set
+			ID= #{id,jdbcType=VARCHAR}
+			,expense_type = #{expenseType,jdbcType=VARCHAR}
+			,expense_way = #{expenseWay,jdbcType=VARCHAR}
+			,expense_money = #{expenseMoney,jdbcType=DOUBLE}
+			,content = #{content,jdbcType=VARCHAR}
+			,dept_no = #{deptNo,jdbcType=VARCHAR}
+			,dept_name = #{deptName,jdbcType=VARCHAR}
+			,enter_pid = #{enterPid,jdbcType=VARCHAR}
+			,enter_name = #{enterName,jdbcType=VARCHAR}
+			,check_pid = #{checkPid,jdbcType=VARCHAR}
+			,check_name = #{checkName,jdbcType=VARCHAR}
+			,enter_date = #{enterDate,jdbcType=TIMESTAMP}
+			,check_date = #{checkDate,jdbcType=TIMESTAMP}
+			,doc_attach = #{docAttach,jdbcType=INTEGER}
+			,check_flag = #{checkFlag,jdbcType=INTEGER}
+			,file_url = #{fileUrl,jdbcType=BLOB}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="auditByKey" parameterType="com.dongnao.workbench.account.model.ExpenseAccount">
+		update emp_expense_account set 
+			 check_date = #{checkDate,jdbcType=TIMESTAMP}
+			,check_pid = #{checkPid,jdbcType=VARCHAR}
+			,check_name = #{checkName,jdbcType=VARCHAR}
+			,check_flag= #{checkFlag,jdbcType=VARCHAR}
+			,check_pizhu = #{checkPizhu,jdbcType=BLOB}
+			where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="assignByKey" parameterType="com.dongnao.workbench.account.model.ExpenseAccount">
+		update 
+			emp_expense_account  
+		set 
+			assign_flag= '2'
+		where 
+			id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

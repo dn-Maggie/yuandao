@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.basic.dao.CourseMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.basic.model.Course">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="subject_id" property="subjectId" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id
+		,name
+		,subject_id
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from course
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.basic.model.Course">
+		select
+			 c.id
+			,c.name
+			,c.subject_id
+			,s.NAME as subjectName
+		from 
+			course c
+		left join
+			subject s 
+		on 
+			s.id = c.subject_id
+		where 1=1
+		<if test="id != null and '' != id">
+			and c.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null and '' != name">
+			and c.name = #{name,jdbcType=VARCHAR}
+		</if>
+		<if test="subjectId != null and '' != subjectId">
+			and c.subject_id = #{subjectId,jdbcType=VARCHAR}
+		</if>
+		<if test="orderFields != null and '' != orderFields">
+			order by ${orderFields} ${order}
+		</if>
+	</select>
+
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from course
+		where
+		id = #{id,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="add" parameterType="com.dongnao.workbench.basic.model.Course">
+		insert into course (
+		<include refid="Base_Column_List" />
+		)values (
+		#{id,jdbcType=VARCHAR}
+		,#{name,jdbcType=VARCHAR}
+		,#{subjectId,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.dongnao.workbench.basic.model.Course">
+		update course set
+		ID=
+		#{id,jdbcType=VARCHAR}
+		,name = #{name,jdbcType=VARCHAR}
+		,subject_id = #{subjectId,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

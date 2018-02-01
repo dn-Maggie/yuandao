@@ -1,0 +1,213 @@
+@charset "utf-8";
+*{ margin:0; padding:0;}
+html {height:100%; overflow:hidden;font-family:"Microsoft YaHei",SimSun,SimHei;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;}
+body{height:100%; overflow:hidden;font-family:"Microsoft YaHei",SimSun,SimHei;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale; background:#fff; overflow-x:hidden;overflow-y:auto; font-size:12px;}
+.tree_left { position:absolute; left:0px; top:0px; bottom:0px; width:220px; overflow:auto;}
+.right_main { position:absolute; left:221px;/*min-width:900px;*/ top:0px; bottom:0px; right:1px; overflow:auto;}
+input,textarea,select,option,textarea,em,h1,h2,h3,h4,h4,h6,strong,span,li,dl,dt,td{font-family:"Microsoft YaHei",SimSun,SimHei;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale; outline:none;}
+h1,h2,h3,h4,h5,h6,em,i{font-style:normal; font-weight:400; outline:none;}
+table{border-collapse:collapse;border-spacing:0;cursor: default;}
+li,dl,dt,dd{list-style-type:none;}
+.clearfix:before, .clearfix:after {content:" ";display:table}
+.clearfix:after {clear:both}
+/*img{border:0px;width:100%; height:auto; width: auto\9;}*/
+img{border:0px; width: auto\9;}
+a{text-decoration:none;outline:none;}
+.fl{ float:left;}
+.fr{ float:right;}
+.clearfix:before, .clearfix:after {content:" ";display:table}
+.clearfix:after {clear:both}
+.textcenter{ text-align:center;}
+.mt14{ margin-top:14px;}
+.ml14{ margin-left:14px;}
+.mlr4{ margin-left:4px;margin-right:10px;}
+.mr10{ margin-right:10px;}
+.mr22{ margin-right:11px;}
+.top4{ top:4px;}
+
+.red_txt{ color:#ff1e00;}
+.blue_txt{ color:#2574e1;}
+.bg_lightblue{background:#f0f6fc;}
+
+
+
+
+.form_select{width: 150px;height: 30px;line-height:30px; border: 1px solid #ddd;color: rgb(98,149,233);padding-left: 5px;outline: none;}
+
+/*状态样式*/
+.state_icons{position:relative; display:inline-block;margin-right:5px; background-image:url(../images/state_icons.png); background-repeat:no-repeat;width:18px; height:18px;}
+.icon_nochange{background-position:0 0; top:3px;}/*未启用，禁用*/
+.icon_sent{background-position:0 -21px; top:3px;}/*已发送*/
+.icon_update{ background-position:0 -63px;top:3px;}/*已更新*/
+.icon_change{background-position:0 -42px; top:3px;}/*已换装*/
+.icon_enabled{background-position:0 -84px; top:3px;}/*已启用*/
+.icon_failure{background-position:0 -105px; top:3px;}/*换装失败*/
+
+.icon_wxh{background-position:-21px 0; top:3px;}/*未销号*/
+.icon_wjxh{background-position:-21px -20px; top:3px;}/*文件销号*/
+.icon_scxh{background-position:-21px -41px; top:3px;}/*手持销号*/
+.icon_rgxh{background-position:-21px -61px; top:3px;}/*人工销号*/
+.icon_zdxh{background-position:-21px -86px; top:3px;}/*自动销号*/
+
+.icon_audit1{background-position:-41px -20px; top:3px;}/*已审核*/
+.icon_noaudit{background-position:-41px 0; top:3px;}/*待审核*/
+.icon_yxj{background-position:-41px -41px; top:3px;}/*已销记*/
+.icon_yxf{background-position:-41px -62px; top:3px;}/*已下发*/
+.icon_shwtg{background-position:-41px -82px; top:3px;}/*审核未通过*/
+.icon_wtj{background-position:-41px -104px; top:3px;}/*未提交*/
+
+.icon_kua{background-position:-59px 0; top:8px; position:absolute;left:0;}/*跨局*/
+.icon_wei{background-position:-59px -20px; top:8px;  position:absolute;right:0;}/*委托*/
+.icon_te{background-position:-59px -43px; top:8px; position:absolute;left:0;}/*特殊换装*/
+
+.icon_online{background-position:-79px 0px;top:4px;width: 15px;}/*在线*/
+.icon_offline{background-position:-79px -20px;top:4px;width: 15px;}/*离线*/
+
+.icon_one-level{background-position:-94px -20px;}/*警示一级*/
+.icon_two-level{background-position:-94px -42px;}/*警示二级*/
+.icon_three-level{background-position:-94px -1px;}/*警示三级*/
+
+/*标题图标*/
+.title-icon{ position:relative; display:inline-block; background-image:url(../images/title-icon.png); background-repeat:no-repeat;}
+.icon_hztj{ background-position:0 0; width:16px; height:14px; float:left; top:3px; }
+.icon_newlist{background-position:-41px 0; width:16px; height:15px; float:left; top:4px;}
+.icon_jcxh{background-position:-60px 0; width:16px; height:16px; float:left; top:4px;}
+.icon_jconline{background-position:-20px 0; width:16px; height:15px; float:left; top:4px;}
+.icon_warn{background-position:-80px 0; width:13px; height:16px; float:left; top:4px;}
+.icon_addchoice{background-position:-95px 0; width:14px; height:13px; float:left; top:8px;}/*选择换装点*/
+.icon_zaixian{background-position:-127px 0; width:14px; height:16px; top:3px;}/*选择换装点在线*/
+.icon_lixian{background-position:-143px 0; width:14px; height:16px; top:3px;}/*选择换装点离线*/
+.icon_shangchu{background-position:-111px 0; width:14px; height:16px; top:3px;}/*橙色删除*/
+
+
+
+/*功能button*/
+.icon_bg{position:relative; display:inline-block; background-image:url(../images/btn/btn.png); background-repeat:no-repeat; width:16px; height:16px;/*top:2px;*/}
+.icon_add{ background-position:0 0;}/*新增*/
+.icon_del{ background-position:-16px 0;}/*删除*/
+.icon_edit{ background-position:-32px 0;}/*编辑*/
+.icon_audit{background-position:-48px 0;}/*审核*/
+.icon_submit{background-position:-64px 0;}/*提交审核*/
+.icon_plan{background-position:-80px 0;}/*计划*/
+.icon_qrsx{background-position:-112px 0;}/*确认生效*/
+.icon_qxsx{background-position:-128px 0;}/*取消生效*/
+.icon_download{background-position:-96px 0;}/*下载*/
+.icon_szychz{background-position:-144px 0;}/*设置远程换装*/
+.icon_dywtd{background-position:-162px 0;}/*打印委托单*/
+.icon_ckxq{background-position:-181px 0;}/*查看详情*/
+
+a:hover .icon_add{ background-position:0 -16px;}
+a:hover .icon_del{ background-position:-16px -16px;}
+a:hover .icon_edit{ background-position:-32px -16px;}
+a:hover .icon_audit{background-position:-48px -16px;}
+a:hover .icon_submit{background-position:-64px -16px;}
+a:hover .icon_plan{background-position:-80px -16px;}
+a:hover .icon_qrsx{background-position:-112px -16px;}
+a:hover .icon_qxsx{background-position:-128px -16px;}
+a:hover .icon_download{background-position:-96px -16px;}
+a:hover .icon_szychz{background-position:-144px -16px;}
+a:hover .icon_dywtd{background-position:-162px -16px;}
+a:hover .icon_ckxq{background-position:-181px -16px;}
+
+
+/*二级菜单图标*/
+.icon_second-level{position:relative; display:inline-block; background-image:url(../images/icon_second-level.png); background-repeat:no-repeat;width:16px; height:16px;  margin-right:3px;}
+.sicon_planmain{ background-position:0 0; } /*主计划*/
+.sicon_planItem{ background-position:0 -20px;} /*完整子计划*/
+.sicon_planPiece{ background-position:0 -40px;} /*块子计划*/
+.sicon_crossCar{ background-position:0 -60px;} /*跨局换装*/
+.sicon_artificlaControl{ background-position:0 -100px;} /*人工销号*/
+.sicon_automaticControl{ background-position:0 -80px;} /*闭环销号管理*/
+.sicon_jcdw{ background-position:0 -120px;} /*机车定位*/
+.sicon_jczx{ background-position:0 -140px;} /*机车在线*/
+.sicon_alarmLevel{ background-position:0 -160px;} /*消息级别*/
+.sicon_locoAlarm{ background-position:0 -180px;} /*消息历史统计*/
+.sicon_jcbbll{ background-position:-20px 0;} /*机车版本履历*/
+.sicon_locoVersion{ background-position:-20px -20px;} /*机车当前版本*/
+.sicon_locoVersionHis{ background-position:-20px -40px;} /*历史版本机车*/
+.sicon_jcbbfb{ background-position:-20px -60px;} /*机车版本分布*/
+.sicon_hzqkjcfl{ background-position:-20px -80px;} /*换装情况机车分类*/
+.sicon_hzqkbjtj{ background-position:-20px -100px;} /*换装情况报警统计*/
+.sicon_jchzqktj{ background-position:-20px -120px;} /*机车换装情况统计*/
+
+.sicon_updatePwd{ background-position:-20px -140px;} /*修改密码*/
+.sicon_locomotiveMgr{ background-position:-20px -160px;} /*机车型号管理*/
+.sicon_locomotiveInfo{ background-position:-20px -180px;} /*机车信息管理*/
+.sicon_workshopMgr{ background-position:-40px 0;} /*车间信息管理*/
+.sicon_deptlocotypeMgr{ background-position:-40px -20px;} /*车间车型管理*/
+.sicon_sectionMgr{ background-position:-40px -40px;} /*区段信息管理*/
+.sicon_depotMgr{ background-position:-40px -60px;} /*站段信息管理*/
+.sicon_potMgr{ background-position:-40px -80px;} /*换装点管理*/
+.sicon_ShowTable{ background-position:-40px -100px;} /*显示表格管理*/
+.sicon_bureau{ background-position:-40px -120px;} /*局信息管理*/
+.sicon_station{ background-position:-40px -140px;} /*车站管理*/
+.sicon_userInfo{ background-position:-40px -160px;} /*用户管理*/
+.sicon_roleInfo{ background-position:-40px -180px;} /*角色授权*/
+.sicon_orgInfo{ background-position:-60px 0;} /*组织机构管理*/
+.sicon_trace{ background-position:-60px -20px;} /*车次基础信息管理*/
+.sicon_dictMgr{ background-position:-60px -40px;} /*数字字典管理*/
+.sicon_module{ background-position:-60px -60px;} /*菜单管理*/
+.sicon_moduleRes{ background-position:-60px -80px;} /*资源管理*/
+.sicon_settingInfo{ background-position:-60px -100px;} /*系统设置*/
+.sicon_logInfo{ background-position:-60px -120px;} /*日志管理*/
+
+
+.mask-wrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  filter: alpha(opacity=30);
+  background-color:#FFFFFF;
+  text-align: center; 
+  display: none;
+  vertical-align: middle; 
+}
+.mask-wrap-msg {
+  font-size:13px;
+  position: absolute;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+width: 50%;
+height: 30%;
+margin: auto;
+  color:rgb(98,149,233);
+}
+.mask-wrap-msg-img {
+ width: 100px;
+  height: 100px;
+  vertical-align:middle;
+}
+
+/*查询按钮 btn_area*/
+div.btn_area{
+	display: inline-block;
+	height: 30px;
+	margin: auto;
+	width: 100%;
+	line-height: 30px;
+	text-align: center;
+}
+div.btn_area #submit{
+	margin: auto auto;
+	width: 100px;
+	display: block;
+	float: none;
+	margin-top: 2px;
+}
+/*数据格子 btn_area*/
+div.staticBox{
+	width:25%;
+	float:left
+	
+}
+.ui-subgrid .ui-state-default.ui-jqgrid-hdiv{
+	display:none !important;
+}
+.ui-subgrid tr{
+	background: #fff!important;
+	
+}

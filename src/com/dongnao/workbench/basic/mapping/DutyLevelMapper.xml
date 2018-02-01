@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.basic.dao.DutyLevelMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.basic.model.DutyLevel">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+															<result column="duty_id" property="dutyId" jdbcType="VARCHAR" />
+													<result column="level_type" property="levelType" jdbcType="VARCHAR" />
+													<result column="level_name" property="levelName" jdbcType="INTEGER" />
+													<result column="level_sal" property="levelSal" jdbcType="DOUBLE" />
+									</resultMap>
+	<sql id="Base_Column_List">
+		 	id
+			,duty_id
+			,level_type
+			,level_name
+			,level_sal
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			dl.id,
+			dl.duty_id,
+			d.duty_name as dutyName,
+			dl.level_type,
+			dl.level_name,
+			dl.level_sal
+		from basic_duty_level as dl
+		left join basic_duty d on d.id=dl.duty_id
+		where dl.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.basic.model.DutyLevel">
+		select
+			dl.id,
+			dl.duty_id,
+			d.duty_name as dutyName,
+			dl.level_type,
+			dl.level_name,
+			dl.level_sal
+		from basic_duty_level as dl
+		left join basic_duty d on d.id=dl.duty_id
+		where 1=1
+		<if test="id != null and '' != id">  
+			and dl.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="dutyId != null and '' != dutyId">  
+			and dl.duty_id = #{dutyId,jdbcType=VARCHAR}
+		</if>
+		<if test="levelType != null and '' != levelType">  
+			and dl.level_type = #{levelType,jdbcType=VARCHAR}
+		</if>
+		<if test="levelName != null and '' != levelName">  
+			and dl.level_name = #{levelName,jdbcType=INTEGER}
+		</if>
+		<if test="levelSal != null and '' != levelSal">  
+			and dl.level_sal = #{levelSal,jdbcType=DOUBLE}
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from basic_duty_level
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.basic.model.DutyLevel">
+		insert into basic_duty_level (
+		<include refid="Base_Column_List" />
+		)values (
+				#{id,jdbcType=VARCHAR}
+				,#{dutyId,jdbcType=VARCHAR}
+				,#{levelType,jdbcType=VARCHAR}
+				,#{levelName,jdbcType=INTEGER}
+				,#{levelSal,jdbcType=DOUBLE}
+			)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.basic.model.DutyLevel">
+		update basic_duty_level  set
+		ID= #{id,jdbcType=VARCHAR}
+			,duty_id = #{dutyId,jdbcType=VARCHAR}
+			,level_type = #{levelType,jdbcType=VARCHAR}
+			,level_name = #{levelName,jdbcType=INTEGER}
+			,level_sal = #{levelSal,jdbcType=DOUBLE}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

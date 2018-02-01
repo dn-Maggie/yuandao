@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.school.dao.EmpSalaryMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.school.model.EmpSalary">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="emp_id" property="empId" jdbcType="VARCHAR" />
+		<result column="emp_bank" property="empBank" jdbcType="VARCHAR" />
+		<result column="emp_bank_card" property="empBankCard" jdbcType="VARCHAR" />
+		<result column="basic_salary" property="basicSalary" jdbcType="DECIMAL" />
+		<result column="duty_level_salary" property="dutyLevelSalary" jdbcType="DECIMAL" />
+		<result column="should_salary" property="shouldSalary" jdbcType="DECIMAL" />
+		<result column="social_security" property="socialSecurity" jdbcType="DECIMAL" />
+		<result column="late_early_time" property="lateEarlyTime" jdbcType="INTEGER" />
+		<result column="late_early_cost" property="lateEarlyCost" jdbcType="DOUBLE" />
+		<result column="attendance_anomaly_time" property="attendanceAnomalyTime" jdbcType="INTEGER" />
+		<result column="attendance_anomaly_cost" property="attendanceAnomalyCost" jdbcType="DOUBLE" />
+		<result column="leave_day" property="leaveDay" jdbcType="DOUBLE" />
+		<result column="leave_cost" property="leaveCost" jdbcType="DECIMAL" />
+		<result column="table_money" property="tableMoney" jdbcType="DECIMAL" />
+		<result column="housing_allowance" property="housingAllowance" jdbcType="DECIMAL" />
+		<result column="merit_raise" property="meritRaise" jdbcType="DECIMAL" />
+		<result column="push_money" property="pushMoney" jdbcType="DECIMAL" />
+		<result column="rests" property="rests" jdbcType="DECIMAL" />
+		<result column="actual_salary" property="actualSalary" jdbcType="DECIMAL" />
+		<result column="send_flag" property="sendFlag" jdbcType="INTEGER" />
+		<result column="check_id" property="checkId" jdbcType="VARCHAR" />
+		<result column="send_date" property="sendDate" jdbcType="TIMESTAMP" />
+		<result column="check_date" property="checkDate" jdbcType="TIMESTAMP" />
+		<result column="check_flag" property="checkFlag" jdbcType="INTEGER" />
+		<result column="assign_flag" property="assignFlag" jdbcType="INTEGER" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+		<result column="actualattendance" property="actualattendance" jdbcType="DECIMAL" />
+		<result column="all_social_security" property="allSocialSecurity" jdbcType="DECIMAL" />
+	</resultMap>
+	
+
+	
+	<sql id="Base_Column_List">
+	 	id
+	 	,create_date
+		,emp_id
+		,emp_bank
+		,emp_bank_card
+		,basic_salary
+		,duty_level_salary
+		<!-- ,should_salary -->
+		,social_security
+		,leave_day
+		<!-- ,leave_cost -->
+		,table_money
+		,housing_allowance
+		,merit_raise
+		,push_money
+		,rests
+		,actual_salary
+		,send_flag
+		,check_id
+		,send_date
+		,check_date
+		,check_flag
+		,assign_flag
+		,note
+		,actualattendance
+		,trafficsubsidies
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			es.id
+			,es.emp_id
+			,es.emp_bank
+			,es.emp_bank_card
+			,es.create_date
+			,e.emp_no as empNo
+			,e.name as empName
+			,e.nick_name as empNickName
+			,e.curr_state as empStatus
+			,bo.org_name as empDept
+			,e.bank_card as empBankCard
+			,e.entry_date as empEntryDate
+			,e.mobile as empMobile
+			,es.late_early_time
+			,es.attendance_anomaly_time
+			,es.leave_day
+			,e.be_full_date as empBeFullDate
+			,es.basic_salary
+			,es.duty_level_salary
+			,es.should_salary
+			,es.social_security
+			,es.leave_cost
+			,es.late_early_cost
+		  	,es.attendance_anomaly_cost
+			,es.table_money
+			,es.housing_allowance
+			,es.merit_raise
+			,es.push_money
+			,es.rests
+			,es.actual_salary
+			,es.send_flag
+			,e1.nick_name as checkName
+			,es.send_date
+			,es.check_date
+			,es.check_flag
+			,es.assign_flag
+			,es.note
+			,es.actualattendance
+			,es.trafficsubsidies
+			,es.all_social_security
+		from emp_salary as es
+		LEFT JOIN employee as e on es.emp_id = e.id
+		LEFT JOIN employee as e1 on es.check_id = e1.id
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		where es.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		SELECT
+			 es.id
+			,es.create_date
+			,e.emp_no as empNo
+			,es.emp_bank as empBank
+			,e.name as empName
+			,e.nick_name as empNickName
+			,e.curr_state as empStatus
+			,bo.org_name as empDept
+			,es.emp_bank_card as empBankCard
+			,e.entry_date as empEntryDate
+			,e.mobile as empMobile
+			,es.leave_day
+			,es.late_early_time
+			,es.attendance_anomaly_time
+			,e.be_full_date as empBeFullDate
+			,(case when es.basic_salary>0 then es.basic_salary else e.sal_value end) as basic_salary
+			<!-- ,(case when e.curr_state=2 then e.sal_value*0.8 else e.sal_value end) as basic_salary -->
+			,e.salary as duty_level_salary 
+			,es.should_salary
+			<!-- ,(case when es.should_salary>0 then es.should_salary else e.sal_value end) as should_salary -->
+			,es.social_security
+			<!-- ,es.leave_day*(es.basic_salary/30) as leave_cost -->
+			,es.leave_cost
+			,es.late_early_cost
+			,es.attendance_anomaly_cost
+			<!-- ,es.late_early_time*30 as late_early_cost -->
+		 	<!-- ,es.attendance_anomaly_time*50 as attendance_anomaly_cost -->
+			,es.table_money
+			,es.housing_allowance 
+			,es.merit_raise 
+			,es.push_money 
+			,es.rests
+			,es.actual_salary
+			<!-- ,(case when es.actual_salary>0 then es.actual_salary else 
+				e.sal_value
+				+e.salary
+				+es.table_money
+				+es.housing_allowance
+				+es.merit_raise
+				+es.rests
+				-es.social_security
+				-es.late_early_cost
+				-es.attendance_anomaly_cost
+				-es.leave_cost
+			 end) as actual_salary  -->
+			,es.send_flag
+			,e1.nick_name as checkName
+			,es.send_date
+			,es.check_date
+			,es.check_flag
+			,es.assign_flag
+			,es.note
+			,es.actualattendance
+			,es.trafficsubsidies
+		FROM emp_salary AS es
+		LEFT JOIN  employee AS e ON es.emp_id = e.id
+		<if test="empStatus != null and '' != empStatus">  
+			and e.curr_state = #{empStatus,jdbcType=VARCHAR}
+		</if>
+		LEFT JOIN employee as e1 on es.check_id = e1.id
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		where 1=1
+		<if test="id != null and '' != id">  
+			and es.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="checkFlag != null and '' != checkFlag">  
+			and es.check_flag = #{checkFlag,jdbcType=VARCHAR}
+		</if>
+		<if test="sendFlag != null and '' != sendFlag">  
+			and es.send_flag = #{sendFlag,jdbcType=VARCHAR}
+		</if>
+		<if test="empId != null and '' != empId">  
+			and es.emp_id = #{empId,jdbcType=VARCHAR}
+		</if>
+		<if test="empNickName != null and '' != empNickName">  
+			and e.nick_name = #{empNickName,jdbcType=TIMESTAMP}
+		</if>
+		<if test="empDept != null and '' != empDept">  
+			and bo.org_name = #{empDept,jdbcType=TIMESTAMP}
+		</if>
+		<if test="empStatus != null and '' != empStatus">  
+			and e.curr_state = #{empStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="basicSalary != null and '' != basicSalary">  
+			and es.basic_salary = #{basicSalary,jdbcType=DECIMAL}
+		</if>
+		<if test="shouldSalary != null and '' != shouldSalary">  
+			and es.should_salary = #{shouldSalary,jdbcType=DECIMAL}
+		</if>
+		<if test="socialSecurity != null and '' != socialSecurity">  
+			and es.social_security = #{socialSecurity,jdbcType=DECIMAL}
+		</if>
+		<if test="leaveCost != null and '' != leaveCost">  
+			and es.leave_cost = #{leaveCost,jdbcType=DECIMAL}
+		</if>
+		<if test="tableMoney != null and '' != tableMoney">  
+			and es.table_money = #{tableMoney,jdbcType=DECIMAL}
+		</if>
+		<if test="housingAllowance != null and '' != housingAllowance">  
+			and es.housing_allowance = #{housingAllowance,jdbcType=DECIMAL}
+		</if>
+		<if test="meritRaise != null and '' != meritRaise">  
+			and es.merit_raise = #{meritRaise,jdbcType=DECIMAL}
+		</if>
+		<if test="rests != null and '' != rests">  
+			and es.rests = #{rests,jdbcType=DECIMAL}
+		</if>
+		<if test="actualSalary != null and '' != actualSalary">  
+			and es.actual_salary = #{actualSalary,jdbcType=DECIMAL}
+		</if>
+		<if test="note != null and '' != note">  
+			and es.note = #{note,jdbcType=VARCHAR}
+		</if>
+		<if test="trafficsubsidies != null and '' != trafficsubsidies">  
+			and es.trafficsubsidies = #{trafficsubsidies,jdbcType=DECIMAL}
+		</if>
+		<if test="actualattendance != null and '' != actualattendance">  
+			and es.actualattendance = #{actualattendance,jdbcType=DECIMAL}
+		</if>
+		<if test="null != createDate and createDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(es.create_date,'%Y%m') = DATE_FORMAT(#{createDate,jdbcType=TIMESTAMP},'%Y%m')
+			]]>
+		</if>
+		<!-- group by es.emp_id -->
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<!-- 社保扣款 -->
+	<select id="listEmpSocialSecurity" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		SELECT
+			 es.id
+			,es.create_date
+			,e.emp_no as empNo
+			,e.name as empName
+			,e.nick_name as empNickName
+			,e.curr_state as empStatus
+			,bo.org_name as empDept
+			,e.entry_date as empEntryDate
+			,e.be_full_date as empBeFullDate
+			,es.money as social_security
+		FROM account_flow AS es 
+		LEFT JOIN  employee AS e ON es.emp_id = e.id
+		<if test="empStatus != null and '' != empStatus">  
+			and e.curr_state = #{empStatus,jdbcType=VARCHAR}
+		</if>
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		where es.account_no = 'SBKK'
+		<if test="id != null and '' != id">  
+			and es.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="empId != null and '' != empId">  
+			and es.emp_id = #{empId,jdbcType=VARCHAR}
+		</if>
+		<if test="empNickName != null and '' != empNickName">  
+			and e.nick_name = #{empNickName,jdbcType=TIMESTAMP}
+		</if>
+		<if test="empDept != null and '' != empDept">  
+			and bo.org_name = #{empDept,jdbcType=TIMESTAMP}
+		</if>
+		<if test="empStatus != null and '' != empStatus">  
+			and e.curr_state = #{empStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="null != createDate and createDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(es.create_date,'%Y%m') = DATE_FORMAT(#{createDate,jdbcType=TIMESTAMP},'%Y%m')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<!-- 员工成本 -->
+	<select id="listEmpCost" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		SELECT
+			 ps.id
+			,DATE_FORMAT(ps.month,'%Y-%c-%d')  as empEntryDate
+			,e.emp_no as empNo
+			,e.name as empName
+			,e.nick_name as empNickName
+			,e.curr_state as empStatus
+			,bo.org_name as empDept
+			,ps.cost as actualSalary
+			,ps.emp_performance as meritRaise
+			,ps.bonus as rests
+			,ps.actual_bonus as pushMoney
+		FROM performance_statistics AS ps 
+		left JOIN  employee AS e ON ps.emp_id = e.id
+		<if test="empStatus != null and '' != empStatus">  
+			and e.curr_state = #{empStatus,jdbcType=VARCHAR}
+		</if>
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		where e.duty_id = 'ddfd8fbf-e7fc-4768-a052-1b252e168344'
+		<if test="id != null and '' != id">  
+			and ps.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="empId != null and '' != empId">  
+			and ps.emp_id = #{empId,jdbcType=VARCHAR}
+		</if>
+		<if test="empNo != null and '' != empNo">  
+			and e.emp_no = #{empNo,jdbcType=VARCHAR}
+		</if>
+		<if test="empName != null and '' != empName">  
+			and e.name = #{empName,jdbcType=VARCHAR}
+		</if>
+		<if test="empNickName != null and '' != empNickName">  
+			and e.nick_name = #{empNickName,jdbcType=TIMESTAMP}
+		</if>
+		<if test="empDept != null and '' != empDept">  
+			and bo.org_name = #{empDept,jdbcType=TIMESTAMP}
+		</if>
+		<if test="empStatus != null and '' != empStatus">  
+			and e.curr_state = #{empStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="null != createDate and createDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(ps.month,'%Y%m') = DATE_FORMAT(#{createDate,jdbcType=TIMESTAMP},'%Y%m')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<select id="getEmpSalaryStatistic" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		SELECT 
+			COUNT(*) as empNo,
+			SUM(
+			(case when es.basic_salary>0 then es.basic_salary else 0 end)
+			  +(case when es.duty_level_salary>0 then es.duty_level_salary else 0 end)
+			  +(case when es.table_money>0 then es.table_money else 0 end)
+			  +(case when es.housing_allowance>0 then es.housing_allowance else 0 end)
+			  +(case when es.merit_raise>0 then es.merit_raise else 0 end)
+			  +(case when es.push_money>0 then es.push_money else 0 end)
+			  +(case when es.rests>0 then es.rests else 0 end)
+			  -(case when es.social_security>0 then es.social_security else 0 end)
+			  -(case when es.leave_day>0 then es.leave_day*(es.basic_salary/30) else 0 end)	
+			  -(case when es.late_early_time>0 then es.late_early_time*30 else 0 end)
+		  	  -(case when es.attendance_anomaly_time>0 then es.attendance_anomaly_time*50 else 0 end)
+			) actual_salary
+		FROM 
+		 	emp_salary as es
+		WHERE 1=1 
+		<if test="null != createDate and createDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(es.create_date,'%Y%m') = DATE_FORMAT(#{createDate,jdbcType=TIMESTAMP},'%Y%m')
+			]]>
+		</if>
+		<if test="checkFlag != null and '' != checkFlag">  
+			and es.check_flag = #{checkFlag,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from emp_salary
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		insert into emp_salary (
+				id
+			 	,create_date
+				,emp_id
+				,emp_bank
+				,emp_bank_card
+				,basic_salary
+				,should_salary
+				,duty_level_salary
+				,social_security
+				,late_early_time
+				,late_early_cost
+				,attendance_anomaly_time
+				,attendance_anomaly_cost
+				,leave_day
+				,leave_cost
+				,table_money
+				,housing_allowance
+				,merit_raise
+				,push_money
+				,rests
+				,actual_salary
+				,send_flag
+				,check_id
+				,send_date
+				,check_date
+				,check_flag
+				,assign_flag
+				,note
+				,actualattendance
+				,trafficsubsidies
+				,all_social_security
+		)values (
+			#{id,jdbcType=VARCHAR}
+			,#{createDate,jdbcType=TIMESTAMP}
+			,#{empId,jdbcType=VARCHAR}
+			,#{empBank,jdbcType=VARCHAR}
+			,#{empBankCard,jdbcType=VARCHAR}
+			,#{basicSalary,jdbcType=DECIMAL}
+			,#{shouldSalary,jdbcType=DECIMAL}
+			,#{dutyLevelSalary,jdbcType=DECIMAL}
+			,#{socialSecurity,jdbcType=DECIMAL}
+			,#{lateEarlyTime,jdbcType=INTEGER}
+			,#{lateEarlyCost,jdbcType=DOUBLE}
+			,#{attendanceAnomalyTime,jdbcType=INTEGER}
+			,#{attendanceAnomalyCost,jdbcType=DOUBLE}
+			,#{leaveDay,jdbcType=DOUBLE}
+			,#{leaveCost,jdbcType=DOUBLE}
+			,#{tableMoney,jdbcType=DECIMAL}
+			,#{housingAllowance,jdbcType=DECIMAL}
+			,#{meritRaise,jdbcType=DECIMAL}
+			,#{pushMoney,jdbcType=DECIMAL}
+			,#{rests,jdbcType=DECIMAL}
+			,#{actualSalary,jdbcType=DECIMAL}
+			,#{sendFlag,jdbcType=INTEGER}
+			,#{checkId,jdbcType=VARCHAR}
+			,#{sendDate,jdbcType=TIMESTAMP}
+			,#{checkDate,jdbcType=TIMESTAMP}
+			,#{checkFlag,jdbcType=INTEGER}
+			,#{assignFlag,jdbcType=INTEGER}
+			,#{note,jdbcType=VARCHAR}
+			,#{actualattendance,jdbcType=DECIMAL}
+			,#{trafficsubsidies,jdbcType=DECIMAL}
+			,#{allSocialSecurity,jdbcType=DECIMAL}
+		)
+	</insert>
+	
+	
+	<!-- <insert id="addEmpCost" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		insert into performance_statistics (
+				id
+				,emp_id
+				,month
+				,emp_performance
+				,cost
+				,bonus
+				,actual_bonus
+		)	SELECT
+				 CONCAT(DATE_FORMAT(#{empEntryDate,jdbcType=TIMESTAMP},'%Y-%c'),e.id)
+				,e.id
+				,DATE_FORMAT(#{empEntryDate,jdbcType=TIMESTAMP},'%Y-%c-%d')  as createDate
+				,(select sum(performance) from emp_performance where employee_id = e.id and DATE_FORMAT(create_date,'%Y-%c')= DATE_FORMAT(#{empEntryDate,jdbcType=TIMESTAMP},'%Y-%c')) as emp_performance
+				,af.money as cost
+				,(select sum(performance) from emp_performance_new where employee_id = e.id and DATE_FORMAT(create_date,'%Y-%c')=DATE_FORMAT(#{empEntryDate,jdbcType=TIMESTAMP},'%Y-%c')) as bonus
+				,(select sum(performance) from emp_performance_new where employee_id = e.id  and DATE_FORMAT(create_date,'%Y-%c')=DATE_FORMAT(#{empEntryDate,jdbcType=TIMESTAMP},'%Y-%c')) as actual_bonus
+			FROM employee AS e
+			LEFT JOIN  account_flow AS af ON af.emp_id = e.id and DATE_FORMAT(af.create_date,'%Y%c') = DATE_FORMAT(#{empEntryDate,jdbcType=TIMESTAMP},'%Y%c')
+			where e.duty_id = 'ddfd8fbf-e7fc-4768-a052-1b252e168344'
+			and af.account_no = 'GZZC'
+			ORDER BY e.id ASC
+	</insert> -->
+	
+	<insert id="addBatch" parameterType="java.util.List">
+	insert into emp_salary (
+				id
+			 	,create_date
+				,emp_id
+				,emp_bank
+				,emp_bank_card
+				,basic_salary
+				,should_salary
+				,duty_level_salary
+				,social_security
+				,late_early_time
+				,late_early_cost
+				,attendance_anomaly_time
+				,attendance_anomaly_cost
+				,leave_day
+				,leave_cost
+				,table_money
+				,housing_allowance
+				,merit_raise
+				,push_money
+				,rests
+				,actual_salary
+				,send_flag
+				,check_id
+				,send_date
+				,check_date
+				,check_flag
+				,assign_flag
+				,note
+				,actualattendance
+				,trafficsubsidies
+				,all_social_security
+		)values 
+		<foreach collection ="list" item="item" index= "index" separator =",">
+		(
+			#{item.id,jdbcType=VARCHAR}
+			,#{item.createDate,jdbcType=TIMESTAMP}
+			,#{item.empId,jdbcType=VARCHAR}
+			,#{item.empBank,jdbcType=VARCHAR}
+			,#{item.empBankCard,jdbcType=VARCHAR}
+			,#{item.basicSalary,jdbcType=DECIMAL}
+			,#{item.shouldSalary,jdbcType=DECIMAL}
+			,#{item.dutyLevelSalary,jdbcType=DECIMAL}
+			,#{item.socialSecurity,jdbcType=DECIMAL}
+			,#{item.lateEarlyTime,jdbcType=INTEGER}
+			,#{item.lateEarlyCost,jdbcType=DOUBLE}
+			,#{item.attendanceAnomalyTime,jdbcType=INTEGER}
+			,#{item.attendanceAnomalyCost,jdbcType=DOUBLE}
+			,#{item.leaveDay,jdbcType=DOUBLE}
+			,#{item.leaveCost,jdbcType=DOUBLE}
+			,#{item.tableMoney,jdbcType=DECIMAL}
+			,#{item.housingAllowance,jdbcType=DECIMAL}
+			,#{item.meritRaise,jdbcType=DECIMAL}
+			,#{item.pushMoney,jdbcType=DECIMAL}
+			,#{item.rests,jdbcType=DECIMAL}
+			,#{item.actualSalary,jdbcType=DECIMAL}
+			,#{item.sendFlag,jdbcType=INTEGER}
+			,#{item.checkId,jdbcType=VARCHAR}
+			,#{item.sendDate,jdbcType=TIMESTAMP}
+			,#{item.checkDate,jdbcType=TIMESTAMP}
+			,#{item.checkFlag,jdbcType=INTEGER}
+			,#{item.assignFlag,jdbcType=INTEGER}
+			,#{item.note,jdbcType=VARCHAR}
+			,#{item.actualattendance,jdbcType=DECIMAL}
+			,#{item.trafficsubsidies,jdbcType=DECIMAL}
+			,#{item.allSocialSecurity,jdbcType=DECIMAL}
+		)
+		 </foreach >
+	</insert>
+	
+	<insert id="autoAdd" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		INSERT INTO emp_salary (
+			id,
+			emp_id,
+			emp_bank,
+			emp_bank_card,
+			basic_salary,
+			duty_level_salary,
+			should_salary,
+			leave_day,
+			leave_cost,
+			table_money,
+			create_date
+		) SELECT
+			e.id,
+			e.id,
+			e.bank_name,
+			e.bank_card,
+			(case when e.curr_state=2 then e.sal_value*0.8 else e.sal_value end),
+			e.salary,
+			e.sal_value+e.salary,
+			(case when sum(ela.leave_date)>0 then sum(ela.leave_date) else 0 end),
+			(case when sum(ela.leave_date)>0 then sum(ela.leave_date)*e.sal_value/30 else 0 end),
+			(case when sum(etg.table_money)>0 then sum(etg.table_money) else 0 end),
+			#{createDate,jdbcType=TIMESTAMP}
+		FROM
+			employee AS e
+		LEFT JOIN emp_absence AS eb ON eb.emp_id = e.id
+		LEFT JOIN emp_leave_apply AS ela 
+		ON 
+			ela.emp_id = e.id
+			and DATE_FORMAT(ela.start_date,'%Y%m') = DATE_FORMAT(#{createDate,jdbcType=TIMESTAMP},'%Y%m')
+			and DATE_FORMAT(ela.end_date,'%Y%m') = DATE_FORMAT(#{createDate,jdbcType=TIMESTAMP},'%Y%m')
+		LEFT JOIN emp_table_grant AS etg ON 
+			etg.emp_id = e.id
+			and DATE_FORMAT(etg.grant_date_start,'%Y%m') = DATE_FORMAT(#{createDate,jdbcType=TIMESTAMP},'%Y%m')
+			and DATE_FORMAT(etg.grant_date_end,'%Y%m') = DATE_FORMAT(#{createDate,jdbcType=TIMESTAMP},'%Y%m')
+		GROUP BY e.id
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		update emp_salary 
+			 <trim prefix="set" suffixOverrides=",">
+				<if test="id != null and '' != id"> 
+					id = #{id,jdbcType=VARCHAR},
+				</if>
+				<if test="leaveDay != null and '' != leaveDay">
+					leave_day= #{leaveDay,jdbcType=DOUBLE},
+				</if>
+				<if test="attendanceAnomalyCost != null and '' != attendanceAnomalyCost"> 
+					attendance_anomaly_cost= #{attendanceAnomalyCost,jdbcType=DOUBLE},
+				</if>
+				<if test="attendanceAnomalyTime != null and '' != attendanceAnomalyTime">
+					attendance_anomaly_time= #{attendanceAnomalyTime,jdbcType=INTEGER},
+				</if>
+				<if test="dutyLevelSalary != null and '' != dutyLevelSalary">  
+					duty_level_salary= #{dutyLevelSalary,jdbcType=DOUBLE},
+				</if>
+				<if test="lateEarlyTime != null and '' != lateEarlyTime">  
+					late_early_time = #{lateEarlyTime,jdbcType=INTEGER},
+				</if>
+				<if test="lateEarlyCost != null and '' != lateEarlyCost">  
+					late_early_cost = #{lateEarlyCost,jdbcType=DOUBLE},
+				</if>		
+				<if test="empBankCard != null and '' != empBankCard">  
+					emp_bank_card= #{empBankCard,jdbcType=VARCHAR},
+				</if>		
+				<if test="empBank != null and '' != empBank">  
+					emp_bank= #{empBank,jdbcType=VARCHAR},
+				</if>	
+				<if test="basicSalary != null and '' != basicSalary">  
+					basic_salary= #{basicSalary,jdbcType=DOUBLE},
+				</if>
+				<if test="shouldSalary != null and '' != shouldSalary">  
+					should_salary = #{shouldSalary,jdbcType=DOUBLE},
+				</if>
+				<if test="socialSecurity != null and '' != socialSecurity">  
+					social_security = #{socialSecurity,jdbcType=DOUBLE},
+				</if>
+				<if test="leaveCost != null and '' != leaveCost">  
+					leave_cost = #{leaveCost,jdbcType=DOUBLE},
+				</if>
+				<if test="tableMoney != null and '' != tableMoney">  
+					table_money = #{tableMoney,jdbcType=DOUBLE},
+				</if>
+				<if test="housingAllowance != null and '' != housingAllowance">  
+					housing_allowance= #{housingAllowance,jdbcType=DOUBLE},
+				</if>
+				<if test="meritRaise != null and '' != meritRaise">  
+					merit_raise = #{meritRaise,jdbcType=DOUBLE},
+				</if>
+				<if test="pushMoney != null and '' != pushMoney">  
+					push_money = #{pushMoney,jdbcType=DOUBLE},
+				</if>
+				<if test="rests != null and '' != rests">  
+					rests = #{rests,jdbcType=DOUBLE},
+				</if>
+				<if test="actualSalary != null and '' != actualSalary">  
+					actual_salary = #{actualSalary,jdbcType=DECIMAL},
+				</if>
+				<if test="note != null and '' != note">  
+					note= #{note,jdbcType=VARCHAR},
+				</if>
+				<if test="trafficsubsidies != null and '' != trafficsubsidies">  
+					trafficsubsidies = #{trafficsubsidies,jdbcType=DECIMAL},
+				</if>
+				<if test="actualattendance != null and '' != actualattendance">  
+					actualattendance = #{actualattendance,jdbcType=DECIMAL},
+				</if>
+				<if test="allSocialSecurity != null and '' != allSocialSecurity">  
+					all_social_security = #{allSocialSecurity,jdbcType=DOUBLE},
+				</if>
+			</trim>
+		where id = #{id,jdbcType=VARCHAR} 
+	</update>
+	
+	
+	<update id="updateEmpCost" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		update performance_statistics 
+			set id = #{id,jdbcType=VARCHAR} 
+				,cost = #{actualSalary,jdbcType=DECIMAL}
+				,actual_bonus = (
+					CASE
+					WHEN emp_performance - cost > 0 THEN
+						bonus
+					ELSE
+						bonus/3
+					END
+				)
+		where id = #{id,jdbcType=VARCHAR} 
+	</update>
+	
+	<!-- <update id="updateEmpCostBonus" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		update performance_statistics 
+			 <trim prefix="set" suffixOverrides=",">
+				<if test="actualSalary != null and '' != actualSalary">  
+					cost = #{actualSalary,jdbcType=DECIMAL},
+					actual_bonus = (
+					CASE
+					WHEN emp_performance - cost > 0 THEN
+						bonus
+					ELSE
+						bonus/3
+					END
+				)
+				</if>
+			</trim>
+		where id = #{id,jdbcType=VARCHAR} 
+	</update> -->
+	<update id="audit" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		update emp_salary  set
+			id= #{id,jdbcType=VARCHAR}
+			,emp_bank = #{empBank,jdbcType=VARCHAR}
+			,emp_bank_card = #{empBankCard,jdbcType=VARCHAR}
+			<!-- ,social_security = #{socialSecurity,jdbcType=DOUBLE}
+			,late_early_time = #{lateEarlyTime,jdbcType=INTEGER}
+			,attendance_anomaly_time = #{attendanceAnomalyTime,jdbcType=INTEGER}
+			,leave_day = #{leaveDay,jdbcType=DOUBLE}
+			,late_early_cost = #{lateEarlyCost,jdbcType=DOUBLE}
+			,attendance_anomaly_cost = #{attendanceAnomalyCost,jdbcType=DOUBLE}
+			,leave_cost = #{leaveCost,jdbcType=DOUBLE}
+			,table_money = #{tableMoney,jdbcType=DOUBLE}
+			,housing_allowance = #{housingAllowance,jdbcType=DOUBLE}
+			,merit_raise = #{meritRaise,jdbcType=DOUBLE}
+			,rests = #{rests,jdbcType=DOUBLE}
+			,should_salary = #{shouldSalary,jdbcType=DOUBLE}
+			,actual_salary = #{actualSalary,jdbcType=DOUBLE}
+			,basic_salary = #{basicSalary,jdbcType=DOUBLE}
+			,duty_level_salary = #{dutyLevelSalary,jdbcType=DOUBLE} -->
+			,note = #{note,jdbcType=VARCHAR}
+			,check_id = #{checkId,jdbcType=VARCHAR}
+			,check_date = #{checkDate,jdbcType=TIMESTAMP}
+			,check_flag = #{checkFlag,jdbcType=VARCHAR}
+		where emp_id = #{empId,jdbcType=VARCHAR}
+		and DATE_FORMAT(create_date,'%Y%m') = DATE_FORMAT(#{createDate,jdbcType=TIMESTAMP},'%Y%m')
+	</update>
+	
+	<update id="send" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		update emp_salary set
+			send_date = #{sendDate,jdbcType=TIMESTAMP}
+			,send_flag = #{sendFlag,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+		and emp_id = #{empId,jdbcType=VARCHAR}
+	</update>
+	
+	
+	<!-- <update id="assign" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		update emp_salary set
+			assign_flag = #{assignFlag,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+		and emp_id = #{empId,jdbcType=VARCHAR}
+	</update> -->
+	
+	<delete id="assign" parameterType="com.dongnao.workbench.school.model.EmpSalary">
+		delete from emp_salary 	where id = #{id,jdbcType=VARCHAR}
+	</delete> 
+</mapper>

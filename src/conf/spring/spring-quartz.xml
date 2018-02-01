@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- 配置调度器工厂(SchedulerFactoryBean) -->
+	<bean name="startQuertz"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="myJobTrigger" />
+				<ref bean="myJobTrigger2" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置Cron触发器(CronTriggerFactoryBean) -->
+	<bean id="myJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<!-- 每隔45秒钟执行一次 0/45 * * * * ? -->
+			<!-- 本月最后一天0 0 0 L * ? -->
+			<!-- 每一天执行一次0 0 0 1/1 * ? * -->
+			<!-- 每天1点执行0 0 1 * * ? * -->
+			<!-- 指定某几个时刻运行 0 0 1,2,3,4,5,6 * * ?  -->
+			<!-- 每个小时执行一次 0 0 0/1 * * ?  -->
+			<value>0 0 0/1 * * ?</value>
+		</property>
+	</bean>
+
+	<!-- 配置方法调用任务工厂(XXXJobDetailFactoryBean) -->
+	<bean id="myJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="myJob" />
+		</property>
+		<!-- 要执行的方法 -->
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+	</bean>
+
+	<bean id="myJobTrigger2"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myJobDetail2" />
+		</property>
+		<property name="cronExpression">
+		<!--  0 0 2 1 1-12 ?-->
+		<!-- 0 0 2 4 * ? -->
+			<value>0 0 2 4 * ? </value>
+		</property>
+	</bean>
+
+	<!-- 配置方法调用任务工厂(XXXJobDetailFactoryBean) -->
+	<bean id="myJobDetail2"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="myJob" />
+		</property>
+		<!-- 要执行的方法 -->
+		<property name="targetMethod">
+			<value>updatePerformance</value>
+		</property>
+	</bean>
+
+
+	<!-- 配置自定义的时间任务(myJob) -->
+	<bean id="myJob" class="com.dongnao.workbench.school.controller.SpringQtz" />
+
+</beans>  

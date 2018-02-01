@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.system.dao.PersonroleMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.system.model.Personrole">
+		<id column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ROLE_ID
+		,CREATE_TIME
+		,USER_ID
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sys_ro_personrole
+		where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.system.model.Personrole">
+		select
+		<include refid="Base_Column_List" />
+		from sys_ro_personrole
+		where 1=1
+		<if test="roleId != null and '' != roleId">
+			and ROLE_ID = #{roleId,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null and '' != createTime">
+			and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="userId != null and '' != userId">
+			and USER_ID = #{userId,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from
+		sys_ro_personrole
+		where USER_ID = #{userId,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="add" parameterType="com.dongnao.workbench.system.model.Personrole">
+		insert into sys_ro_personrole (
+		<include refid="Base_Column_List" />
+		)values (
+		#{roleId,jdbcType=VARCHAR}
+		,#{createTime,jdbcType=TIMESTAMP}
+		,#{userId,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.dongnao.workbench.system.model.Personrole">
+		update sys_ro_personrole set
+		ROLE_ID = #{roleId,jdbcType=VARCHAR}
+		,CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+		,USER_ID = #{userId,jdbcType=VARCHAR}
+		where USER_ID = #{userId,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.basic.dao.DutyMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.basic.model.Duty">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="org_id" property="orgId" jdbcType="VARCHAR" />
+		<result column="DUTY_TYPE" property="dutyType" jdbcType="VARCHAR" />
+		<result column="DUTY_TYPE_NAME" property="dutyTypeName" jdbcType="VARCHAR" />
+		<result column="DUTY_NAME" property="dutyName" jdbcType="VARCHAR" />
+		<result column="DUTY_DESC" property="dutyDesc" jdbcType="VARCHAR" />
+		<result column="DUTY_SORT" property="dutySort" jdbcType="VARCHAR" />
+		<result column="PID" property="pid" jdbcType="VARCHAR" />
+		<result column="IS_ACTIVE" property="isActive" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+			 	ID
+ 				,org_id
+				,DUTY_TYPE
+				,DUTY_NAME
+				,DUTY_DESC
+				,DUTY_SORT
+				,PID
+				,IS_ACTIVE
+	</sql>
+	<sql id="Query_Base_Column_List">
+			 	t.ID
+ 				,t.org_id
+				,t.DUTY_TYPE
+				,di.dict_name as DUTY_TYPE_NAME
+				,t.DUTY_NAME
+				,t.DUTY_DESC
+				,t.DUTY_SORT
+				,t.PID
+				,t.IS_ACTIVE
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Query_Base_Column_List" />
+		from BASIC_DUTY t left join SYS_DICT_INFO di on t.duty_type=di.dict_code and di.dict_type_code='dutyType'
+		where t.ID = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.basic.model.Duty">
+		select
+		<include refid="Query_Base_Column_List" />
+		from BASIC_DUTY t left join SYS_DICT_INFO di on t.duty_type=di.dict_code and di.dict_type_code='dutyType'
+		where t.IS_ACTIVE=1
+		<if test="dutyType != null and '' != dutyType">  
+			and t.DUTY_TYPE = #{dutyType,jdbcType=VARCHAR}
+		</if>
+		<if test="orgId != null and '' != orgId">  
+			and t.org_id = #{orgId,jdbcType=VARCHAR}
+		</if>
+		<if test="dutyName != null and '' != dutyName">  
+		 and t.DUTY_NAME LIKE CONCAT('%',#{dutyName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="dutySort != null and '' != dutySort">  
+			and t.DUTY_SORT = #{dutySort,jdbcType=VARCHAR}
+		</if>
+		<if test="pid != null and '' != pid">  
+			and t.PID = #{pid,jdbcType=VARCHAR}
+		</if>
+		<if test="isActive != null and '' != isActive">  
+			and t.IS_ACTIVE = #{isActive,jdbcType=INTEGER}
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from BASIC_DUTY
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.basic.model.Duty">
+		insert into BASIC_DUTY (
+		<include refid="Base_Column_List" />
+		)values (
+			#{id,jdbcType=VARCHAR}
+			,#{orgId,jdbcType=VARCHAR}
+			,#{dutyType,jdbcType=VARCHAR}
+			,#{dutyName,jdbcType=VARCHAR}
+			,#{dutyDesc,jdbcType=VARCHAR}
+			,#{dutySort,jdbcType=VARCHAR}
+			,#{pid,jdbcType=VARCHAR}
+			,#{isActive,jdbcType=INTEGER}
+				)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.basic.model.Duty">
+		update BASIC_DUTY  set
+		ID = #{id,jdbcType=VARCHAR}
+			,org_id  = #{orgId,jdbcType=VARCHAR}
+			,DUTY_TYPE = #{dutyType,jdbcType=VARCHAR}
+			,DUTY_NAME = #{dutyName,jdbcType=VARCHAR}
+			,DUTY_DESC = #{dutyDesc,jdbcType=VARCHAR}
+			,DUTY_SORT = #{dutySort,jdbcType=VARCHAR}
+			,PID = #{pid,jdbcType=VARCHAR}
+			,IS_ACTIVE = #{isActive,jdbcType=INTEGER}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

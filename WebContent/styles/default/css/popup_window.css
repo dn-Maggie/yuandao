@@ -1,0 +1,117 @@
+.black_overlay{  display: none;  position: absolute;  top: 0%;  left: 0%;  width: 100%;  height: 100%;  background-color: black;  z-index:1001;  -moz-opacity: 0.5;  opacity:.50;  filter: alpha(opacity=50);  }  
+.window_content {
+	display: none;
+	position: absolute;
+	top: 50%;
+	width: 400px;
+	height: 250px;
+	border: 5px solid rgba(0,0,0,0.3);
+	background-color: #FFF;
+	z-index: 1002;
+	overflow: auto;
+	margin-top: -125px;
+	margin-left: -200px;
+	left: 50%;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	-moz-background-clip: border;     /* Firefox 3.6? */
+    -webkit-background-clip: border;  /* Safari 4? Chrome 6? */
+    background-clip: border-box;      /* Firefox 4、Safari 5、Opera 10、IE9 */
+
+    -moz-background-clip: padding;     /* Firefox 3.6 */
+    -webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
+    background-clip: padding-box;     /* Firefox 4、Safari 5、Opera 10、IE9 */
+
+    -moz-background-clip: content;     /* Firefox 3.6 */
+    -webkit-background-clip: content;  /* Safari 4? Chrome 6? */
+    background-clip: content-box;      /* Firefox 4、Safari 5、Opera 10、IE9 */
+}  
+.window_title {
+	height: 40px;
+	line-height:40px;
+	background-color: #46494d;
+	color: #fff;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+.window_title span {
+	float: right;
+}
+.window_title span a {
+	display: block;
+	background-image: url(../images/btn/window_closed_bg.png);
+	background-position: center center;
+	height: 40px;
+	width: 14px;
+	background-repeat: no-repeat;
+}
+.window_del_bg {
+	line-height: 40px;
+	background-image: url(../images/btn/window_del_bg.png);
+	background-repeat: no-repeat;
+	background-position: center top;
+	text-align: center;
+	height: 40px;
+	padding-top: 60px;
+	color: rgb(98,149,233);
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.queding_btn {
+	width: 80px;
+	height: 30px;
+	line-height: 30px;
+	border: none;
+	background-color: rgb(98,149,233);
+	color: #FFF;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	background-image: url(../images/btn/window_gou_bg.png);
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	text-indent: 30px;
+	cursor: pointer;
+	display: inline-block;
+}
+.quxiao_btn {
+	width: 80px;
+	height: 30px;
+	line-height: 30px;
+	border: none;
+	background-color: rgb(98,149,233);
+	color: #FFF;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	background-image: url(../images/btn/window_cha_bg.png);
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	text-indent: 30px;
+	cursor: pointer;
+	display: inline-block;
+}
+.window_btn {
+	width: 182px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.window_c_title {
+	width: 100px;
+	text-align: right;
+	margin-right: 10px;
+	display: inline-table;
+}
+.window_cloose {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.window_edit {
+	height: 70px;
+	width: 210px;
+	padding-right: 5px;
+	padding-left: 5px;
+	outline: none;
+	border: 1px solid #ddd;
+}

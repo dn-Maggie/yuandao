@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.school.dao.EmpAbsenceMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.school.model.EmpAbsence">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="emp_id" property="empId" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="absence_type" property="absenceType" jdbcType="INTEGER" />
+		<result column="absence_date" property="absenceDate" jdbcType="TIMESTAMP" />
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="check_id" property="checkId" jdbcType="VARCHAR" />
+		<result column="check_flag" property="checkFlag" jdbcType="INTEGER" />
+		<result column="check_date" property="checkDate" jdbcType="TIMESTAMP" />
+		<result column="straight_leader" property="straightLeader" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+	 	id
+		,emp_id
+		,content
+		,absence_type
+		,absence_date
+		,create_date
+		,check_id
+		,check_flag
+		,check_date
+		,straight_leader
+	</sql>
+	
+	<select id="getStraightLeader" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.EmpAbsence">
+		SELECT DISTINCT straight_leader FROM `emp_absence` ;
+	</select>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			ea.id
+			,ea.emp_id
+			,ea.content
+			,ea.absence_type
+			,ea.absence_date
+			,ea.create_date
+			,ea.check_flag
+			,ea.check_date
+			,e.emp_no as empNo
+			,e.nick_name as empNickName
+			,bo.org_name as empDept
+			,bo.corp_man AS deptLeader
+			,ea.straight_leader
+			,e2.nick_name AS checkName
+			,e3.nick_name AS straightLeaderName
+		from emp_absence ea
+		LEFT JOIN employee e on e.id = ea.emp_id
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		LEFT JOIN employee e2 ON e2.id = ea.check_id
+		LEFT JOIN employee e3 ON e3.id = ea.straight_leader
+		where ea.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.EmpAbsence">
+		select
+			ea.id
+			,ea.emp_id
+			,ea.content
+			,ea.absence_type
+			,ea.absence_date
+			,ea.create_date
+			,ea.check_flag
+			,ea.check_date
+			,e.emp_no as empNo
+			,e.nick_name as empNickName
+			,bo.org_name as empDept
+			,bo.corp_man AS deptLeader
+			,ea.straight_leader
+			,e2.nick_name AS checkName
+			,e3.nick_name AS straightLeaderName
+		from emp_absence ea
+		LEFT JOIN employee e on e.id = ea.emp_id
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		LEFT JOIN employee e2 ON e2.id = ea.check_id
+		LEFT JOIN employee e3 ON e3.id = ea.straight_leader
+		where 1=1
+		<if test="id != null and '' != id">  
+			and ea.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="empId != null and '' != empId">  
+			and ea.emp_id = #{empId,jdbcType=VARCHAR}
+		</if>
+		<if test="content != null and '' != content">  
+			and ea.content = #{content,jdbcType=VARCHAR}
+		</if>
+		<if test="absenceType != null and '' != absenceType">  
+			and ea.absence_type = #{absenceType,jdbcType=INTEGER}
+		</if>
+		<if test="absenceDate != null and '' != absenceDate">  
+			and DATE_FORMAT(ea.absence_date,'%Y-%m-%d') = DATE_FORMAT(#{absenceDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+		</if>
+		 <if test="straightLeader != null and '' != straightLeader">  
+			and ea.straight_leader = #{straightLeader,jdbcType=TIMESTAMP}
+		</if> 
+		<if test="empNickName != null and '' != empNickName">  
+			and e.nick_name = #{empNickName,jdbcType=TIMESTAMP}
+		</if>
+		<if test="deptLeader != null and '' != deptLeader">  
+			and bo.corp_man = #{deptLeader,jdbcType=VARCHAR}
+		</if>
+		<if test="empDept != null and '' != empDept">  
+			and e.dept = #{empDept,jdbcType=TIMESTAMP}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(ea.create_date,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(ea.create_date,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		delete from emp_absence
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="add" parameterType="com.dongnao.workbench.school.model.EmpAbsence">
+		insert into emp_absence (
+		<include refid="Base_Column_List" />
+		)values (
+				#{id,jdbcType=VARCHAR}
+				,#{empId,jdbcType=VARCHAR}
+				,#{content,jdbcType=VARCHAR}
+				,#{absenceType,jdbcType=INTEGER}
+				,#{absenceDate,jdbcType=TIMESTAMP}
+				,#{createDate,jdbcType=TIMESTAMP}
+				,#{checkId,jdbcType=VARCHAR}
+				,#{checkFlag,jdbcType=INTEGER}
+				,#{checkDate,jdbcType=TIMESTAMP}
+				,#{straightLeader,jdbcType=VARCHAR}
+				)
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.school.model.EmpAbsence">
+		update emp_absence  set
+		ID= #{id,jdbcType=VARCHAR}
+			,emp_id = #{empId,jdbcType=VARCHAR}
+			,content = #{content,jdbcType=VARCHAR}
+			,absence_type = #{absenceType,jdbcType=INTEGER}
+			,absence_date = #{absenceDate,jdbcType=TIMESTAMP}
+			,create_date = #{createDate,jdbcType=TIMESTAMP}
+			,check_id = #{checkId,jdbcType=VARCHAR}
+			,check_flag = #{checkFlag,jdbcType=INTEGER}
+			,check_date = #{checkDate,jdbcType=TIMESTAMP}
+			,straight_leader = #{straightLeader,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

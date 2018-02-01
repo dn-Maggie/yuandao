@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.school.dao.EmpCheckMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.school.model.EmpCheck">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="emp_no" property="empNo" jdbcType="VARCHAR" />
+		<result column="emp_name" property="empName" jdbcType="VARCHAR" />
+		<result column="post" property="post" jdbcType="VARCHAR" />
+		<result column="department" property="department" jdbcType="VARCHAR" />
+		<result column="check_month" property="checkMonth" jdbcType="VARCHAR" />
+		<result column="check_point" property="checkPoint" jdbcType="VARCHAR" />
+		<result column="check_note" property="checkNote" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="nickname" property="nickName" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="checkpeople" property="checkPeople" jdbcType="VARCHAR" />
+		<result column="checkstanderd" property="checkStanderd" jdbcType="INTEGER" />
+		<result column="isconfirm" property="isConfirm" jdbcType="INTEGER" />	
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+	 				id,
+	 				emp_no,
+					emp_name,
+					post,
+					department,
+					check_month,
+					check_point,
+					check_note,
+					create_time,
+					nickname,
+					state,
+					checkpeople,
+					checkstanderd,
+					isconfirm
+	</sql>
+	
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+					e.id,
+	 				e.emp_no,
+					e.emp_name,
+					e.post,
+					e.department,
+					e.check_month,
+					right(e.check_point,2) as check_point,
+					e.check_note,
+					e.create_time,
+					e.nickname,
+					e.state,
+					e.checkpeople,	
+					e.checkstanderd,
+					e.isconfirm			
+		from emp_check as e
+		where e.id =#{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="showCheckFormKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+					e.id,
+	 				e.emp_no,
+					e.emp_name,
+					e.post,
+					e.department,
+					e.check_month,
+					e.check_point,
+					e.check_note,
+					e.create_time,
+					e.nickname,
+					e.state,
+					e.checkpeople,	
+					e.checkstanderd,
+					e.isconfirm			
+		from emp_check as e
+		where e.id =#{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.EmpCheck">
+		select
+				e.id,
+	 				e.emp_no,
+					e.emp_name,
+					e.post,
+					e.department,
+					e.check_month,
+					right(e.check_point,2) as check_point,
+					e.check_note,
+					e.create_time,
+					e.nickname,
+					e.state,
+					e.checkpeople,
+					e.checkstanderd,
+					e.isconfirm	
+		from emp_check as e
+		where 1=1
+		<if test="id != null and '' != id">  
+			and e.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="empNo != null and '' != empNo">  
+			and e.emp_no = #{empNo,jdbcType=VARCHAR}
+		</if>
+		<if test="empName != null and '' != empName">  
+			and e.emp_name like CONCAT('%',#{empName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="post != null and '' != post">  
+			and e.post = #{post,jdbcType=VARCHAR}
+		</if>
+		<if test="department != null and '' != department">  
+			and e.department = #{department,jdbcType=VARCHAR}
+		</if>
+		<if test="checkMonth != null and '' != checkMonth">  
+			and e.check_month = #{checkMonth,jdbcType=VARCHAR}
+		</if>
+		<if test="checkPoint != null and '' != checkPoint">  
+			and e.check_point = #{checkPoint,jdbcType=VARCHAR}
+		</if>
+		<if test="checkNote != null and '' != checkNote">  
+			and e.check_note = #{checkNote,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime != null and '' != createTime">  
+			and e.create_time = #{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="nickName != null and '' != nickName">  
+			and e.nickname = #{nickName,jdbcType=VARCHAR}
+		</if>
+		<if test="state != null and '' != state">  
+			and e.state = #{state,jdbcType=INTEGER}
+		</if>
+		<if test="checkPeople != null and '' != checkPeople">  
+			and e.checkpeople = #{checkPeople,jdbcType=INTEGER}
+		</if>
+		<if test="checkStanderd != null and '' != checkStanderd">  
+			and e.checkstanderd = #{checkStanderd,jdbcType=INTEGER}
+		</if>
+		<if test="isConfirm != null and '' != isConfirm">  
+			and e.isconfirm = #{isConfirm,jdbcType=INTEGER}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(e.create_time,'%Y-%m') >= #{propsMap.startDate,jdbcType=TIMESTAMP}
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(e.create_time,'%Y-%m') <= #{propsMap.endDate,jdbcType=TIMESTAMP}
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+          	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	
+	<insert id="add" parameterType="java.util.List">
+		insert into emp_check (
+	 				emp_no,
+					emp_name,
+					post,
+					department,
+					check_month,
+					check_point,
+					check_note,
+					create_time,
+					nickname,
+					state,
+					checkpeople,
+					checkstanderd,
+					isconfirm) values
+				<foreach collection ="list" item="item" index= "index" separator =",">
+                 (#{item.empNo,jdbcType=VARCHAR}, #{item.empName,jdbcType=VARCHAR},#{item.post,jdbcType=VARCHAR},#{item.department,jdbcType=VARCHAR},
+                 #{item.checkMonth,jdbcType=VARCHAR}, #{item.checkPoint,jdbcType=VARCHAR}, #{item.checkNote,jdbcType=VARCHAR},
+                 now(),#{item.nickName,jdbcType=VARCHAR},#{item.state,jdbcType=INTEGER},#{item.checkPeople,jdbcType=VARCHAR},#{item.checkStanderd,jdbcType=INTEGER},#{item.isConfirm,jdbcType=INTEGER})
+       		    </foreach >
+	</insert>
+	
+	<update id="update" parameterType="com.dongnao.workbench.school.model.EmpCheck">
+	                update emp_check   
+	                set 
+	                  check_point = #{checkPoint,jdbcType=VARCHAR},
+	                  check_note = #{checkNote,jdbcType=VARCHAR},
+	                  state = #{state,jdbcType=INTEGER},
+	                  isconfirm = #{isConfirm,jdbcType=INTEGER}
+	                where emp_name = #{empName,jdbcType=VARCHAR} and check_month = #{checkMonth,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="empConfirm" parameterType="com.dongnao.workbench.school.model.EmpCheck">
+	                update emp_check   
+	                set 
+	                  isconfirm = #{isConfirm,jdbcType=INTEGER}
+	                where emp_no = #{empNo,jdbcType=VARCHAR} and check_month = #{checkMonth,jdbcType=VARCHAR} and state=2
+	</update>
+</mapper>

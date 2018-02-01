@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.system.dao.ModuleResMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.system.model.ModuleRes">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="RESOURCECODE" property="resourcecode" jdbcType="VARCHAR" />
+		<result column="NEEDRIGHT" property="needright" jdbcType="CHAR" />
+		<result column="MUUID" property="muuid" jdbcType="VARCHAR" />
+		<result column="MEMO" property="memo" jdbcType="VARCHAR" />
+		<result column="STATUS" property="status" jdbcType="CHAR" />
+		<result column="SERIALINDEX" property="serialindex" jdbcType="INTEGER" />
+		<result column="RESOURCE_NAME" property="resourceName" jdbcType="VARCHAR" />
+		<result column="RESPARENTUUID" property="resparentuuid" jdbcType="VARCHAR" />
+		<result column="RESURL" property="resurl" jdbcType="VARCHAR" />
+		<result column="RES_TYPE" property="resType" jdbcType="VARCHAR" />
+		<result column="ROLESTATUS" property="roleStatus" jdbcType="VARCHAR" /> 
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID
+		,RESOURCECODE
+		,NEEDRIGHT
+		,MUUID
+		,MEMO
+		,STATUS
+		,SERIALINDEX
+		,RESOURCE_NAME
+		,RESPARENTUUID
+		,RESURL
+		,RES_TYPE
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />,resTypeName
+		from (select
+	    d.dict_name as resTypeName,t.*
+	    from SYS_RO_MODULERES t left join 
+	    sys_dict_info d on d.dict_type_code = 'resType' and d.dict_code = t.res_type) SYS_RO_MODULERES
+			where ID = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listByCondition" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.system.model.ModuleRes">
+		select 
+		<include refid="Base_Column_List" />,resTypeName
+		from (select
+    d.dict_name as resTypeName,t.*
+    from SYS_RO_MODULERES t left join 
+    sys_dict_info d on d.dict_type_code = 'resType' and d.dict_code = t.res_type) SYS_RO_MODULERES
+		where 1=1 
+		<if test="id != null and '' != id">
+			and ID = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="resourcecode != null and '' != resourcecode">
+			and RESOURCECODE like #{resourcecode,jdbcType=VARCHAR}
+		</if>
+		<if test="needright != null and '' != needright">
+			and NEEDRIGHT = #{needright,jdbcType=CHAR}
+		</if>
+		<if test="muuid != null and '' != muuid">
+			and MUUID = #{muuid,jdbcType=VARCHAR}
+		</if>
+		<if test="memo != null and '' != memo">
+			and MEMO = #{memo,jdbcType=VARCHAR}
+		</if>
+		<if test="status != null and '' != status">
+			and STATUS = #{status,jdbcType=CHAR}
+		</if>
+		<if test="serialindex != null and '' != serialindex">
+			and SERIALINDEX = #{serialindex,jdbcType=INTEGER}
+		</if>
+		<if test="resourceName != null and '' != resourceName">
+			and RESOURCE_NAME like CONCAT('%',#{resourceName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="resparentuuid != null and '' != resparentuuid">
+			and RESPARENTUUID = #{resparentuuid,jdbcType=VARCHAR}
+		</if>
+		<if test="resurl != null and '' != resurl">
+			and RESURL = #{resurl,jdbcType=VARCHAR}
+		</if>
+		<if test="resType != null and '' != resType">
+			and RES_TYPE = #{resType,jdbcType=VARCHAR}
+		</if>
+		<choose>  
+        	<when test="sortFild != null and '' != sortFild">  
+            	order by ${sortFild} ${sortBy}
+        	</when>  
+        	<otherwise>  
+				order by SERIALINDEX asc
+        	</otherwise>  
+    	</choose> 
+	</select>
+	
+	<select id="listWithoutSysRes" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.system.model.ModuleRes">
+		select 
+		<include refid="Base_Column_List" />,resTypeName
+		from (select
+    d.dict_name as resTypeName,t.*
+    from SYS_RO_MODULERES t left join 
+    sys_dict_info d on d.dict_type_code = 'resType' and d.dict_code = t.res_type) SYS_RO_MODULERES
+     where RES_TYPE !='RT003'
+		<if test="needright != null and '' != needright">
+			and NEEDRIGHT = #{needright,jdbcType=CHAR}
+		</if>
+		<if test="status != null and '' != status">
+			and STATUS = #{status,jdbcType=CHAR}
+		</if>
+		order by SERIALINDEX asc
+	</select>
+
+
+
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from
+		SYS_RO_MODULERES
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="add" parameterType="com.dongnao.workbench.system.model.ModuleRes">
+		insert into SYS_RO_MODULERES (
+		<include refid="Base_Column_List" />
+		)
+		values (
+		#{id,jdbcType=VARCHAR}
+		,#{resourcecode,jdbcType=VARCHAR}
+		,#{needright,jdbcType=CHAR}
+		,#{muuid,jdbcType=VARCHAR}
+		,#{memo,jdbcType=VARCHAR}
+		,#{status,jdbcType=CHAR}
+		,#{serialindex,jdbcType=INTEGER}
+		,#{resourceName,jdbcType=VARCHAR}
+		,#{resparentuuid,jdbcType=VARCHAR}
+		,#{resurl,jdbcType=VARCHAR}
+		,#{resType,jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+
+	<update id="update" parameterType="com.dongnao.workbench.system.model.ModuleRes">
+		update SYS_RO_MODULERES set
+		ID = #{id,jdbcType=VARCHAR}
+		,RESOURCECODE = #{resourcecode,jdbcType=VARCHAR}
+		,NEEDRIGHT = #{needright,jdbcType=CHAR}
+		,MEMO = #{memo,jdbcType=VARCHAR}
+		,STATUS = #{status,jdbcType=CHAR}
+		,SERIALINDEX = #{serialindex,jdbcType=INTEGER}
+		,RESOURCE_NAME = #{resourceName,jdbcType=VARCHAR}
+		,RESPARENTUUID = #{resparentuuid,jdbcType=VARCHAR}
+		,RESURL = #{resurl,jdbcType=VARCHAR}
+		,RES_TYPE = #{resType,jdbcType=VARCHAR}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateMrMuuid" parameterType="java.util.Map">
+		update SYS_RO_MODULERES set MUUID = #{muuid,jdbcType=VARCHAR}
+		where 1=1
+		<if test="list!=null and list.size()>0">
+			and ID in 
+			<foreach item="id" index="index" collection="list" open="(" separator="," close=")">   
+				#{id}
+	    	</foreach>
+		</if>
+	</update>
+	
+	<select id="queryForMenuByAdmin" resultMap="BaseResultMap">
+		select DISTINCT MR.ID,MR.MUUID,MR.RESOURCECODE,MR.RESOURCE_NAME,MR.RESURL,MR.SERIALINDEX from SYS_RO_MODULERES MR
+		    where  MR.STATUS=1
+		    ORDER BY MR.SERIALINDEX
+	</select>
+	
+	<select id="queryForMenuByPcode" parameterType="java.lang.String" resultMap="BaseResultMap" >
+		select MR.ID,MR.MUUID,MR.RESOURCECODE,MR.RESOURCE_NAME,MR.RESURL,MR.SERIALINDEX from (
+		    select DISTINCT MR.ID,MR.MUUID,MR.RESOURCECODE,MR.RESOURCE_NAME,MR.RESURL,MR.SERIALINDEX from SYS_RO_PERSONROLE A 
+		                        left join SYS_RO_ROLERIGHT B on A.role_id=B.ROLEID
+		                        left join SYS_RO_MODULERES MR ON B.RESUUID = MR.ID
+		                        LEFT JOIN SYS_RO_RESACT RA ON RA.RESUU_ID = B.RESUUID 
+		                        where (A.user_id=#{pcode,jdbcType=VARCHAR} and B.ID is not null) AND MR.STATUS=1 
+		    union
+		        select MR.ID,MR.MUUID,MR.RESOURCECODE,MR.RESOURCE_NAME,MR.RESURL,MR.SERIALINDEX from SYS_RO_MODULERES MR where MR.STATUS=1 and MR.NEEDRIGHT=0
+		) MR
+		ORDER BY MR.MUUID,MR.SERIALINDEX
+	</select>
+	<select id="queryFoRoleStatesByPcode" parameterType="java.lang.String" resultMap="BaseResultMap">
+	select distinct
+	u.id,
+	r.role_name,
+	r.states as ROLESTATUS
+    FROM
+     basic_user_info u,
+     sys_ro_personrole p
+     ,sys_ro_role r
+    WHERE u.IS_ACTIVE=1 and
+     p.USER_ID=u.ID and 
+     p.role_id=r.role_id and
+      u.id=#{pcode,jdbcType=VARCHAR}
+	</select>
+</mapper>

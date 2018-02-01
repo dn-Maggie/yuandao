@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.basic.dao.OrgMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.basic.model.Org">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="ORG_NO" property="orgNo" jdbcType="VARCHAR" />
+		<result column="ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+		<result column="ORG_FULL_NAME" property="orgFullName" jdbcType="VARCHAR" />
+		<result column="ORG_SHORT_NAME" property="orgShortName"	jdbcType="VARCHAR" />
+		<result column="PINYIN" property="pinyin" jdbcType="VARCHAR" />
+		<result column="ORG_TYPE" property="orgType" jdbcType="VARCHAR" />
+		<result column="ORG_DESC" property="orgDesc" jdbcType="VARCHAR" />
+		<result column="ORG_STATE" property="orgState" jdbcType="INTEGER" />
+		<result column="ORG_CLASS" property="orgClass" jdbcType="INTEGER" />
+		<result column="ORG_KIND" property="orgKind" jdbcType="INTEGER" />
+		<result column="PARENT_ORG_ID" property="parentOrgId" jdbcType="VARCHAR" />
+		<result column="PARENT_ORG_NAME" property="parentOrgName" jdbcType="VARCHAR" />
+		<result column="ADDR" property="addr" jdbcType="VARCHAR" />
+		<result column="TELEPHONE" property="telephone" jdbcType="VARCHAR" />
+		<result column="FAX" property="fax" jdbcType="VARCHAR" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
+		<result column="CORP_MAN" property="corpMan" jdbcType="VARCHAR" />
+		<result column="UPDATED" property="updated" jdbcType="TIMESTAMP" />
+		<result column="UPDATEDBY" property="updatedby" jdbcType="VARCHAR" />
+		<result column="CREATEDBY" property="createdby" jdbcType="VARCHAR" />
+		<result column="CREATED" property="created" jdbcType="TIMESTAMP" />
+		<result column="IS_ACTIVE" property="isActive" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID
+		,ORG_NO
+		,ORG_NAME
+		,ORG_FULL_NAME
+		,ORG_SHORT_NAME
+		,PINYIN
+		,ORG_TYPE
+		,ORG_DESC
+		,ORG_STATE
+		,ORG_CLASS
+		,ORG_KIND
+		,PARENT_ORG_ID
+		,PARENT_ORG_NAME
+		,ADDR
+		,TELEPHONE
+		,FAX
+		,EMAIL
+		,CORP_MAN
+		,UPDATED
+		,UPDATEDBY
+		,CREATEDBY
+		,CREATED
+		,IS_ACTIVE
+	</sql>
+
+	<select id="getByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from BASIC_ORG
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="listByCondition" resultMap="BaseResultMap"
+		parameterType="com.dongnao.workbench.basic.model.Org">
+		select
+		<include refid="Base_Column_List" />
+		from BASIC_ORG
+		where 1=1
+		<if test="orgNo != null and '' != orgNo">
+			and ORG_NO LIKE CONCAT('%',#{orgNo,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orgName != null and '' != orgName">
+			and ORG_NAME LIKE CONCAT('%',#{orgName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orgFullName != null and '' != orgFullName">
+			and ORG_FULL_NAME CONCAT('%',#{orgFullName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orgShortName != null and '' != orgShortName">
+			and ORG_SHORT_NAME CONCAT('%',#{orgShortName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="pinyin != null and '' != pinyin">
+			and PINYIN  LIKE CONCAT('%',#{pinyin,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orgType != null and '' != orgType">
+			and ORG_TYPE = #{orgType,jdbcType=VARCHAR}
+		</if>
+		<if test="orgDesc != null and '' != orgDesc">
+			and ORG_DESC CONCAT('%',#{orgDesc,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orgState != null and '' != orgState">
+			and ORG_STATE = #{orgState,jdbcType=INTEGER}
+		</if>
+		<if test="orgClass != null and '' != orgClass">
+			and ORG_CLASS = #{orgClass,jdbcType=INTEGER}
+		</if>
+		<if test="orgKind != null and '' != orgKind">
+			and ORG_KIND = #{orgKind,jdbcType=INTEGER}
+		</if>
+		<if test="parentOrgId != null and '' != parentOrgId">
+			and PARENT_ORG_ID = #{parentOrgId,jdbcType=VARCHAR}
+		</if>
+		<if test="parentOrgName != null and '' != parentOrgName">
+			and PARENT_ORG_NAME = #{parentOrgName,jdbcType=VARCHAR}
+		</if>
+		<if test="addr != null and '' != addr">
+			and ADDR LIKE CONCAT('%',#{addr,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="telephone != null and '' != telephone">
+			and TELEPHONE LIKE CONCAT('%',#{telephone,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="fax != null and '' != fax">
+			and FAX LIKE CONCAT('%',#{fax,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="email != null and '' != email">
+			and EMAIL  LIKE CONCAT('%',#{email,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="corpMan != null and '' != corpMan">
+			and CORP_MAN LIKE CONCAT('%',#{corpMan,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="updated != null and '' != updated">
+			and UPDATED = #{updated,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updatedby != null and '' != updatedby">
+			and UPDATEDBY = #{updatedby,jdbcType=VARCHAR}
+		</if>
+		<if test="createdby != null and '' != createdby">
+			and CREATEDBY = #{createdby,jdbcType=VARCHAR}
+		</if>
+		<if test="created != null and '' != created">
+			and CREATED = #{created,jdbcType=TIMESTAMP}
+		</if>
+		<if test="isActive != null and '' != isActive">
+			and IS_ACTIVE = #{isActive,jdbcType=INTEGER}
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+
+
+	
+	<delete id="deleteByKey" parameterType="java.lang.Integer">
+		delete from BASIC_ORG
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="add" parameterType="com.dongnao.workbench.basic.model.Org">
+		insert into BASIC_ORG (
+		<include refid="Base_Column_List" />
+		)values (
+		#{id,jdbcType=VARCHAR}
+		,#{orgNo,jdbcType=VARCHAR}
+		,#{orgName,jdbcType=VARCHAR}
+		,#{orgFullName,jdbcType=VARCHAR}
+		,#{orgShortName,jdbcType=VARCHAR}
+		,#{pinyin,jdbcType=VARCHAR}
+		,#{orgType,jdbcType=VARCHAR}
+		,#{orgDesc,jdbcType=VARCHAR}
+		,#{orgState,jdbcType=INTEGER}
+		,#{orgClass,jdbcType=INTEGER}
+		,#{orgKind,jdbcType=INTEGER}
+		,#{parentOrgId,jdbcType=VARCHAR}
+		,#{parentOrgName,jdbcType=VARCHAR}
+		,#{addr,jdbcType=VARCHAR}
+		,#{telephone,jdbcType=VARCHAR}
+		,#{fax,jdbcType=VARCHAR}
+		,#{email,jdbcType=VARCHAR}
+		,#{corpMan,jdbcType=VARCHAR}
+		,#{updated,jdbcType=TIMESTAMP}
+		,#{updatedby,jdbcType=VARCHAR}
+		,#{createdby,jdbcType=VARCHAR}
+		,#{created,jdbcType=TIMESTAMP}
+		,#{isActive,jdbcType=INTEGER}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.dongnao.workbench.basic.model.Org">
+		update BASIC_ORG set
+		ORG_NO = #{orgNo,jdbcType=VARCHAR}
+		,ORG_NAME = #{orgName,jdbcType=VARCHAR}
+		,ORG_FULL_NAME = #{orgFullName,jdbcType=VARCHAR}
+		,ORG_SHORT_NAME = #{orgShortName,jdbcType=VARCHAR}
+		,PINYIN = #{pinyin,jdbcType=VARCHAR}
+		,ORG_TYPE = #{orgType,jdbcType=VARCHAR}
+		,ORG_DESC = #{orgDesc,jdbcType=VARCHAR}
+		,ORG_STATE = #{orgState,jdbcType=INTEGER}
+		,ORG_CLASS = #{orgClass,jdbcType=INTEGER}
+		,ORG_KIND = #{orgKind,jdbcType=INTEGER}
+		,PARENT_ORG_ID = #{parentOrgId,jdbcType=VARCHAR}
+		,PARENT_ORG_NAME = #{parentOrgName,jdbcType=VARCHAR}
+		,ADDR = #{addr,jdbcType=VARCHAR}
+		,TELEPHONE = #{telephone,jdbcType=VARCHAR}
+		,FAX = #{fax,jdbcType=VARCHAR}
+		,EMAIL = #{email,jdbcType=VARCHAR}
+		,CORP_MAN = #{corpMan,jdbcType=VARCHAR}
+		,UPDATED = #{updated,jdbcType=TIMESTAMP}
+		,UPDATEDBY = #{updatedby,jdbcType=VARCHAR}
+		<if test="isActive != null and '' != isActive">
+			,IS_ACTIVE = #{isActive,jdbcType=INTEGER}
+		</if>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>
