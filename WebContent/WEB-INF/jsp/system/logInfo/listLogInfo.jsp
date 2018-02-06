@@ -29,11 +29,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<li class="date_area"><span>操作时间:</span>
 						<div class="time_bg">
 							<input type="text" name="actTime" class="search_time150"
-								id="actTime"> <i class="search_time_ico2"></i>
+								id="actTime"> <i class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input type="text" name="endTime" class="search_time150"
-								id="endTime"> <i class="search_time_ico2"></i>
+								id="endTime"> <i class="search_time_ico1"></i>
 						</div></li>
 					<li><span><m:message code="logInfo.queryForm.actType" />:</span><select
 						id="actType" name="actType" class="search_select"></select></li>

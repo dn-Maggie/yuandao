@@ -22,7 +22,7 @@
 
 		<div class="navbar-header pull-right" role="navigation">
 			<ul class="nav ace-nav">
-				<li><a data-toggle="dropdown" href="#" class="dropdown-toggle" style="width: 200px;">
+				<li id="drop"><a data-toggle="dropdown" href="#" class="dropdown-toggle" style="width: 200px;">
 						<img alt="" src="<%=path%>/styles/images/logo.png">
 						<span class="user-info"> <small style="margin-bottom: 2px">欢迎登陆</small>
 							<small><%=Utils.getLoginUserInfo(request).getFullName()%></small>

@@ -87,6 +87,7 @@ spring3.1之后RequestMappingHandlerMapping RequestMappingHandlerAdapter -->
 				<value>/varifyCode.do</value>
 				<value>/uploadExcelData.do</value>
 				<value>/userHomePage.do</value>
+				<value>/standard/toListStandardBar.do</value>
 			</list>
 		</property>
 	</bean>

@@ -609,11 +609,11 @@ ul.infos>li.infoItem a:hover {
     }
     //查看公告的弹出框
 	/* var showNotice_iframe_dialog; */
-	
 	$(document).ready(function(){
 		//获取父框架修改密码和用户资料按钮
 		var _iframe = window.parent;
 		var _userMessBtn =_iframe.document.getElementById('userMessBtn');
+		var _dropLi =_iframe.document.getElementById('drop');
 		var _setPwdBtn =_iframe.document.getElementById('setPwdBtn');
 		//用户资料点击事件
 		_userMessBtn.addEventListener("click", function(){
@@ -628,7 +628,23 @@ ul.infos>li.infoItem a:hover {
 			});
 	  		show_iframe_dialog.open();
 		})
+		_dropLi.addEventListener("click",function(){
+			if(($(this)[0].className).indexOf("open")>-1){
+				$(this).removeClass("open");
+			}else{$(this).addClass("open");}
+		})
 		//修改密码点击事件
+		_setPwdBtn.addEventListener("click", function(){
+				var url="<m:url value='/userInfo/toEditPassWord.do'/>";
+				edit_password_iframe_dialog = new biz.dialog({
+					id:$('<div id="addwindow_iframe"></div>').html('<iframe id="iframeAdd" name="iframeAdd" src="'+url+'" width="100%" frameborder="no" border="0" height="97%"></iframe>'),  
+					modal: true,
+					width: 400,
+					height: 240,
+					title: "修改密码"
+				});
+				edit_password_iframe_dialog.open();
+		})
 		_setPwdBtn.addEventListener("click", function(){
 				var url="<m:url value='/userInfo/toEditPassWord.do'/>";
 				edit_password_iframe_dialog = new biz.dialog({

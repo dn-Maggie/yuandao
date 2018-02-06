@@ -77,7 +77,7 @@ function getEmpIDByName(obj,value) {
 						style="top: 40px; left: 0px; height: 25px; line-height: 25px; position: absolute; width: 220px">
 						<span>申请时间：</span> <input id="edit_createDate" name="createDate"
 							class="input_select" style="height: 25px; width: 100px" readonly />
-						<i class="search_time_ico2" style="top: 6px;"></i>
+						<i class="search_time_ico1" style="top: 6px;"></i>
 					</div>
 				</div>
 				<div class="center_body">
@@ -106,7 +106,7 @@ function getEmpIDByName(obj,value) {
 									<input type="text" class="search_time150 valid text"
 										name="absenceDate" id="edit_absenceDate" style="width: 88%;">
 									<!-- 时间选择控件-->
-									<i class="search_time_ico2"></i>
+									<i class="search_time_ico1"></i>
 								</div>
 							</td>
 							<td class="inputLabelTd"><span class="required">*</span>补签类型：</td>

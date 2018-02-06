@@ -390,11 +390,11 @@
 										name="propsMap['startDate']">
 								</c:otherwise>
 							</c:choose>
-							<i class="search_time_ico2"></i>
+							<i class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
-								name="propsMap['endDate']"> <i class="search_time_ico2"></i>
+								name="propsMap['endDate']"> <i class="search_time_ico1"></i>
 						</div></li>
 					<!--下拉 -->
 					<li><input type="reset" class="reset_btn"

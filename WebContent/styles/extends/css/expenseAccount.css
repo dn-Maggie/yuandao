@@ -37,12 +37,13 @@
 		border:none;
 		box-shadow:none;
 		width: 96%;
+		padding: 0px;
 	}
 	.center_body textarea {
-		border:none;	
+		border:none;
 		resize:none;
 		box-shadow:none;
 		width: 98%;
 		height:98%;
-		padding: 5px;
+		/* padding: 5px; */
 	}

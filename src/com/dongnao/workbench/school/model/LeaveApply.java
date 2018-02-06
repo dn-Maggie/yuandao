@@ -107,7 +107,10 @@ public class LeaveApply extends Model{
 	                 **/
 		   			private String headLeader;
 		   		
-	
+		   			/**
+	                 * 病历图片地址
+	                 **/
+		   			private String fileUrl;
 				
 		  			/**
 			 * 获取 主键
@@ -398,6 +401,14 @@ public class LeaveApply extends Model{
 
 			public void setStraightLeaderName(String straightLeaderName) {
 				this.straightLeaderName = straightLeaderName;
+			}
+
+			public String getFileUrl() {
+				return fileUrl;
+			}
+
+			public void setFileUrl(String fileUrl) {
+				this.fileUrl = fileUrl;
 			}
 		  		
 		

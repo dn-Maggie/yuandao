@@ -16,12 +16,12 @@
 						<div class="time_bg">
 							<input id="startDate" type="text" class="search_time150"
 								name="propsMap['startDate']" mainid="startDate"> <i
-								class="search_time_ico2"></i>
+								class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
 								name="propsMap['endDate']" mainid="endDate"> <i
-								class="search_time_ico2"></i>
+								class="search_time_ico1"></i>
 						</div></li>
 
 					<li style="width: 180px;"><select class="search_choose"
@@ -90,11 +90,15 @@
 							{name : "id",hidden : true,key : true,label:"",index : "id"},
 		                    {name : "leaveType",label:"假别",index : "leave_type",width:9,
 		    					formatter:function(cellvalue, options, rowObject){
-		    		 				 if (cellvalue==1) {
-		    		 				 	return '事假';
-		    		 				 }else if (cellvalue==2) {
-		    		 				 	return '公假';
-		    		 				 }
+		    						 if (cellvalue==1) {
+		 			 				 	return '事假';
+		 			 				 }else if (cellvalue==2) {
+		 			 				 	return '公假';
+		 			 				 }else if (cellvalue==3) {
+		 			 				 	return '病假';
+		 			 				 }else if (cellvalue==4) {
+		 			 				 	return '婚假';
+		 			 				 }
 		    		 		}},	
 		    		 		{name : "content",label:"请假事由",index : "content",width:40,},
 		    		 		{name : "startDate",label:"请假日期始",index : "leave_date_from",width:6,},				

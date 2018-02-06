@@ -114,7 +114,7 @@ input[name='timeQuantum']:checked+label {
 					<li style="width: 200px;"><span>发生年份:</span>
 						<div class="time_bg">
 							<input id="r_year" type="text" class="search_time150"
-								name="r_year"> <i class="search_time_ico2"></i>
+								name="r_year"> <i class="search_time_ico1"></i>
 						</div></li>
 					<li style="width: 600px;"><select multiple
 						class="width-100 chosen-select tag-input-style"

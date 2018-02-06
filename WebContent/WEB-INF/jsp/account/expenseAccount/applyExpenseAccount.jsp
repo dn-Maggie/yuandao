@@ -141,7 +141,26 @@ var gridObj = {};
     function resetForm(formId){
 		document.getElementById(formId).reset();
 	}
-    
+    function show(){
+    	var key = ICSS.utils.getSelectRowData("id");
+		if(key.indexOf(",")>-1||key==""){
+			showMessage("请选择一条数据！");
+			return ;
+		}
+		var url="<m:url value='/expenseAccount/toShowExpenseAccount.do'/>?key="+key;
+		show_iframe_dialog = new biz.dialog({
+		 	id:$('<div id="showwindow_iframe"></div>').html('<iframe id="iframeShow" name="iframeShow" src="'+url+'" width="100%" frameborder="no" border="0" height="97%"></iframe>'),  
+			modal: true,
+			width: 900,
+			height:700,
+				title: "报销单详情"
+		});
+  		show_iframe_dialog.open();
+    }
+    //关闭查看页面，供子页面调用
+    function closeShow(){
+    	show_iframe_dialog.close();
+    }
     //删除
     function batchDelete(){
     	var ids = ICSS.utils.getSelectRowData("id");
@@ -181,34 +200,31 @@ var gridObj = {};
 						<div class="time_bg">
 							<input type="hidden" name="enterName" id="enterName"
 								value="${user.fullName}"> <input id="startDate"
-								type="text" class="search_time150" name="propsMap['startDate']"
-								mainid="startDate"> <i class="search_time_ico2"
+								type="text" class="search_time150" name="propsMap['startDate']"> 
+								<i class="search_time_ico1"
 								onclick="WdatePicker({el:'startDate'})"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
-								name="propsMap['endDate']" mainid="endDate"> <i
-								class="search_time_ico2" onclick="WdatePicker({el:'endDate'})"></i>
+								name="propsMap['endDate']"> <i
+								class="search_time_ico1" onclick="WdatePicker({el:'endDate'})"></i>
 						</div></li>
 					<li style="width: 180px;"><select class="search_choose"
-						name="expenseType" id="expenseType" mainid="expenseType"
-						style="width: 100px;">
+						name="expenseType" id="expenseType" style="width: 100px;">
 							<option value="">所有</option>
 							<option value="个人报销">个人报销</option>
 							<option value="集体报销">集体报销</option>
 					</select><span>报销类型</span></li>
 					<!-- 输入框-->
 					<li style="width: 180px;"><select class="search_choose"
-						name="checkFlag" id="checkFlag" mainid="checkFlag"
-						style="width: 100px;">
+						name="checkFlag" id="checkFlag" style="width: 100px;">
 							<option value="">所有</option>
 							<option value="1">未审核</option>
 							<option value="2">已审核</option>
 					</select><span>审核状态:</span></li>
 					<!-- 输入框-->
 					<li style="width: 180px;"><select class="search_choose"
-						name="expenseType" id="expenseType" mainid="expenseType"
-						style="width: 100px;">
+						name="expenseType" id="expenseType" style="width: 100px;">
 							<option value="">所有</option>
 							<option value="支付现款">支付现款</option>
 							<option value="银行转账">银行转账</option>
@@ -230,14 +246,16 @@ var gridObj = {};
 					<li><a title="申请" href="javascript:;" onclick="add();"> <i
 							class="back_icon add_icon"> </i> <span>申请</span>
 					</a></li>
-					<%-- 							<li><a title="<m:message code="button.edit"/>" href="javascript:;"
-								onclick="edit();"><i class="icon_bg icon_edit"></i> <span><m:message
-											code="button.edit" /></span> </a></li> --%>
 
 					<li><a title="<m:message code="button.delete"/>"
 						href="javascript:;" onclick="batchDelete();"> <i
 							class="icon_bg icon_del"></i> <span><m:message
 									code="button.delete" /></span>
+					</a></li>
+					<li><a title="<m:message code="button.view"/>"
+						href="javascript:" onclick="show();"> <i
+							class="icon_bg icon_ckxq"></i> <span><m:message
+									code="button.view" /></span>
 					</a></li>
 				</ul>
 			</div>

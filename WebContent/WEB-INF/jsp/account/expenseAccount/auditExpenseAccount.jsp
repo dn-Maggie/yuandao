@@ -28,10 +28,9 @@
 					<div class="time_bg"
 						style="top: 40px; right: 0px; height: 25px; line-height: 25px; position: absolute;">
 						<span>申请日期&nbsp;&nbsp;</span> <input id="enterDate" type="text"
-							class="search_time150" name="enterDate" mainid="enterDate"
+							class="search_time150" name="enterDate" 
 							style="height: 25px;" value="${expenseAccount.enterDate}"
-							disabled="disabled"> <i class="search_time_ico2"
-							style="top: 6px;" onclick="WdatePicker({el:'enterDate'})"></i>
+							disabled="disabled"> <i class="search_time_ico1" style="top: 6px;" ></i>
 					</div>
 				</div>
 				<div class="center_body">

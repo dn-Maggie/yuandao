@@ -98,7 +98,7 @@ $(function() {
 								<input type="text" class="search_time150" name="createDate"
 									id="edit_createDate" mainid="createDate">
 								<!-- 时间选择控件-->
-								<i class="search_time_ico2"></i>
+								<i class="search_time_ico1"></i>
 							</div>
 
 						</td>

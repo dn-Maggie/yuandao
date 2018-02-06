@@ -69,10 +69,12 @@ public class LeaveApplyController{
 	 * @return ModelAndView: 查询实体
 	 */	
 	@RequestMapping("/toShowLeaveApply")
-	public ModelAndView toShow(String key){
+	public ModelAndView toShow(String key,HttpServletRequest request,HttpServletResponse response){
 		LeaveApply entity = leaveApplyService.getByPrimaryKey(key);
 		Map<String,String> leaveApply = FormatEntity.getObjectValue(entity);
-		return new ModelAndView("WEB-INF/jsp/school/empLeaveApply/showLeaveApply","leaveApply",leaveApply );
+		ModelAndView mv = new ModelAndView("WEB-INF/jsp/school/empLeaveApply/showLeaveApply","leaveApply",leaveApply );
+		mv.addObject("user", employeeService.getByPrimaryKey(Utils.getLoginUserInfoId(request)));
+		return mv;
 	}
 	
 	/**

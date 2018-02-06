@@ -34,7 +34,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							type="text" class="search_time150" name="currdate"
 							mainid="currdate" style="height: 25px;"
 							value="${fixedAsset.currdate}" readonly> <i
-							class="search_time_ico2" style="top: 6px;"></i>
+							class="search_time_ico1" style="top: 6px;"></i>
 					</div>
 
 				</div>

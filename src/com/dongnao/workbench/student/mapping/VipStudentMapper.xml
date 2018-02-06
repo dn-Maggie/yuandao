@@ -260,6 +260,7 @@
 			v1.curr_status,
 			v1.join_time,
 			v1.edu_back,
+			v1.curr_position,
 			a.nick_name AS enterEmpname
 		FROM
 			vip_student v1
@@ -344,6 +345,9 @@
 		</if>
 		<if test="currStatus != null and '' != currStatus">  
 			and curr_status = #{currStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="currPosition != null and '' != currPosition">  
+			and curr_position = #{currPosition,jdbcType=VARCHAR}
 		</if>
 		<if test="isCount != null and '' != isCount">  
 			and is_count = #{isCount,jdbcType=VARCHAR}
@@ -539,7 +543,6 @@
 		,curr_position = #{currPosition,jdbcType=VARCHAR}
 		,working_year = #{workingYear,jdbcType=VARCHAR}
 		,salary = #{salary,jdbcType=VARCHAR}
-<!-- 		,enterEmp = #{enterEmp,jdbcType=VARCHAR} -->
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
 	

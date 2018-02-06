@@ -19,11 +19,11 @@
 						<div class="time_bg">
 							<input id="startDate" type="text" class="search_time150"
 								name="propsMap['startDate']"> <i
-								class="search_time_ico2"></i>
+								class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
-								name="propsMap['endDate']"> <i class="search_time_ico2"></i>
+								name="propsMap['endDate']"> <i class="search_time_ico1"></i>
 						</div></li>
 					<li style="width: 180px;"><select class="search_choose"
 						name="leaveDate" id="leaveDate" style="width: 100px;">
@@ -37,6 +37,8 @@
 							<option value="">所有</option>
 							<option value="1">事假</option>
 							<option value="2">公假</option>
+							<option value="3">病假</option>
+							<option value="4">婚假</option>
 					</select><span>请假类型:</span></li>
 					<!-- 输入框-->
 					<li style="width: 180px;"><select class="search_choose"
@@ -66,13 +68,13 @@
 							class="icon_bg icon_add"> </i> <span><m:message
 									code="button.add" /></span>
 					</a></li>
-					<li><a title="<m:message code="button.edit"/>"
+					<%-- <li><a title="<m:message code="button.edit"/>"
 						href="javascript:;" onclick="edit();"><i
 							class="icon_bg icon_edit"></i> <span><m:message
-									code="button.edit" /></span> </a></li>
-					<!-- <li><a title="查看详细" href="javascript:;"
-								onclick="show();"><i class="icon_bg icon_show"></i> <span>查看详细</span> 
-								</a></li> -->
+									code="button.edit" /></span> </a></li> --%>
+					<li><a title="查看" href="javascript:;"
+								onclick="show();"><i class="icon_bg icon_show"></i> <span>查看</span> 
+								</a></li> 
 					<li><a title="<m:message code="button.delete"/>"
 						href="javascript:;" onclick="batchDelete();"> <i
 							class="icon_bg icon_del"></i> <span><m:message
@@ -108,10 +110,14 @@
 					{name : "empName",label:"申请人",index : "empName"},	
 					{name : "leaveType",label:"假别",index : "leave_type",
 						formatter:function(cellvalue, options, rowObject){
-			 				 if (cellvalue==1) {
+							 if (cellvalue==1) {
 			 				 	return '事假';
 			 				 }else if (cellvalue==2) {
 			 				 	return '公假';
+			 				 }else if (cellvalue==3) {
+			 				 	return '病假';
+			 				 }else if (cellvalue==4) {
+			 				 	return '婚假';
 			 				 }
 			 		}},
 					{name : "content",label:"请假事由",index : "content"},				
@@ -156,9 +162,9 @@
 	    //新增的弹出框
 		var add_iframe_dialog;
 		//修改的弹出框
-	   	var edit_iframe_dialog;
+	   //	var edit_iframe_dialog;
 		//查看的弹出框
-		//var show_iframe_dialog;
+		var show_iframe_dialog;
 		
 		
 		//新增方法
@@ -179,7 +185,7 @@
 	  	}
 	  	
 	 	//编辑方法
-	    function edit(){
+	   /*  function edit(){
 			var key = ICSS.utils.getSelectRowData("id");
 			if(key.indexOf(",")>-1||key==""){
 				showMessage("请选择一条数据！");
@@ -199,13 +205,13 @@
 				title: "请假申请编辑"
 			});
 	  		edit_iframe_dialog.open();
-	    }
+	    } */
 	    //关闭编辑页面，供子页面调用
-	    function closeEdit(){
+	   /*  function closeEdit(){
 	    	edit_iframe_dialog.close();
-	    }
+	    } */
 	    
-	  	/* //查看详细方法
+	  	 //查看详细方法
 	    function show(){
 			var key = ICSS.utils.getSelectRowData("id");
 			if(key.indexOf(",")>-1||key==""){
@@ -225,7 +231,7 @@
 	    //关闭编辑页面，供子页面调用
 	    function closeShow(){
 	    	show_iframe_dialog.close();
-	    } */
+	    } 
 	    
 		
 	  	

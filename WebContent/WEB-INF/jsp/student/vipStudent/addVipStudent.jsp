@@ -179,7 +179,8 @@ function addVipStudent(){
 			serialNo:serialNo,
 			currStatus:currStatus,
 			joinTime:joinTime,
-			isCount:isCount
+			isCount:isCount,
+			currPosition:currPosition
 				};
 	$.ajax({
 		   type: "post",
@@ -337,13 +338,25 @@ function  addOrderInfo(stuid){
 							</datalist></td>
 					</tr>
 					<tr>
+						<td class="inputLabelTd"><span class="required">*</span>在职状态：</td>
+						<td class="inputTd">
+							<input class="text" name="currPosition" id="edit_currPosition" list="currPositionList"> 
+							<datalist id="currPositionList">
+								<option value="在读学生" label="在读学生"></option>
+								<option value="待业" label="待业"></option>
+								<option value="IT在职" label="IT在职"></option>
+								<option value="转行" label="转行"></option>
+							</datalist>
+						</td>
+					</tr>
+					<tr>
 						<td class="inputLabelTd"><span class="required">*</span>报名时间：</td>
 						<td class="inputTd">
 							<div class="time_bg">
 								<input type="text" class="search_time150 valid" name="joinTime"
 									id="edit_joinTime">
 								<!-- 时间选择控件-->
-								<i class="search_time_ico2"
+								<i class="search_time_ico1"
 									onclick="WdatePicker({el:'edit_joinTime'})"></i>
 							</div>
 						</td>

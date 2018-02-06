@@ -22,16 +22,20 @@
 							name="leaveType" id="edit_leaveType" class="input_select"
 							style="width: 100px">
 							<option value="1"
-								<c:if test="${leaveApply.leaveType==1}">selected</c:if>>事假</option>
+								<c:if test="${leaveApply.leaveType=='1'}">selected</c:if>>事假</option>
 							<option value="2"
-								<c:if test="${leaveApply.leaveType==2}">selected</c:if>>公假</option>
+								<c:if test="${leaveApply.leaveType=='2'}">selected</c:if>>公假</option>
+							<option value="3"
+								<c:if test="${leaveApply.leaveType=='3'}">selected</c:if>>病假</option>
+							<option value="4"
+								<c:if test="${leaveApply.leaveType=='4'}">selected</c:if>>婚假</option>
 						</select>
 					</div>
 					<div class="time_bg"
 						style="top: 40px; right: 0px; height: 25px; line-height: 25px; position: absolute; width: 200px">
 						<span>申请日期：</span> <input id="edit_createDate" name="createDate"
 							type="text" value="${leaveApply.createDate}"
-							style="height: 25px;" readonly /> <i class="search_time_ico2"
+							style="height: 25px;" readonly /> <i class="search_time_ico1"
 							style="top: 6px;"></i>
 					</div>
 				</div>
@@ -43,11 +47,10 @@
 								name="deptName" type="text" class="text"
 								value="${leaveApply.empDept}" readonly /></td>
 							<td class="inputLabelTd"><span class="required">*</span>申请人：</td>
-							<td class="inputTd"><input id="edit_enterName"
-								name="enterName" type="text" class="text"
-								value="${leaveApply.empNAME}" readonly /> <input id="edit_empId"
-								name="empId" type="hidden" class="text"
-								value="${leaveApply.empId}" readonly /></td>
+							<td class="inputTd">
+								<input id="edit_enterName" name="enterName" type="text" class="text" value="${leaveApply.empName}" readonly /> 
+								<input id="edit_empId" name="empId" type="hidden" class="text" value="${leaveApply.empId}" readonly />
+							</td>
 						</tr>
 						<tr class="trDetails" style="height: 140px;">
 							<td class="inputLabelTd"><span class="required">*</span>请假事由：</td>
@@ -55,6 +58,14 @@
 									name="content" id="edit_content" readonly>${leaveApply.content}</textarea>
 							</td>
 						</tr>
+						<c:if test="${not empty leaveApply.fileUrl}">
+							<tr>
+								<td class="inputLabelTd">病历证明：</td>
+								<td class="inputTd" colspan="3">
+									<img alt=""  src="${leaveApply.fileUrl}">
+								</td>
+							</tr>
+						</c:if>
 						<tr>
 							<td class="inputLabelTd"><span class="required">*</span>开始日期：</td>
 							<td class="inputTd">
@@ -63,7 +74,7 @@
 										name="startDate" id="edit_startDate" style="width: 88%;"
 										value="${leaveApply.startDate}" readonly />
 									<!-- 时间选择控件-->
-									<i class="search_time_ico2"></i>
+									<i class="search_time_ico1"></i>
 								</div>
 							</td>
 							<td class="inputLabelTd"><span class="required">*</span>结束日期：</td>
@@ -73,7 +84,7 @@
 										name="endDate" id="edit_endDate" style="width: 88%;"
 										value="${leaveApply.endDate}" readonly />
 									<!-- 时间选择控件-->
-									<i class="search_time_ico2"></i>
+									<i class="search_time_ico1"></i>
 								</div>
 							</td>
 						</tr>
@@ -83,15 +94,12 @@
 								id="edit_leaveDate" name="leaveDate" type="text" class="text"
 								readonly /></td>
 							<td class="inputLabelTd"><span class="required">*</span>直接负责人：</td>
-							<td class="inputTd"><input
-								value="${leaveApply.straightLeaderName}"
-								id="edit_straightLeaderName" name="straightLeaderName"
-								type="text" class="text" readonly /> <input
-								value="${leaveApply.straightLeader}" id="edit_straightLeader"
-								name="straightLeader" type="hidden" /></td>
+							<td class="inputTd">
+								<input value="${leaveApply.straightLeaderName}" id="edit_straightLeaderName" name="straightLeaderName" type="text" class="text" readonly /> 
+								<input value="${leaveApply.straightLeader}" id="edit_straightLeader" name="straightLeader" type="hidden" /></td>
 						</tr>
 					</table>
-
+					
 					<div class="inputTd" style="display: block; text-align: center;">
 						<input id="submit" type="button" class="ti_bottom" value="审核通过" />
 					</div>

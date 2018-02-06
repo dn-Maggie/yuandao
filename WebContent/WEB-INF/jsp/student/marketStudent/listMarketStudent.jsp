@@ -26,24 +26,22 @@
 										name="propsMap['startDate']" value="${currDate}">
 								</c:when>
 								<c:when test="${condition=='year'}">
-									<input id="startDate" type="text" class="search_time150"
-										name="propsMap['startDate']" mainid="startDate"
-										value="${currDate}">
+									<input id="startDate" type="text" class="search_time150" name="propsMap['startDate']" value="${currDate}">
 								</c:when>
 								<c:otherwise>
 									<input id="startDate" type="text" class="search_time150"
-										name="propsMap['startDate']" mainid="startDate">
+										name="propsMap['startDate']">
 								</c:otherwise>
 							</c:choose>
-							<i class="search_time_ico2"></i>
+							<i class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
-								name="propsMap['endDate']" mainid="endDate"> <i
-								class="search_time_ico2"></i>
+								name="propsMap['endDate']"> <i
+								class="search_time_ico1"></i>
 						</div></li>
 					<li><select class="search_choose" name="subjectId"
-						id="subjectId" mainid="subjectId">
+						id="subjectId" >
 							<option value="">--请选择--</option>
 							<c:forEach var="mr" items="${er.subject}">
 								<option value="${mr.id}">
@@ -52,8 +50,7 @@
 							</c:forEach>
 					</select><span>学科:</span></li>
 					<!--下拉 -->
-					<li><select class="search_choose" name="createdby"
-						id="createdby" mainid="createdby"
+					<li><select class="search_choose" name="createdby" id="createdby"
 						onchange="enterChange(this.value);">
 							<option value="">-请选择-</option>
 							<c:forEach var="useradmin" items="${useradmin}">
@@ -62,8 +59,7 @@
 								</option>
 							</c:forEach>
 					</select><span>管理员:</span></li>
-					<li><select class="search_choose" name="userId" id="userId"
-						mainid="userId">
+					<li><select class="search_choose" name="userId" id="userId">
 							<option value="">-请选择-</option>
 							<c:forEach var="user" items="${user}">
 								<option value="${user.id}">
@@ -124,7 +120,7 @@
 				<table id="remote_rowed"></table>
 				<div id="remote_prowed"></div>
 			</div>
-			<div id="main"></div>
+			<div id="main" style="z-index:-1"></div>
 		</div>
 	</div>
 	<script type="text/javascript">
@@ -144,8 +140,8 @@ var gridObj = {};
             colModel:[
 				{name : "id",hidden : true,key : true,label:"",index : "id"},				
 				{name : "qq",label:"QQ号码",index : "qq"},				
-				{name : "notes",label:"店铺名",index : "notes"},		
-				{name : "subjectId",label:"微信号",index : "subjectId"},				
+				{name : "notes",label:"意向课程",index : "notes"},		
+				{name : "subjectname",label:"意向学科",index : "subjectname"},				
 				{name : "fullname",label:"录入人",index : "fullname"},				
 				{name : "time",label:"时间",index : "time"}	
            	],
@@ -183,7 +179,7 @@ var gridObj = {};
 			id:$('<div id="addwindow_iframe"></div>').html('<iframe id="iframeAdd" name="iframeAdd" src="'+url+'" width="100%" frameborder="no" border="0" height="97%"></iframe>'),  
 			modal: true,
 			width: 800,
-			height: 250,
+			height: $(window).height()*0.6,
 			title: "录入学员信息表增加"
 		});
 		add_iframe_dialog.open();
@@ -350,7 +346,6 @@ var gridObj = {};
    			async : false,
    			dataType:"json",
    			success : function(data) {
-   				debugger
    				drawMainChart(data.curr);
    			}
    		});

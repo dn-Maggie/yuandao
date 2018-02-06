@@ -136,7 +136,7 @@ function getEmpIDByName(obj,value) {
 								id="edit_createDate"
 								value="<fmt:formatDate value='${empPerformance.createDate}' pattern="yyyy-MM-dd HH:mm:ss"/>">
 							<!-- 时间选择控件-->
-							<i class="search_time_ico2"></i>
+							<i class="search_time_ico1"></i>
 						</div>
 					</td>
 				</tr>

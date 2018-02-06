@@ -63,7 +63,7 @@ public interface ModuleService {
 	void update(Module module);
 
 	List<Module> getMenuListForAdmin();
-	 List<Module> getMenuListByPcode(String pcode);
+	List<Module> getMenuListByPcode(String pcode);
 
 	/**
 	 * 获取系统管理的菜单JSON数据

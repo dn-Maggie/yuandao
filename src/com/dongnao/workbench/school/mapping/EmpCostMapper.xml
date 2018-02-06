@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongnao.workbench.school.dao.EmpCostMapper">
+	<resultMap id="BaseResultMap" type="com.dongnao.workbench.school.model.EmpCost">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="emp_id" property="empId" jdbcType="VARCHAR" />
+		<result column="month" property="month" jdbcType="TIMESTAMP" />
+		<result column="cost_money" property="costMoney" jdbcType="DECIMAL" />
+		<result column="cost_type" property="costType" jdbcType="INTEGER" />
+		<result column="cost_content" property="costContent" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+	 	id
+	 	,month
+		,emp_id
+		,cost_money
+		,cost_type
+		,cost_content
+		,status
+	</sql>
+	<select id="getByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+			ec.id
+		 	,ec.month
+			,ec.emp_id
+			,ec.cost_money
+			,ec.cost_type
+			,ec.cost_content
+			,ec.status
+			,e.nick_name as empNickName
+			,bo.org_name as empDept
+			,bo.org_no as empDeptNo
+		from emp_cost as ec
+		LEFT JOIN employee as e on ec.emp_id = e.id
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		where ec.id = #{id,jdbcType=VARCHAR} and ec.status = 1
+	</select>
+	<select id="listByCondition" resultMap="BaseResultMap" parameterType="com.dongnao.workbench.school.model.EmpCost">
+		SELECT
+			ec.id
+		 	,ec.month
+			,ec.emp_id
+			,ec.cost_money
+			,ec.cost_type
+			,ec.cost_content
+			,ec.status
+			,e.nick_name as empNickName
+			,bo.org_name as empDept
+			,bo.org_no as empDeptNo
+		from emp_cost as ec
+		LEFT JOIN  employee AS e ON ec.emp_id = e.id
+		<if test="empStatus != null and '' != empStatus">  
+			and e.curr_state = #{empStatus,jdbcType=VARCHAR}
+		</if>
+		LEFT join basic_org bo on e.dept_no = bo.org_no
+		where 1=1 and status = 1
+		<if test="id != null and '' != id">  
+			and es.id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test="empId != null and '' != empId">  
+			and es.emp_id = #{empId,jdbcType=VARCHAR}
+		</if>
+		<if test="empNickName != null and '' != empNickName">  
+			and e.nick_name = #{empNickName,jdbcType=TIMESTAMP}
+		</if>
+		<if test="empDept != null and '' != empDept">  
+			and bo.org_name = #{empDept,jdbcType=TIMESTAMP}
+		</if>
+		<if test="empStatus != null and '' != empStatus">  
+			and e.curr_state = #{empStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="null != propsMap.startDate and propsMap.startDate != ''">
+			<![CDATA[
+			and DATE_FORMAT(ec.month,'%Y-%m-%d') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="null != propsMap.endDate and propsMap.endDate != ''">
+			<![CDATA[
+				and DATE_FORMAT(ec.month,'%Y-%m-%d') <= DATE_FORMAT(#{propsMap.endDate,jdbcType=TIMESTAMP},'%Y-%m-%d')
+			]]>
+		</if>
+		<if test="orderFields != null and '' != orderFields">  
+           	order by ${orderFields} ${order}
+       	</if>
+	</select>
+	<delete id="deleteByKey" parameterType="java.lang.String">
+		UPDATE emp_cost SET status = 4  where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="add" parameterType="com.dongnao.workbench.school.model.EmpCost">
+		insert into emp_cost (
+				id
+			 	,month
+				,emp_id
+				,cost_money
+				,cost_type
+				,cost_content
+				,status
+		)values (
+			#{id,jdbcType=VARCHAR}
+			,#{month,jdbcType=TIMESTAMP}
+			,#{empId,jdbcType=VARCHAR}
+			,#{costMoney,jdbcType=DECIMAL}
+			,#{costType,jdbcType=INTEGER}
+			,#{costContent,jdbcType=VARCHAR}
+			,1
+		)
+	</insert>
+	<update id="update" parameterType="com.dongnao.workbench.school.model.EmpCost">
+		update emp_cost
+			 <trim prefix="set" suffixOverrides=",">
+				<if test="id != null and '' != id"> 
+					id = #{id,jdbcType=VARCHAR},
+				</if>
+				<if test="month != null and '' != month">
+					month= #{month,jdbcType=TIMESTAMP},
+				</if>
+				<if test="empId != null and '' != empId"> 
+					emp_id= #{empId,jdbcType=VARCHAR},
+				</if>
+				<if test="costMoney != null and '' != costMoney">
+					cost_money= #{costMoney,jdbcType=DECIMAL},
+				</if>
+				<if test="costType != null and '' != costType">  
+					cost_type= #{costType,jdbcType=INTEGER},
+				</if>
+				<if test="costContent != null and '' != costContent">  
+					cost_content= #{costContent,jdbcType=VARCHAR},
+				</if>
+			</trim>
+		where id = #{id,jdbcType=VARCHAR} 
+	</update>
+	
+</mapper>

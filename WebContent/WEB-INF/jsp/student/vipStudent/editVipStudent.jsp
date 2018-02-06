@@ -85,6 +85,18 @@
 						</datalist></td>
 				</tr>
 				<tr>
+					<td class="inputLabelTd"><span class="required">*</span>在职状态：</td>
+					<td class="inputTd">
+						<input class="text" name="currPosition" id="edit_currPosition" list="currPositionList" value="${vipStudent.currPosition}"> 
+						<datalist id="currPositionList">
+							<option value="在读学生" label="在读学生"></option>
+							<option value="待业" label="待业"></option>
+							<option value="IT在职" label="IT在职"></option>
+							<option value="转行" label="转行"></option>
+						</datalist>
+					</td>
+				</tr>
+				<tr>
 					<td class="inputLabelTd">备注：</td>
 					<td class="inputTd"><input id="edit_notes" name="notes"
 						type="text" class="text" value="${vipStudent.notes}" /></td>
@@ -94,7 +106,7 @@
 							<input type="text" class="search_time150 valid" name="joinTime"
 								id="edit_joinTime" value="${vipStudent.joinTime}">
 							<!-- 时间选择控件-->
-							<i class="search_time_ico2"></i>
+							<i class="search_time_ico1"></i>
 						</div>
 					</td>
 				</tr>
@@ -266,6 +278,7 @@ function updateVipStudent(){
 	var actualPay = $("#edit_actualPay").val();
 	var owePay = $("#edit_owePay").val();
 	var isCount = $("#isCount").val();
+	var currPosition = $("#edit_currPosition").val();
 	var paramDatas = {
 			id:$("#edit_id").val(),
 			name:name,
@@ -285,7 +298,8 @@ function updateVipStudent(){
 			actualPay:actualPay,
 			owePay:owePay,
 			currStatus:currStatus,
-			isCount:isCount
+			isCount:isCount,
+			currPosition:currPosition
 				};
 	$.ajax({
 		   type: "post",

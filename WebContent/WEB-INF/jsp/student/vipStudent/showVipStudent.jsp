@@ -53,8 +53,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<td class="inputTd">${vipStudent.joinTime}</td>
 			</tr>
 			<tr>
+				<td class="inputLabelTd">在职状态：</td>
+				<td class="inputTd">${vipStudent.currPosition}</td>
 				<td class="inputLabelTd">备注：</td>
-				<td class="inputTd" colspan="3">${vipStudent.notes}</td>
+				<td class="inputTd">${vipStudent.notes}</td>
 			</tr>
 			<tr style="text-indent: 4em">
 				<td colspan="4"><i class="icon_bg icon_plan"></i> 学生付款信息</td>

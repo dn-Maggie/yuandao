@@ -47,7 +47,6 @@ $(function(){
 			{name : "deptName",label:"所在部门"},	
 			{name : "expenseMoney",label:"报销金额",index : "expense_money"},	
 			{name : "enterName",label:"申请人"},	
-									
        	],
        	multiselect: false,
 		autowidth:true,
@@ -197,12 +196,12 @@ $(function(){
 						<div class="time_bg">
 							<input id="startDate" type="text" class="search_time150"
 								name="propsMap['startDate']" mainid="startDate"> <i
-								class="search_time_ico2" onclick="WdatePicker({el:'startDate'})"></i>
+								class="search_time_ico1" onclick="WdatePicker({el:'startDate'})"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
 								name="propsMap['endDate']" mainid="endDate"> <i
-								class="search_time_ico2" onclick="WdatePicker({el:'endDate'})"></i>
+								class="search_time_ico1" onclick="WdatePicker({el:'endDate'})"></i>
 						</div></li>
 
 					<li><input type="reset" class="reset_btn"

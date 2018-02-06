@@ -3,6 +3,7 @@
 <!DOCTYPE html  >
 <html>
 <head>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/common-util/image-util.js"></script>	
 <%@ include file="../../common/header.jsp"%>
 </head>
 
@@ -16,20 +17,34 @@
 				<tr>
 					<td class="inputLabelTd">QQ号码：</td>
 					<td class="inputTd"><input id="edit_qq" name="qq" type="text" class="text" value="${marketStudent.qq}" /></td>
-					<td class="inputLabelTd">微信号：</td>
-					<td class="inputTd"> <input id="edit_subjectId" name="subjectId" type="text" class="text" value="${marketStudent.subjectId}" /></td>
+					<td class="inputLabelTd">意向学科：</td>
+					<td class="inputTd">
+						<select onchange="xuekeChange(this.value);" style="float:left" class="input_select" name="subjectId" id="edit_subjectId">
+							<c:forEach var="mr" items="${er.subject}">
+								<option value="${mr.id}" <c:if test="${mr.id == marketStudent.subjectId}">selected</c:if>> <c:out value="${mr.name}"></c:out> </option>
+				             </c:forEach>
+				        </select>
+					</td>
 				</tr>
 				<tr>
-					<td class="inputLabelTd">店铺名：</td>
-					<td class="inputTd"><input id="edit_notes" name="notes" type="text" class="text" value="${marketStudent.notes}" /></td>
+					<td class="inputLabelTd">意向课程：</td>
+					<td class="inputTd">
+						<input id="edit_notes" name="notes" type="text" class="text" value="${marketStudent.notes}" list="courseList"/> 
+						<dataList style="float:left" class="input_select" id="courseList">
+							<c:forEach var="mr" items="${er.course}">
+								<option value="${mr.name}" > <c:out value="${mr.name}"></c:out> </option>
+				             </c:forEach>
+						</dataList>
+						<input id="edit_time" name="time" type="hidden" value="${marketStudent.time}" />
+					</td>
 					<td class="inputLabelTd">更换图片：</td>
 					<td class="inputTd"><input id="fileData" name="fileUrl"
 						type="hidden" value="${marketStudent.fileUrl}"> <input
-						id="file" type="file" class="text" /></td>
+						id="file" type="file" class="text" onchange="javascript:setImagePreviews();"/></td>
 				</tr>
 				<tr>
-					<td colspan="4" class="inputTd"><img alt="图片"
-						style="height: 400px; width: 100%" src="${marketStudent.fileUrl}">
+					<td colspan="4" class="inputTd" id="preview">
+						<img alt="图片" style="height: 400px; width: 100%" src="${marketStudent.fileUrl}">
 					</td>
 				</tr>
 				<tr>
@@ -65,32 +80,14 @@ $(function() {
 		};
 		//验证图片
 		var fileName = $("#file").val();
+		//如果有图片要上传，进行图片上次处理
 		if(fileName.length>1){  
-			var extname = fileName.substring(fileName.lastIndexOf(".")+1,fileName.length).toLowerCase();  
-			var imgname = fileName.substring(fileName.lastIndexOf("\\")+1,fileName.length);  
-			if(extname!= "jpeg"&&extname!= "jpg"&&extname!= "gif"&&extname!= "png"){  
-				 showWarn("格式不正确,支持的图片格式为：JPEG、JPG、GIF、PNG！");  
-		         return false;  
-		        }  
-			var file = $("#file").get(0).files; 
-			var size = file[0].size;
-			if(size>2097152){  
-				  showWarn("所选择的图片太大，图片大小最多支持2M!"); 
-		          return false;  
-		     }  			
-			// 创建一个FileReader对象
-			var reader = new FileReader();
-			// 绑定load事件
-			reader.onload = function(e) {
-				$("#fileData").val(e.target.result);
-				$('#marketStudentFormEdit').ajaxSubmit(options);// 将options传给ajaxForm
-			}
-			// 读取File对象的数据
-			reader.readAsDataURL($("#file").get(0).files[0]);
-	      }
-			else{
-			// 将options传给ajaxForm
-			$('#marketStudentFormEdit').ajaxSubmit(options);}
+			var file = $("#file").get(0).files[0]; 
+			PreviewFile(file,$('#marketStudentFormEdit'),options);
+	    }else{
+	    	// 直接将options传给ajaxForm（不上传图片）
+	  		$('#marketStudentFormEdit').ajaxSubmit(options);
+	    }
 	});
 
 	/*编辑表单数据验证*/
@@ -100,6 +97,25 @@ $(function() {
 		}
 	}); 
 });
+function xuekeChange(val){
+	$('#edit_notes').val("");
+	$ .ajax({
+		url: "<m:url value='/marketStudent/getCourseList.do'/>?key="+val,
+		cache:false,
+		dataType:"json",
+		success: function(data, textStatus, jqXHR){
+			$('#courseList option').remove();
+			for(var i in data.course){
+				if(data.course[i].id){
+					$('#courseList').append('<option value="'+data.course[i].name+'">'+data.course[i].name+' </option>');
+				}
+			}
+			if(!data.course[0]){
+				$('#courseList option').remove();
+			}
+		}
+	});
+}
 </script>
 </body>
 </html>

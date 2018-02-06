@@ -242,7 +242,7 @@
 				e.probation
 		from employee as e
 		LEFT join basic_org bo on e.dept_no = bo.org_no
-		where 1=1
+		where 1=1 and e.is_delete = '1'
 		<if test="id != null and '' != id">  
 			and e.id = #{id,jdbcType=VARCHAR}
 		</if>
@@ -319,7 +319,7 @@
 			and e.nick_name = #{nickName,jdbcType=VARCHAR}
 		</if>
 		<if test="deptNo != null and '' != deptNo">  
-			and e.dept_no like CONCAT(#{deptNo,jdbcType=VARCHAR},'%')
+			and e.dept_no  = #{deptNo,jdbcType=VARCHAR}
 		</if>
 		<if test="dept != null and '' != dept">  
 			and bo.org_name = #{dept,jdbcType=VARCHAR}
@@ -345,10 +345,6 @@
 		<if test="currState != null and '' != currState">  
 			and e.curr_state = #{currState,jdbcType=VARCHAR}
 		</if>
-		<if test="currState == null or '' == currState">  
-			and e.curr_state in('1','2','3','4')
-		</if>
-		
 		<if test="propsMap.startDate != null  and propsMap.startDate != ''">
 			<![CDATA[
 			and DATE_FORMAT(e.entry_date,'%Y-%m-%c') >= DATE_FORMAT(#{propsMap.startDate,jdbcType=TIMESTAMP},'%Y-%m-%c')
@@ -417,7 +413,7 @@
 					]]>
 				</if>
 		)ela ON ela.emp_id = e.id
-		WHERE 1=1 
+		WHERE 1=1 and e.is_delete = '1'
 		<if test="name != null and '' != name">  
 			and e.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
 		</if>
@@ -435,7 +431,7 @@
 		select 
 			count(*) as empCount
 		from employee
-		WHERE 1=1 
+		WHERE 1=1  and is_delete = '1'
 		<if test="_parameter!=null and _parameter!=''"> 
 			AND DATE_FORMAT(entry_date,'%Y%m') =  #{month,jdbcType=VARCHAR}
 		</if>
@@ -451,7 +447,7 @@
 	</select>
 	
 	<delete id="deleteByKey" parameterType="java.lang.String">
-		delete from employee
+		update employee set is_delete = 2
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
 	
@@ -499,7 +495,8 @@
 				 ,curr_state  
 				 ,foxmail    
 				 ,probation      
-				 ,not_dining     
+				 ,not_dining   
+				 ,is_delete  
 		)values (
 					#{id,jdbcType=VARCHAR}
 					,#{empNo,jdbcType=VARCHAR}
@@ -544,6 +541,7 @@
 					,#{foxmail,jdbcType=VARCHAR}
 					,#{probation,jdbcType=INTEGER}
 					,'0'
+					,'1'
 				)
 	</insert>
 	

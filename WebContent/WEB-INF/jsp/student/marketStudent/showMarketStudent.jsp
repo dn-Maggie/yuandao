@@ -25,8 +25,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<tr>
 				<td class="inputLabelTd">QQ号码：</td>
 				<td class="inputTd">${marketStudent.qq}</td>
-				<td class="inputLabelTd">微信号：</td>
-				<td class="inputTd">${marketStudent.subjectId}</td>
+				<td class="inputLabelTd">意向学科：</td>
+				<td class="inputTd">${marketStudent.subjectname}</td>
 			</tr>
 			<tr>
 				<td class="inputLabelTd">录入人：</td>
@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<td class="inputTd">${marketStudent.time}</td>
 			</tr>
 			<tr>
-				<td class="inputLabelTd">店铺名：</td>
+				<td class="inputLabelTd">意向课程：</td>
 				<td class="inputTd" colspan="3">${marketStudent.notes}</td>
 			</tr>
 			<tr>

@@ -12,17 +12,12 @@ td>.editable {
 <script type="text/javascript">
 var gridObj = {};
 	$(function(){
-		/* var lastsel; */
   		gridObj = new biz.grid({
             id:"#remote_rowed",/*html部分table id*/
-            url: "<m:url value='/empSalary/listEmpSocialSecurity.do'/>",/*grid初始化请求数据的远程地址*/
+            url: "<m:url value='/empCost/listEmpCost.do'/>",/*grid初始化请求数据的远程地址*/
             datatype: "json",/*数据类型，设置为json数据，默认为json*/
-           	sortname:"empNo",
+           	sortname:"month",
            	sortorder:"asc", 
-           	/*forceFit:true,固定宽度*/
-           	rownumbers:false,/*不显示数据数，左侧行号*/
-           	multiselect:true,//多选checkbox
-           	multiboxonly:true,
            	footerrow:true,//页脚汇总行
            	emptyrecords: "无记录可显示",
            	pager: '#remote_prowed' /*分页栏id*/,
@@ -31,26 +26,37 @@ var gridObj = {};
     		navtype:"top" /*导航栏类型*/,
     		navopt:{edit : false,add : false,del : false,reloadAfterSubmit:true},
             colModel:[
-                /* {name: '操作', width:50, fixed:true, sortable:false, resize:false, formatter:'actions',formatoptions:{keys:true}}, */
-				{name : "id",hidden : true,key : true,label:"主键",index : "id"},				
-				{name : "createDate",index : "create_date",hidden : true},
-				{name : "empNo",index : "empNo",hidden : true},
-		 		{name : "empDept",label:"所属部门",index : "empDept",hidden : true},
-				{name : "empStatus",label:"在职状态",index : "empStatus",width:"3",
+				{name : "id",hidden : true, key : true,label:"主键",index : "id"},				
+		 		{name : "empDept",label:"所属部门",width:"6",index : "empDept",
 					formatter:function(cellvalue, options, rowObject){
-	 				if (cellvalue==1) {return '在职';}else if (cellvalue==2){return '试用';}else if (cellvalue==3){return '离职';}else if (cellvalue==4){return '兼职';}
-	 			}},	
-	 			{name : "empName",label:"员工姓名",index : "empName",frozen : true,width:"6",
-			        formatter : function(value, options, rData){
-			          return value + "-"+rData['empNickName'];
-		       		}},
-				{name : "empNickName",label:"昵称",hidden : true,index : "empNickName",cellattr: function(rowId, value, rowObject, colModel, arrData) {
-	 		          return " style=display:none; ";
- 		        }},
-				{name : "empEntryDate",label:"入职时间",width:"6",index : "empEntryDate"},
-				{name : "empBeFullDate",label:"转正日期",width:"3",index : "empBeFullDate"}, 
-				{name : "socialSecurity",label:"社保扣款",width:"4",index : "social_security", editable:true,number:true,
-					formatter:'currency', formatoptions:{thousandsSeparator: ',',decimalPlaces:'2'}}			
+		 				 if (cellvalue=="") {
+		 				 	return "所有部门"
+		 				 }else {
+		 					 return cellvalue;
+		 				 }
+	 			}},
+	 			{name : "empNickName",label:"责任人",width:"6",index : "empNickName",
+					formatter:function(cellvalue, options, rowObject){
+		 				 if (cellvalue=="") {
+		 				 	return "所有人"
+		 				 }else {
+		 					 return cellvalue;
+		 				 }
+	 			}},
+ 		        {name : "costMoney",label:"金额",width:"6",index : "cost_money"},
+ 		        {name : "costType",label:"类型",width:"6",index : "cost_type",
+ 		        	formatter:function(cellvalue, options, rowObject){
+	 				 if (cellvalue=="1") {
+		 				 	return "公摊成本"
+		 				 }else if (cellvalue=="2") {
+		 					 return "个人成本";
+		 				 }
+	 			}},
+ 		        {name : "costContent",label:"成本详细",width:"6",index : "cost_content"},
+ 		       	{name : "month",label:"统计月份",width:"6",index : "month",
+ 		    	  formatter:'date',formatoptions: {newformat:'Y-m'}, 	
+ 		       	}, 
+ 		      
            	],
            	serializeGridData:function(postData){//添加查询条件值，把数据进行序列化
 				var obj = getQueryCondition();
@@ -60,36 +66,25 @@ var gridObj = {};
     		gridComplete:function(){
     			$(".ui-jqgrid-sdiv").show();
            		//如果需要统计则需要定义
-               /* 	getFooterJsonData($(this)); */
                $(this).footerData("set",
-            		   {"操作":"合计",
-            	   		"socialSecurity":$(this).getCol("socialSecurity",false,"sum"),
+            		   {"所属部门":"合计",
+            	   		"costMoney":$(this).getCol("costMoney",false,"sum"),
             	   		});
 	 		},
-    		//editurl : "<m:url value='/empSalary/operEmpSalary.do'/>",
      	});
-    	
-		new biz.datepicker({
-  			id : "#createDateMonth",
-  			dateFmt:'yyyy-MM'
+  		new biz.datepicker({
+  			id : "#startDate",
+  			maxDate:'#F{$dp.$D(\'endDate\',{d:0});}',
+  			dateFmt:'yyyy-MM-dd'
   		});
   	    
+  	    new biz.datepicker({
+  			id : "#endDate",
+  			minDate:'#F{$dp.$D(\'startDate\',{d:0});}',
+  			dateFmt:'yyyy-MM-dd'
+  		});
     });
 
- 	function importData(){
- 		 if($('input[type="file"]').val()!=""){
- 			var extend=$('input[type="file"]').val().substr($('input[type="file"]').val().lastIndexOf(".")+1);
- 			if("xls|xlsx".indexOf(extend+"|")==-1){
- 				 showInfo("选择的文件必须是EXCEL文件,请确认！",3000);
- 	         }else{ 
- 	        	showInfo("数据正在导入...");
- 	        	ajaxFileUpload();
- 	        	gridObj.trigger('reloadGrid');
- 	         }
- 		 }else{
- 			showInfo("请选EXCEL文件！",3000);
- 	    }
- 	}
   	
     /**
     * 获取查询条件值
@@ -123,7 +118,7 @@ var gridObj = {};
     		new biz.alert({type:"confirm",message:I18N.msg_del_confirm,title:I18N.promp,callback:function(result){
     			if(result){
     				$ .ajax({
-        				url: "<m:url value='/empSalary/deleteEmpSocialSecurity.do'/>?key="+ids,
+        				url: "<m:url value='/empCost/deleteEmpCost.do'/>?key="+ids,
         				cache:false,
         				success: function(data, textStatus, jqXHR){
         					doSearch();
@@ -134,24 +129,18 @@ var gridObj = {};
     		}}) ;   
     	}
     }
-    //获取创建日期方法
-    function getCreateDate(){
-    	var createDate = $("#createDateMonth").val()+"-01";
-    	$("#createDate").val(createDate);
-    }
-    
     
     //新增的弹出框
 	var add_iframe_dialog;
 	function add(){
 	  	//xin zeng iframe 弹出框
-			var url="<m:url value='/empSalary/toAddEmpSocialSecurity.do'/>";
+			var url="<m:url value='/empCost/toAddEmpCost.do'/>";
 			add_iframe_dialog = new biz.dialog({
 				id:$('<div id="addwindow_iframe"></div>').html('<iframe id="iframeAdd" name="iframeAdd" src="'+url+'" width="100%" frameborder="no" border="0" height="97%"></iframe>'),  
 				modal: true,
 				width: $(window).width()*0.6,
 				height:$(window).height()*0.8,
-				title: "员工社保增加"
+				title: "新增成本信息"
 			});
 			add_iframe_dialog.open();
 	  	}
@@ -159,23 +148,44 @@ var gridObj = {};
   	function closeAdd(){
 		add_iframe_dialog.close();
   	}
+	
+  	var edit_iframe_dialog;
+	function edit(){
+		var key = ICSS.utils.getSelectRowData("id");
+		if(key.indexOf(",")>-1||key==""){
+			showMessage("请选择一条数据！");
+			return ;
+		}
+	  	//xin zeng iframe 弹出框
+			var url="<m:url value='/empCost/toEditEmpCost.do'/>?key="+key;
+			edit_iframe_dialog = new biz.dialog({
+				id:$('<div id="addwindow_iframe"></div>').html('<iframe id="iframeAdd" name="iframeAdd" src="'+url+'" width="100%" frameborder="no" border="0" height="97%"></iframe>'),  
+				modal: true,
+				width: $(window).width()*0.6,
+				height:$(window).height()*0.8,
+				title: "修改成本信息"
+			});
+			edit_iframe_dialog.open();
+	  	}
+	//关闭新增页面，供子页面调用
+  	function closeEdit(){
+  		edit_iframe_dialog.close();
+  	}
+	
     </script>
 </head>
 <body style="height: 100%;">
-
 	<div class="main  choice_box">
 		<form id="queryForm">
 			<!-- 查询区 表单 -->
 			<div class="search border-bottom">
 				<ul>
-					<li style="width: 450px; float: left;"><span>关键字:</span> <input
-						type="text" name="employeeName" id="employeeName"
-						class="search_choose100" placeholder="员工姓名"> <input
-						type="text" name="nickName" id="nickName" class="search_choose100"
-						placeholder="员工昵称"> <input type="text" name="empNo"
-						id="empNo" class="search_choose100" placeholder="员工编号"></li>
+					<li ><span>关键字:</span> 
+					<input type="text" name="empNickName"
+						id="nickName" class="search_choose100" placeholder="员工昵称">
+						</li>
 					<!-- 输入框-->
-					<li><select style="float: none" class="search_choose"
+					<li><select class="search_choose"
 						name="empDept" id="edit_dept" mainid="empDept">
 							<option value="">---请选择---</option>
 							<c:forEach var="org" items="${org}">
@@ -183,22 +193,17 @@ var gridObj = {};
 										value="${org.orgName}"></c:out></option>
 							</c:forEach>
 					</select> <span>所在部门:</span></li>
-					<li><span>月份:</span>
+					<li  class="date_area"><span>月份:</span>
 						<div class="time_bg">
-							<input id="createDateMonth" type="text" class="search_time150"
-								name="createDateMonth" onchange="getCreateDate()"> <input
-								id="createDate" type="hidden" name="createDate"> <i
-								class="search_time_ico1"
-								onclick="WdatePicker({el:'createDateMonth'})"></i>
-						</div></li>
-					<li style="width: 180px;"><select class="search_choose"
-						name="empStatus" id="empStatus" style="width: 100px;">
-							<option value="">所有</option>
-							<option value="1">在职</option>
-							<option value="2">试用</option>
-							<option value="3">离职</option>
-							<option value="4">兼职</option>
-					</select><span>在职状态:</span></li>
+							<input id="startDate" type="text" class="search_time150"
+								name="propsMap['startDate']"> <i
+								class="search_time_ico1"></i>
+						</div> <i>至</i>
+						<div class="time_bg">
+							<input id="endDate" type="text" class="search_time150"
+								name="propsMap['endDate']"> <i class="search_time_ico1"></i>
+						</div>
+					</li>
 					<li><input type="reset" class="reset_btn"
 						onclick="resetForm('queryForm')" value="重置">
 					<!-- 重置 --> <input type="button" class="search_btn mr22 "
@@ -212,12 +217,24 @@ var gridObj = {};
 			<div class="list_btn_bg fl">
 				<!--功能按钮 div-->
 				<ul>
+					<c:if test="${add}">
+					<li><a title="<m:message code="button.add"/>"
+						href="javascript:;" onclick="add();"> <i
+							class="icon_bg icon_add"> </i> <span><m:message
+									code="button.add" /></span>
+					</a></li>
+					</c:if>
 					<c:if test="${edit}">
 						<li><a title="<m:message code="button.edit"/>"
 							href="javascript:;" onclick="edit();"><i
 								class="icon_bg icon_edit"></i> <span><m:message
 										code="button.edit" /></span> </a></li>
 					</c:if>
+					<li><a title="<m:message code="button.delete"/>"
+						href="javascript:;" onclick="batchDelete();"> <i
+							class="icon_bg icon_del"></i> <span><m:message
+									code="button.delete" /></span>
+					</a></li>
 				</ul>
 			</div>
 

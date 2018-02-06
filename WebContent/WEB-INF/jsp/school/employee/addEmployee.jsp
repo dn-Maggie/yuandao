@@ -53,7 +53,7 @@ textarea.text {
 								<input type="text" class="search_time150 valid" name="birthDate"
 									id="edit_birthDate" mainid="birthDate">
 								<!-- 时间选择控件-->
-								<i class="search_time_ico2"></i>
+								<i class="search_time_ico1"></i>
 							</div>
 						</td>
 					</tr>
@@ -241,7 +241,7 @@ textarea.text {
 								<input type="text" class="search_time150 valid" name="entryDate"
 									id="edit_entryDate">
 								<!-- 时间选择控件-->
-								<i class="search_time_ico2"></i>
+								<i class="search_time_ico1"></i>
 							</div>
 						</td>
 						<td class="inputLabelTd"><span class="required">*</span>转正日期：</td>
@@ -249,7 +249,7 @@ textarea.text {
 							<div class="time_bg">
 								<input id="edit_beFullDate" name="beFullDate" type="text"
 									class="search_time150 valid" value="${employee.beFullDate}" />
-								<i class="search_time_ico2"></i>
+								<i class="search_time_ico1"></i>
 							</div>
 						</td>
 					</tr>

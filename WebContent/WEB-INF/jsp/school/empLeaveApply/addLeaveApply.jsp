@@ -1,11 +1,9 @@
-<%@ page language="java" pageEncoding="UTF-8"
-	contentType="text/html; charset=UTF-8"%>
+<%@ page language="java" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <%@ include file="../../common/header.jsp"%>
-<link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath() %>/styles/extends/css/expenseAccount.css" />
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/styles/extends/css/expenseAccount.css" />
 </head>
 <body>
 	<div id="editDialog">
@@ -23,13 +21,15 @@
 							style="width: 100px">
 							<option value="1">事假</option>
 							<option value="2">公假</option>
+							<option value="3">病假</option>
+							<option value="4">婚假</option>
 						</select>
 					</div>
 					<div class="time_bg"
 						style="top: 40px; right: 0px; height: 25px; line-height: 25px; position: absolute; width: 200px">
 						<span>申请日期：</span> <input id="edit_createDate" name="createDate"
 							style="height: 25px; width: 100px" class="input_select" readonly />
-						<i class="search_time_ico2" style="top: 6px;"></i>
+						<i class="search_time_ico1" style="top: 6px;"></i>
 					</div>
 				</div>
 				<div class="center_body">
@@ -51,25 +51,41 @@
 							<td class="inputTd" colspan="3"><textarea class="text"
 									name="content" id="edit_content"></textarea></td>
 						</tr>
+						<tr class="hiddenRow" style="display:none">
+							<td class="inputLabelTd"><span class="required">*</span>病历证明：</td>
+							<td class="inputTd" colspan="3"><input id="fileData"
+								name="fileUrl" type="hidden"> <input id="file"
+								type="file" class="text"
+								style="height: 20px; line-height: 20px;"
+								onchange="javascript:setImagePreviews();" /></td>
+						</tr>
+						<tr class="hiddenRow" style="display:none">
+							<td class="inputTd" colspan="4">
+								<div id="preview"
+									style="width: 100%; margin-top: 5px; margin-bottom: 5px; text-align: center;">
+									<span class="required">*</span>暂未上传图片
+								</div>
+							</td>
+						</tr>
 						<tr>
 							<td class="inputLabelTd"><span class="required">*</span>开始日期：</td>
 							<td class="inputTd">
 								<div class="time_bg" style="width: 98%;">
 									<input type="text" class="search_time150 valid text"
-										name="startDate" id="edit_startDate" mainid="startDate"
+										name="startDate" id="edit_startDate" 
 										style="width: 88%;" onblur="countLeaveDays()">
 									<!-- 时间选择控件-->
-									<i class="search_time_ico2"></i>
+									<i class="search_time_ico1"></i>
 								</div>
 							</td>
 							<td class="inputLabelTd"><span class="required">*</span>结束日期：</td>
 							<td class="inputTd">
 								<div class="time_bg" style="width: 98%;">
 									<input type="text" class="search_time150 valid text"
-										name="endDate" id="edit_endDate" mainid="endDate"
+										name="endDate" id="edit_endDate" 
 										style="width: 88%;" onblur="countLeaveDays()">
 									<!-- 时间选择控件-->
-									<i class="search_time_ico2"></i>
+									<i class="search_time_ico1"></i>
 								</div>
 							</td>
 						</tr>
@@ -99,10 +115,17 @@
 			</div>
 		</form>
 	</div>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/js/common-util/image-util.js"></script>	
 	<script type="text/javascript">
 		var createDate = new Date().format('yyyy-MM-dd hh:mm:ss');//获取今日时间
 		$(function() {
 			$("#edit_createDate").val(createDate);
+			$("#edit_leaveType").on("change",function(e){
+				if($(this).val()=="3"){
+					$(".hiddenRow").css("display","table-row");
+				}
+				else{$(".hiddenRow").css("display","none");}
+			})
 			//绑定提交按钮click事件
 			$("#submit").click(function() {
 				$("#submit").prop('disabled', true).css({'cursor':'not-allowed'});
@@ -127,11 +150,17 @@
 							}
 						}
 				};
-				// 将options传给ajaxForm
-				$('#leaveApplyFormEdit').ajaxSubmit(options);
+				//验证图片
+				var fileName = $("#file").val();
+				//如果有图片要上传，进行图片上次处理
+				if(fileName.length>1){  
+					var file = $("#file").get(0).files[0]; 
+					PreviewFile(file,$('#leaveApplyFormEdit'),options);
+			    }else{
+			    	// 直接将options传给ajaxForm（不上传图片）
+			  		$('#leaveApplyFormEdit').ajaxSubmit(options);
+			    }
 			});
-		
-		
 			/*申请日期格式化*/
 			new biz.datepicker({
 				id : "#edit_startDate",
@@ -144,7 +173,6 @@
 				minDate:'#F{$dp.$D(\'edit_startDate\',{d:0});}',
 				dateFmt:'yyyy-MM-dd HH:mm:ss'
 			});
-			
 			/*编辑表单数据验证*/
 			new biz.validate({
 				id:"#leaveApplyFormEdit",

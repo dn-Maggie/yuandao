@@ -57,7 +57,6 @@ public class VipStudentController {
 	private SubjectService subjectService;
 	@Resource
  	private CourseService courseService;
-	@Resource
 	private UserInfoService userInfoService;
 	@Resource
 	private EmployeeService employeeService;

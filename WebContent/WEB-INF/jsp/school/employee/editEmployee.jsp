@@ -56,7 +56,7 @@ textarea.text {
 									id="edit_birthDate" value="${employee.birthDate}"
 									mainid="birthDate">
 								<!-- 时间选择控件-->
-								<i class="search_time_ico2"></i>
+								<i class="search_time_ico1"></i>
 							</div>
 						</td>
 					</tr>
@@ -217,7 +217,7 @@ textarea.text {
 								<input type="text" class="search_time150 valid" name="entryDate"
 									id="edit_entryDate" value="${employee.entryDate}">
 								<!-- 时间选择控件-->
-								<i class="search_time_ico2"></i>
+								<i class="search_time_ico1"></i>
 							</div>
 						</td>
 					</tr>
@@ -310,7 +310,7 @@ textarea.text {
 							<div class="time_bg">
 								<input id="edit_beFullDate" name="beFullDate" type="text"
 									class="search_time150 valid" value="${employee.beFullDate}" />
-								<i class="search_time_ico2"></i>
+								<i class="search_time_ico1"></i>
 							</div>
 						</td>
 					</tr>
@@ -320,7 +320,7 @@ textarea.text {
 							<div class="time_bg">
 								<input id="edit_leaveDate" name="leaveDate" type="text"
 									class="search_time150 valid" value="${employee.leaveDate}" /> <i
-									class="search_time_ico2"></i>
+									class="search_time_ico1"></i>
 							</div>
 						</td>
 						<td class="inputLabelTd">备注：</td>

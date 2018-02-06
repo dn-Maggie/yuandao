@@ -85,7 +85,7 @@
 								id="edit_joinTime" value="${vipStudent.joinTime}"
 								disabled="disabled">
 							<!-- 时间选择控件-->
-							<i class="search_time_ico2"></i>
+							<i class="search_time_ico1"></i>
 						</div>
 					</td>
 				</tr>
@@ -158,7 +158,7 @@
 							<input type="text" class="search_time150 valid" name="perDate"
 								id="edit_perDate">
 							<!-- 时间选择控件-->
-							<i class="search_time_ico2"></i>
+							<i class="search_time_ico1"></i>
 						</div>
 					</td>
 				</tr>

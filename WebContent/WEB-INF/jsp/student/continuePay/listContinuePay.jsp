@@ -167,12 +167,12 @@ jsion_sumColumns["sumColumns"] = "rn,money";   //总计
 						<div class="time_bg">
 							<input id="joinStartDate" type="text" class="search_time150"
 								name="propsMap['joinStartDate']" mainid="joinStartDate">
-							<i class="search_time_ico2"></i>
+							<i class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="joinEndDate" type="text" class="search_time150"
 								name="propsMap['joinEndDate']" mainid="joinEndDate"> <i
-								class="search_time_ico2"></i>
+								class="search_time_ico1"></i>
 						</div></li>
 					<li class="date_area"><span>补款日期:</span>
 						<div class="time_bg">
@@ -188,11 +188,11 @@ jsion_sumColumns["sumColumns"] = "rn,money";   //总计
 								</c:otherwise>
 							</c:choose>
 
-							<i class="search_time_ico2"></i>
+							<i class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
-								name="propsMap['endDate']"> <i class="search_time_ico2"></i>
+								name="propsMap['endDate']"> <i class="search_time_ico1"></i>
 						</div></li>
 					<li><select class="search_choose" name="isCount" id="isCount">
 							<option value="">--请选择--</option>

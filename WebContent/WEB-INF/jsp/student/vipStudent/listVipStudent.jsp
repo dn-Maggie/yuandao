@@ -65,7 +65,7 @@ jsion_sumColumns["sumColumns"] = "rn,shouldPay,actualPay,owePay";//声明页脚�
 							{name : "courseName",label:"报名课程",index : "course_name"},
 							{name : "shouldPay",label:"应缴学费",index : "should_pay"},				
 							{name : "actualPay",label:"实缴学费",index : "actual_pay"},				
-							{name : "owePay",label:"欠缴学费",index : "owe_pay"},			
+							{name : "owePay",label:"欠缴学费",index : "owe_pay"},		
 							{name : "joinTime",label:"报名时间",index : "join_time"}]
 			break;
 		default:
@@ -82,7 +82,8 @@ jsion_sumColumns["sumColumns"] = "rn,shouldPay,actualPay,owePay";//声明页脚�
 							{name : "shouldPay",label:"应缴学费",index : "should_pay"},				
 							{name : "actualPay",label:"实缴学费",index : "actual_pay"},				
 							{name : "owePay",label:"欠缴学费",index : "owe_pay"},			
-							{name : "currStatus",label:"目前状态",index : "curr_status"},		
+							{name : "currStatus",label:"目前状态",index : "curr_status"},
+							{name : "currPosition",label:"在职状态",index : "curr_position"},	
 							{name : "joinTime",label:"报名时间",index : "join_time"},
 							{name : "enterEmpname",label:"录入人"}]
 			break;
@@ -356,6 +357,16 @@ jsion_sumColumns["sumColumns"] = "rn,shouldPay,actualPay,owePay";//声明页脚�
 							<option value="已退款">已退款</option>
 					</select><span>学生状态:</span> <!--  <input type="text" name="subjectId" id="subjectId" class="search_choose"> -->
 					</li>
+					<li style="width: 180px;"><select class="search_choose"
+						name="currPosition" id="currPosition" 
+						style="width: 100px;">
+							<option value="">--请选择--</option>
+							<option value="在读学生">在读学生</option>
+							<option value="待业">待业</option>
+							<option value="IT在职">IT在职</option>
+							<option value="转行">转行</option>
+					</select><span>在职状态:</span> 
+					</li>
 					<!-- 输入框-->
 					<li class="date_area"><span>报名日期:</span>
 						<div class="time_bg">
@@ -383,13 +394,13 @@ jsion_sumColumns["sumColumns"] = "rn,shouldPay,actualPay,owePay";//声明页脚�
 										name="propsMap['startDate']" mainid="startDate">
 								</c:otherwise>
 							</c:choose>
-							<i class="search_time_ico2"
+							<i class="search_time_ico1"
 								onclick="WdatePicker({el:'startDate'})"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
 								name="propsMap['endDate']" mainid="endDate"> <i
-								class="search_time_ico2" onclick="WdatePicker({el:'endDate'})"></i>
+								class="search_time_ico1" onclick="WdatePicker({el:'endDate'})"></i>
 						</div></li>
 					<li><select class="search_choose" name="isCount" id="isCount"
 						mainid="isCount">

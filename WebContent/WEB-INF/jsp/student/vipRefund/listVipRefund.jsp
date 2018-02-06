@@ -35,12 +35,12 @@ table tr:last {
 						<div class="time_bg">
 							<input id="joinStartDate" type="text" class="search_time150"
 								name="propsMap['joinStartDate']"> <i
-								class="search_time_ico2"></i>
+								class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="joinEndDate" type="text" class="search_time150"
 								name="propsMap['joinEndDate']"> <i
-								class="search_time_ico2"></i>
+								class="search_time_ico1"></i>
 						</div></li>
 					<li class="date_area"><span>退款日期:</span>
 						<div class="time_bg">
@@ -54,11 +54,11 @@ table tr:last {
 										name="propsMap['startDate']">
 								</c:otherwise>
 							</c:choose>
-							<i class="search_time_ico2"></i>
+							<i class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
-								name="propsMap['endDate']"> <i class="search_time_ico2"></i>
+								name="propsMap['endDate']"> <i class="search_time_ico1"></i>
 						</div></li>
 					<li><select class="search_choose" name="isCount" id="isCount">
 							<option value="">--请选择--</option>

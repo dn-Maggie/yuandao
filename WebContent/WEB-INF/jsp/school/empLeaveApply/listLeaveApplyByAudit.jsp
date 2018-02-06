@@ -36,12 +36,12 @@
 						<div class="time_bg">
 							<input id="startDate" type="text" class="search_time150"
 								name="propsMap['startDate']" mainid="startDate"> <i
-								class="search_time_ico2"></i>
+								class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
 								name="propsMap['endDate']" mainid="endDate"> <i
-								class="search_time_ico2"></i>
+								class="search_time_ico1"></i>
 						</div></li>
 					<li style="width: 180px;"><select class="search_choose"
 						name="leaveDate" id="leaveDate" style="width: 100px;">
@@ -55,6 +55,8 @@
 							<option value="">所有</option>
 							<option value="1">事假</option>
 							<option value="2">公假</option>
+							<option value="3">病假</option>
+							<option value="4">婚假</option>
 					</select><span>请假类型:</span></li>
 					<!-- 输入框-->
 					<li style="width: 180px;"><select class="search_choose"
@@ -122,6 +124,10 @@
 			 				 	return '事假';
 			 				 }else if (cellvalue==2) {
 			 				 	return '公假';
+			 				 }else if (cellvalue==3) {
+			 				 	return '病假';
+			 				 }else if (cellvalue==4) {
+			 				 	return '婚假';
 			 				 }
 			 		}},
 					{name : "content",label:"请假事由",index : "content"},				

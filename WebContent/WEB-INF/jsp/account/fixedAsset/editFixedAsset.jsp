@@ -157,7 +157,7 @@ function getEmpIDByName(obj,value) {
 							type="text" class="search_time150" name="currdate"
 							mainid="currdate" style="height: 25px;"
 							value="${fixedAsset.currdate}" readonly> <i
-							class="search_time_ico2" style="top: 6px;"></i>
+							class="search_time_ico1" style="top: 6px;"></i>
 					</div>
 				</div>
 				<input type="hidden" id="edit_id" name="id" type="text"
@@ -206,7 +206,7 @@ function getEmpIDByName(obj,value) {
 									id="edit_beginDate" mainid="beginDate"
 									value="${fixedAsset.beginDate}">
 								<!-- 时间选择控件-->
-								<i class="search_time_ico2"
+								<i class="search_time_ico1"
 									style="display: inline-block; top: 8px"></i>
 							</div>
 						</td>

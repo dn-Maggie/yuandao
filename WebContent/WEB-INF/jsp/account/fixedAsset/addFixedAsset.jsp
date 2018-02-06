@@ -157,7 +157,7 @@ function resetForm(){
 						<span>录入日期&nbsp;&nbsp;</span> <input id="edit_currdate"
 							type="text" class="search_time150" name="currdate"
 							style="height: 25px;" readonly> <i
-							class="search_time_ico2" style="top: 6px;"
+							class="search_time_ico1" style="top: 6px;"
 							onclick="WdatePicker({el:'edit_currdate'})"></i>
 					</div>
 				</div>
@@ -206,7 +206,7 @@ function resetForm(){
 								<input type="text" class="valid text" name="beginDate"
 									id="edit_beginDate" mainid="beginDate">
 								<!-- 时间选择控件-->
-								<i class="search_time_ico2"
+								<i class="search_time_ico1"
 									style="display: inline-block; top: 8px"></i>
 							</div>
 						</td>

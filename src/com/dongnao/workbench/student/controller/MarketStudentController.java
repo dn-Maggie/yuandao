@@ -310,26 +310,14 @@ public class MarketStudentController{
 	@RequestMapping("/toEditMarketStudent")
 	public ModelAndView toEdit(String key){
 		MarketStudent entity = marketStudentService.getByPrimaryKey(key);
-		
 		Map<String,List> er = new HashMap<String, List>();
  		List<Subject> list = subjectService.listByCondition(new Subject());
- 		List<Course> list2 =new ArrayList<Course>();
- 		
- 		Course c=new Course();
-		c.setSubjectId(entity.getSubjectId());
-		
-		list2=courseService.listByCondition(c);
- 		er.put("xueke", list);
- 		er.put("kechen", list2);
-		
+ 		er.put("subject", list);
 		Map<String,String> marketStudent = FormatEntity.getObjectValue(entity);
-		
 		Map<String,Object>  map=new HashMap<String, Object>();
-		
 		map.put("marketStudent", marketStudent);
 		map.put("er", er);
-		
-		return new ModelAndView("WEB-INF/jsp/student/marketStudent/editMarketStudent",map );
+		return new ModelAndView("WEB-INF/jsp/student/marketStudent/editMarketStudent",map);
 	}
 	
 	/**

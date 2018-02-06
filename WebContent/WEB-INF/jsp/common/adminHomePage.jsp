@@ -16,11 +16,16 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/static/css/ace.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/static/css/ace-rtl.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/static/css/ace-skins.min.css" />
-<script src="<%=request.getContextPath() %>/static/js/jquery.easy-pie-chart.min.js"></script>
 <!-- Modernizr -->
 <title></title>
 <script type="text/javascript">
 	jQuery(function($) {
+		var _dropLi =window.parent.document.getElementById('drop');
+		_dropLi.addEventListener("click",function(){
+			if(($(this)[0].className).indexOf("open")>-1){
+				$(this).removeClass("open");
+			}else{$(this).addClass("open");}
+		})
 		$('.easy-pie-chart.percentage').each(function(){
 			var barColor = $(this).data('color') || '#6fb3e0';
 			var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#FFF';
@@ -184,7 +189,6 @@
 
 				</ul> <!-- .cd-pricing-wrapper -->
 			</li>
-
 			<li style="width: 33%">
 				<ul class="cd-pricing-wrapper">
 					<li data-type="monthly" class="is-visible vipStu" did="accountFlow"
@@ -212,10 +216,8 @@
 							</div>
 						</div> <!-- .cd-pricing-header -->
 					</li>
-
 				</ul>
 			</li>
-
 			<li style="width: 33%">
 				<ul class="cd-pricing-wrapper">
 					<li data-type="monthly" class="is-visible allCost" id="AccountFlow"
@@ -236,7 +238,6 @@
 
 				</ul> <!-- .cd-pricing-wrapper -->
 			</li>
-
 			<li class="cd-popular" style="width: 34%">
 				<ul class="cd-pricing-wrapper">
 					<li data-type="monthly" class="is-visible complain"
@@ -411,6 +412,7 @@
 			</li>
 		</ul>
 	</div>
+	<script src="<%=request.getContextPath() %>/static/js/jquery.easy-pie-chart.min.js"></script>
 	<script src="<%=request.getContextPath() %>/js/statistic/main.js"></script>
 	<!-- Resource jQuery -->
 </body>

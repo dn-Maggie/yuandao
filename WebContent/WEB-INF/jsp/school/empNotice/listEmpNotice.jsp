@@ -24,12 +24,12 @@
 						<div class="time_bg">
 							<input id="startDate" type="text" class="search_time150"
 								name="propsMap['startDate']" mainid="startDate"> <i
-								class="search_time_ico2"></i>
+								class="search_time_ico1"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
 								name="propsMap['endDate']" mainid="endDate"> <i
-								class="search_time_ico2"></i>
+								class="search_time_ico1"></i>
 						</div></li>
 					<li><input type="text" name="noticeContent" id="noticeContent"
 						class="search_choose"> <span>关键字:</span></li>

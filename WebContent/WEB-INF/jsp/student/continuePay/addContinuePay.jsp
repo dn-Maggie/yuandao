@@ -44,7 +44,7 @@
 								<input type="text" class="search_time150 valid" name="time"
 									id="edit_time" mainid="time">
 								<!-- 时间选择控件-->
-								<i class="search_time_ico2"></i>
+								<i class="search_time_ico1"></i>
 							</div>
 						</td>
 					</tr>

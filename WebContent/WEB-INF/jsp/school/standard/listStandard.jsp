@@ -43,12 +43,12 @@
 					<span>发生日期:</span>
 					<div class="time_bg">
 						<input id="startDate" type="text" class="search_time150" name="propsMap['startDate']" mainid="startDate">
-						<i class="search_time_ico2"></i>
+						<i class="search_time_ico1"></i>
 					</div>
 					<i>至</i>
 					<div class="time_bg">
 						<input id="endDate" type="text" class="search_time150" name="propsMap['endDate']" mainid="endDate">
-						<i class="search_time_ico2"></i>
+						<i class="search_time_ico1"></i>
 					</div></li>	
 					<li><input type="reset" class="reset_btn" onclick="resetForm('queryForm')" value="重置"><!-- 重置 -->
 						<input type="button" class="search_btn mr22 " onclick="doSearch();" value="查询"></li><!-- 查询-->

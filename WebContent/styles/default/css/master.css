@@ -104,7 +104,7 @@ select.search_choose{height:30px;width:127px;}
 	right: 113px;
 	top: 8px;
 }
-.search_time_ico2 {
+.search_time_ico1 {
 	position: absolute;
 	background-image: url(../images/btn/datePicker.gif);
 	background-repeat: no-repeat;
@@ -122,7 +122,6 @@ select.search_choose{height:30px;width:127px;}
 	background-color: transparent;
 	right: 3px;
 	top: 8px;
-	cursor: pointer;
 }
 .time_bg label {float:left;}
 .selectBoxWarp{position:relative;display:inline}

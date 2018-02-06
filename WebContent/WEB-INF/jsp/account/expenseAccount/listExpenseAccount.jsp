@@ -36,7 +36,7 @@
 						</select><span>审核状态:</span></li>
 						<!-- 输入框-->
 						<li style="width: 180px;"><select class="search_choose"
-							name="assignFlag" id="assignFlag" mainid="assignFlag"
+							name="assignFlag" id="assignFlag" 
 							style="width: 100px;">
 								<option value="1">未发放</option>
 								<option value="2">已发放</option>
@@ -48,11 +48,11 @@
 						<div class="time_bg">
 							<input id="startDate" type="text" class="search_time150"
 								name="propsMap['startDate']"> <i
-								class="search_time_ico2" onclick="WdatePicker({el:'startDate'})"></i>
+								class="search_time_ico1" onclick="WdatePicker({el:'startDate'})"></i>
 						</div> <i>至</i>
 						<div class="time_bg">
 							<input id="endDate" type="text" class="search_time150"
-								name="propsMap['endDate']"> <i class="search_time_ico2"
+								name="propsMap['endDate']"> <i class="search_time_ico1"
 								onclick="WdatePicker({el:'endDate'})"></i>
 						</div></li>
 

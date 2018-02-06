@@ -135,19 +135,19 @@ public class MainController {
 			menus = moduleService.getMenuListForAdmin();
 			m = new ModelAndView("WEB-INF/jsp/common/adminMain");
 			map = m.getModel();
-			map.put("menus", menus);
-		} else if(user.getDutyId().equals("b8d29f69-9c38-4417-bd58-cc0e369c42b8")){//外部服务部门
-			menus = moduleService.getMenuListByPcode(Utils.getLoginUserInfo(request).getId());
-			m = new ModelAndView("WEB-INF/jsp/common/allStudent");
-			map = m.getModel();
-			if(user.getRoleId().equals("dc3dfb2e-5e70-4525-9739-beef0856f15c")){//外部服务部门管理员
-				map.put("isAdmin", true);
-			}
+			m.addObject("ViewPerformance",true);//添加是否有权限查看公司总业绩等信息标识
 			map.put("menus", menus);
 		}
 		else {//普通用户
 			menus = moduleService.getMenuListByPcode(Utils.getLoginUserInfo(request).getId());
+			Role role = new Role();
+			role.setRoleId(user.getRoleId());
 			m = new ModelAndView("WEB-INF/jsp/common/userMain");
+			boolean ViewPerformance=false;
+			if(roleService.listByCondition(role).get(0).getHpvp()==1){
+				ViewPerformance=true;
+			};
+			m.addObject("ViewPerformance",ViewPerformance);//添加是否有权限查看公司总业绩等信息标识
 			map = m.getModel();
 			map.put("menus", menus);
 			Employee entity = employeeService.getByPrimaryKey(Utils.getLoginUserInfo(request).getId());
@@ -155,6 +155,9 @@ public class MainController {
 		}
 		return m;
 	}
+	
+	
+	
 	
 	/**
 	 * 进入首页页面
@@ -449,10 +452,8 @@ public class MainController {
 			AjaxUtils.sendAjaxForObjectStr(response, rm);
 			return;
 		}
-
 		// 登陆成功将用户信息放入session中
 		request.getSession().setAttribute(Constant.LOGIN_USER_KEY, userInfo);
-		
 		userInfo.setLastLoginIp(Utils.getRemortIP(request));
 		userInfo.setLastLoginTime(DateUtil.nowSqlTimestamp());
 		userInfoService.updateLastLoginInfo(userInfo);
