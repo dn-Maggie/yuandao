@@ -4,8 +4,7 @@
 <html>
 <head>
 <%@ include file="../../common/header.jsp"%>
-<link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath() %>/styles/extends/css/expenseAccount.css" />
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/styles/extends/css/expenseAccount.css" />
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/common-util/image-util.js"></script>	
 <script type="text/javascript">
 var createDate = new Date().format('yyyy-MM-dd hh:mm:ss');//获取今日时间

@@ -10,9 +10,8 @@
 <body>
 	<form id="marketStudentFormEdit">
 		<div class="ui-table ui-widget ui-corner-all ui-border">
-			<input type="hidden" id="edit_id" name="id" type="text"
-				value="${marketStudent.id}" /> <input id="edit_time" name="time"
-				type="hidden" value="${marketStudent.time}" />
+			<input type="hidden" id="edit_id" name="id" type="text" value="${marketStudent.id}" /> 
+			<input id="edit_time" name="time" type="hidden" value="${marketStudent.time}" />
 			<table class="table">
 				<tr>
 					<td class="inputLabelTd">QQ号码：</td>

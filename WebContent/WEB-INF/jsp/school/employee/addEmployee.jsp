@@ -198,7 +198,7 @@ textarea.text {
 						</select></td>
 						<td class="inputLabelTd"><span class="required">*</span>职工编号：</td>
 						<td class="inputTd"><input id="edit_empNo" name="empNo"
-							type="text" class="text" value="QM-${nowEmpNo.empNo+1}" /></td>
+							type="text" class="text" value="PS-${nowEmpNo.empNo+1}" /></td>
 					</tr>
 					<tr>
 						<td class="inputLabelTd"><span class="required">*</span>所属部门：</td>

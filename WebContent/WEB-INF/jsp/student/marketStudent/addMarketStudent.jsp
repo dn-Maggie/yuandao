@@ -56,7 +56,6 @@ progress:after {
 </style>
 </head>
 <body>
-
 	<div id="editDialog">
 		<form id="marketStudentFormEdit">
 			<div class="ui-table ui-widget ui-corner-all ui-border">
@@ -117,7 +116,7 @@ progress:after {
 	<script type="text/javascript" src="<%=request.getContextPath()%>/js/common-util/image-util.js"></script>	
 	<script type="text/javascript">
 	var createDate = new Date().format('yyyy-MM-dd hh:mm:ss'); //获取今日时间
-	/* 测试 begin*/
+	/* 拖拽上传 begin*/
 	var fileItems = [];
 	var holder = document.getElementById('preview'),
 	support = {
@@ -179,7 +178,7 @@ progress:after {
             holder.innerHTML += '<p>Uploaded ' + file.name + ' ' + (file.size ? (file.size / 1024 | 0) + 'K' : '');
         }
     }
-	/* 测试end */
+	/* 拖拽上传end */
 $(function() {
 	$("#edit_time").val(createDate);
 	//绑定提交按钮click事件

@@ -23,6 +23,7 @@
 			<div class="search border-bottom">
 				<ul>
 					<li><select class="search_choose" name="empDept" id="empDept">
+						<option value="">---请选择---</option>
 							<c:forEach var="org" items="${org}">
 								<option value="${org.orgNo}">
 									<c:out value="${org.orgName}"></c:out>
